@@ -15,25 +15,31 @@ import gzip
 import json
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
 
+
 def load_config(config_path):
     """Loads and returns the YAML configuration from the given path."""
-    with open(config_path, 'r') as f:
+    with open(config_path, "r") as f:
         return yaml.safe_load(f)
+
 
 def get_mirrorcache_config(config):
     """Extracts and returns the 'mirrorcache' entry from the configuration."""
-    for entry in config.get('stages', []):
-        if entry.get('type') == 'mirrorcache':
+    for entry in config.get("stages", []):
+        if entry.get("type") == "mirrorcache":
             return entry
     return None
+
 
 def create_cache_dir(cache_dir_path):
     """Creates the cache directory if it doesn't already exist."""
     cache_dir_path.mkdir(parents=True, exist_ok=True)
+
 
 def find_iso_urls(base_url, patterns):
     """Scrapes the given URL and returns a list of matching ISO URLs."""
@@ -45,11 +51,11 @@ def find_iso_urls(base_url, patterns):
         logging.error(f"Error fetching URL {base_url}: {e}")
         return []
 
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.text, "html.parser")
     iso_urls = []
-    for a_tag in soup.find_all('a', href=True):
-        href = a_tag['href']
-        filename = href.split('/')[-1]
+    for a_tag in soup.find_all("a", href=True):
+        href = a_tag["href"]
+        filename = href.split("/")[-1]
         for pattern in patterns:
             if fnmatch.fnmatch(filename, pattern):
                 iso_urls.append(urljoin(base_url, href))
@@ -57,11 +63,12 @@ def find_iso_urls(base_url, patterns):
     logging.info(f"Found {len(iso_urls)} ISO URLs.")
     return iso_urls
 
+
 def download_file(url, destination_path):
     """Downloads a file from a URL using curl."""
     logging.info(f"Starting download of {url} to {destination_path} using curl.")
     try:
-        command = ['curl', '-L', url, '-o', str(destination_path), '--progress-bar']
+        command = ["curl", "-L", url, "-o", str(destination_path), "--progress-bar"]
         subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
         logging.info(f"Successfully downloaded {destination_path.name}")
         return True
@@ -69,27 +76,40 @@ def download_file(url, destination_path):
         logging.error(f"Download failed: {e}")
         return False
 
+
 def check_command(command):
     """Checks if a command is available in PATH."""
     return shutil.which(command) is not None
+
 
 def mount_iso(iso_path, mount_point):
     """Mounts an ISO file using fuseiso."""
     logging.info(f"Mounting ISO {iso_path} to {mount_point}")
     try:
         mount_point.mkdir(parents=True, exist_ok=True)
-        subprocess.run(['fuseiso', str(iso_path), str(mount_point)], check=True, stdout=sys.stdout, stderr=sys.stderr)
+        subprocess.run(
+            ["fuseiso", str(iso_path), str(mount_point)],
+            check=True,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+        )
         logging.info(f"ISO successfully mounted to {mount_point}")
         return True
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         logging.error(f"Error mounting ISO {iso_path}: {e}")
         return False
 
+
 def unmount_iso(mount_point):
     """Unmounts a fuseiso mounted directory."""
     logging.info(f"Unmounting {mount_point}")
     try:
-        subprocess.run(['fusermount', '-u', str(mount_point)], check=True, stdout=sys.stdout, stderr=sys.stderr)
+        subprocess.run(
+            ["fusermount", "-u", str(mount_point)],
+            check=True,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+        )
         logging.info(f"Successfully unmounted {mount_point}")
         shutil.rmtree(mount_point)
         logging.info(f"Removed mount point directory {mount_point}")
@@ -98,74 +118,80 @@ def unmount_iso(mount_point):
         logging.error(f"Error unmounting {mount_point}: {e}")
         return False
 
+
 def get_packages_from_metadata(mount_point):
     """
     Parses LiveOS/.packages.json.gz to get a list of all packages.
     """
     metadata_path = mount_point / "LiveOS" / ".packages.json.gz"
     logging.info(f"Reading packages from {metadata_path}...")
-    
+
     if not metadata_path.exists():
         logging.error(f"Metadata file not found: {metadata_path}")
         return []
 
     try:
-        with gzip.open(metadata_path, 'rt', encoding='utf-8') as f:
+        with gzip.open(metadata_path, "rt", encoding="utf-8") as f:
             return json.load(f)
     except (gzip.BadGzipFile, json.JSONDecodeError, KeyError) as e:
         logging.error(f"Failed to parse metadata file {metadata_path}: {e}")
         return []
 
+
 def print_grouped_packages_table(rpm_map, iso_packages):
     """Prints a formatted table of packages grouped by source RPM."""
-    
+
     # Create a mapping from binary package name to its details for quick lookup
-    iso_pkg_map = {pkg['name']: pkg for pkg in iso_packages}
+    iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
 
     # Define column widths
     name_width = 30
     version_width = 25
     release_width = 15
     header = f"{ 'Name':<{name_width}} { 'Version':<{version_width}} { 'Release':<{release_width}}"
-    
+
     for source_rpm, binary_patterns in rpm_map.items():
         print(f"\n--- {source_rpm} ---")
         print(header)
         print("-" * (name_width + version_width + release_width + 2))
-        
+
         found_any = False
         for pattern in binary_patterns:
             # Find all matching packages in the ISO
             for pkg_name, pkg_details in iso_pkg_map.items():
                 if fnmatch.fnmatch(pkg_name, pattern):
                     found_any = True
-                    name = pkg_details.get('name', 'N/A')
-                    version = pkg_details.get('version', 'N/A')
-                    release = pkg_details.get('release', 'N/A')
-                    print(f"{name:<{name_width}} {version:<{version_width}} {release:<{release_width}}")
+                    name = pkg_details.get("name", "N/A")
+                    version = pkg_details.get("version", "N/A")
+                    release = pkg_details.get("release", "N/A")
+                    print(
+                        f"{name:<{name_width}} {version:<{version_width}} {release:<{release_width}}"
+                    )
 
         if not found_any:
             print("  (No matching packages found in ISO)")
 
 
 def main():
-    if not all(map(check_command, ['curl', 'fuseiso', 'fusermount'])):
-        logging.error("Required command(s) not found. Please ensure 'curl', 'fuseiso', and 'fusermount' are installed and in your PATH.")
-        if not check_command('fuseiso'):
+    if not all(map(check_command, ["curl", "fuseiso", "fusermount"])):
+        logging.error(
+            "Required command(s) not found. Please ensure 'curl', 'fuseiso', and 'fusermount' are installed and in your PATH."
+        )
+        if not check_command("fuseiso"):
             logging.info("On openSUSE/SLES, try: sudo zypper install fuseiso")
             logging.info("On Debian/Ubuntu, try: sudo apt-get install fuseiso")
         sys.exit(1)
 
     create_cache_dir(CACHE_DIR)
-    config = load_config('config.yml')
+    config = load_config("config.yml")
     mirrorcache_config = get_mirrorcache_config(config)
 
     if not mirrorcache_config:
         logging.error("No mirrorcache configuration found in config.yml.")
         sys.exit(1)
 
-    base_url = mirrorcache_config['url']
-    patterns = mirrorcache_config['files']
+    base_url = mirrorcache_config["url"]
+    patterns = mirrorcache_config["files"]
     iso_urls = find_iso_urls(base_url, patterns)
 
     if not iso_urls:
@@ -176,12 +202,12 @@ def main():
     latest_iso_url = iso_urls[-1]
     logging.info(f"Determined latest ISO: {latest_iso_url}")
 
-    iso_filename = latest_iso_url.split('/')[-1]
+    iso_filename = latest_iso_url.split("/")[-1]
     iso_filepath = CACHE_DIR / iso_filename
 
     if not iso_filepath.exists():
         if not download_file(latest_iso_url, iso_filepath):
-            sys.exit(1) # Exit if download fails
+            sys.exit(1)  # Exit if download fails
     else:
         logging.info(f"ISO file {iso_filename} already exists in cache.")
 
@@ -189,13 +215,14 @@ def main():
     if mount_iso(iso_filepath, mount_point):
         try:
             iso_packages = get_packages_from_metadata(mount_point)
-            rpm_map = config.get('rpms', {})
+            rpm_map = config.get("rpms", {})
             if iso_packages and rpm_map:
                 print_grouped_packages_table(rpm_map, iso_packages)
             else:
                 logging.warning("Could not find packages in ISO or RPM map in config.")
         finally:
             unmount_iso(mount_point)
+
 
 if __name__ == "__main__":
     main()
