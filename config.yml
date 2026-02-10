@@ -1,3 +1,4 @@
+stages:
 - url: https://github.com/agama-project/agama/
   type: git
   name: git
@@ -16,3 +17,23 @@
   name: sles-16.1-test-iso
   files:
     - SLES-16.1-Online-x86_64-*.iso
+
+
+# maps from obs package to binary rpms (wildcards)
+rpms:
+  agama-web-ui:
+  - agama-web-ui
+  agama:
+  - agama
+  - agama-common
+  - agama-autoinstall
+  - agama-cli
+  - agama-cli-bash-completion
+  rubygem-agama-yast:
+  - ruby*-rubygem-agama-yast
+  # agama-yast source rpm, but same OBS package
+  - agama-yast
+  agama-products:
+  - agama-products-opensuse
+  agama-integration-tests:
+  - agama-integration-tests

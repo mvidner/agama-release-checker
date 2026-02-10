@@ -26,7 +26,7 @@ def load_config(config_path):
 
 def get_mirrorcache_config(config):
     """Extracts and returns the 'mirrorcache' entry from the configuration."""
-    for entry in config:
+    for entry in config['stages']:
         if entry.get('type') == 'mirrorcache':
             return entry
     return None
