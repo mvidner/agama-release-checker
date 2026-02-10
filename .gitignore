@@ -1,0 +1,7 @@
+mnt/
+rpms.yml
+.cache/
+__pycache__/
+*.swp
+*.swo
+*~
