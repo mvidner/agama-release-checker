@@ -34,6 +34,6 @@ rpms:
   # agama-yast source rpm, but same OBS package
   - agama-yast
   agama-products:
-  - agama-products-opensuse
+  - agama-products*
   agama-integration-tests:
   - agama-integration-tests

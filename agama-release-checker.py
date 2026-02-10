@@ -26,7 +26,7 @@ def load_config(config_path):
 
 def get_mirrorcache_config(config):
     """Extracts and returns the 'mirrorcache' entry from the configuration."""
-    for entry in config['stages']:
+    for entry in config.get('stages', []):
         if entry.get('type') == 'mirrorcache':
             return entry
     return None
@@ -98,33 +98,55 @@ def unmount_iso(mount_point):
         logging.error(f"Error unmounting {mount_point}: {e}")
         return False
 
-def find_agama_packages_from_metadata(mount_point):
+def get_packages_from_metadata(mount_point):
     """
-    Parses LiveOS/.packages.json.gz to find Agama packages.
+    Parses LiveOS/.packages.json.gz to get a list of all packages.
     """
     metadata_path = mount_point / "LiveOS" / ".packages.json.gz"
-    logging.info(f"Searching for Agama packages in {metadata_path}...")
+    logging.info(f"Reading packages from {metadata_path}...")
     
     if not metadata_path.exists():
         logging.error(f"Metadata file not found: {metadata_path}")
         return []
 
-    agama_packages = []
     try:
         with gzip.open(metadata_path, 'rt', encoding='utf-8') as f:
-            packages = json.load(f)
-            for pkg in packages:
-                if 'name' in pkg and 'agama' in pkg['name'].lower():
-                    agama_packages.append({
-                        'name': pkg.get('name'),
-                        'version': pkg.get('version'),
-                        'release': pkg.get('release')
-                    })
+            return json.load(f)
     except (gzip.BadGzipFile, json.JSONDecodeError, KeyError) as e:
         logging.error(f"Failed to parse metadata file {metadata_path}: {e}")
         return []
+
+def print_grouped_packages_table(rpm_map, iso_packages):
+    """Prints a formatted table of packages grouped by source RPM."""
     
-    return agama_packages
+    # Create a mapping from binary package name to its details for quick lookup
+    iso_pkg_map = {pkg['name']: pkg for pkg in iso_packages}
+
+    # Define column widths
+    name_width = 30
+    version_width = 25
+    release_width = 15
+    header = f"{ 'Name':<{name_width}} { 'Version':<{version_width}} { 'Release':<{release_width}}"
+    
+    for source_rpm, binary_patterns in rpm_map.items():
+        print(f"\n--- {source_rpm} ---")
+        print(header)
+        print("-" * (name_width + version_width + release_width + 2))
+        
+        found_any = False
+        for pattern in binary_patterns:
+            # Find all matching packages in the ISO
+            for pkg_name, pkg_details in iso_pkg_map.items():
+                if fnmatch.fnmatch(pkg_name, pattern):
+                    found_any = True
+                    name = pkg_details.get('name', 'N/A')
+                    version = pkg_details.get('version', 'N/A')
+                    release = pkg_details.get('release', 'N/A')
+                    print(f"{name:<{name_width}} {version:<{version_width}} {release:<{release_width}}")
+
+        if not found_any:
+            print("  (No matching packages found in ISO)")
+
 
 def main():
     if not all(map(check_command, ['curl', 'fuseiso', 'fusermount'])):
@@ -166,12 +188,12 @@ def main():
     mount_point = CACHE_DIR / "iso_mount"
     if mount_iso(iso_filepath, mount_point):
         try:
-            agama_pkgs = find_agama_packages_from_metadata(mount_point)
-            if agama_pkgs:
-                print("Found Agama packages in ISO:")
-                pprint.pprint(agama_pkgs)
+            iso_packages = get_packages_from_metadata(mount_point)
+            rpm_map = config.get('rpms', {})
+            if iso_packages and rpm_map:
+                print_grouped_packages_table(rpm_map, iso_packages)
             else:
-                print("No Agama packages found in the ISO metadata.")
+                logging.warning("Could not find packages in ISO or RPM map in config.")
         finally:
             unmount_iso(mount_point)
 
