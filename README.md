@@ -15,3 +15,7 @@ The specific projects, repos and packages are taken from a configuration file
 so that this can be made useful for other teams and projects.
 
 [Agama]: https://github.com/agama-project/agama/
+
+### License
+
+GPL-2.0-or-later (like Agama itself)
