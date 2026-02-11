@@ -28,12 +28,9 @@ def load_config(config_path):
         return yaml.safe_load(f)
 
 
-def get_config(config, entry_type):
-    """Extracts and returns the entry of a specific type from the configuration."""
-    for entry in config.get("stages", []):
-        if entry.get("type") == entry_type:
-            return entry
-    return None
+def get_configs(config, entry_type):
+    """Extracts and returns a list of entries of a specific type from the configuration."""
+    return [entry for entry in config.get("stages", []) if entry.get("type") == entry_type]
 
 
 def create_cache_dir(cache_dir_path):
@@ -139,11 +136,25 @@ def get_packages_from_metadata(mount_point):
         return []
 
 
+def extract_git_hashes(iso_packages, rpm_map):
+    """Extracts git hashes from the version strings of packages."""
+    git_hashes = set()
+    iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
+    for source_rpm, binary_patterns in rpm_map.items():
+        for pattern in binary_patterns:
+            for pkg_name, pkg_details in iso_pkg_map.items():
+                if fnmatch.fnmatch(pkg_name, pattern):
+                    version = pkg_details.get("version", "N/A")
+                    match = re.search(r"([0-9a-fA-F]{7,})$", version)
+                    if match:
+                        git_hashes.add(match.group(1))
+    return git_hashes
+
+
 def print_unified_packages_table(rpm_map, iso_packages):
     """Prints a formatted table of packages in a single table."""
 
     iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
-    git_hashes = set()
     all_found_packages_by_source = {}
 
     for source_rpm, binary_patterns in rpm_map.items():
@@ -152,11 +163,6 @@ def print_unified_packages_table(rpm_map, iso_packages):
             for pkg_name, pkg_details in iso_pkg_map.items():
                 if fnmatch.fnmatch(pkg_name, pattern):
                     found_packages.append(pkg_details)
-                    # Extract git hash from version
-                    version = pkg_details.get("version", "N/A")
-                    match = re.search(r"([0-9a-fA-F]{7,})$", version)
-                    if match:
-                        git_hashes.add(match.group(1))
 
         all_found_packages_by_source[source_rpm] = sorted(
             found_packages, key=lambda p: p.get("name")
@@ -167,7 +173,7 @@ def print_unified_packages_table(rpm_map, iso_packages):
     ]
     if not all_packages_flat:
         print("  (No matching packages found in ISO)")
-        return git_hashes
+        return
 
     # Calculate column widths
     source_name_width = max((len(source_rpm) for source_rpm in rpm_map.keys()), default=0)
@@ -217,7 +223,61 @@ def print_unified_packages_table(rpm_map, iso_packages):
                 f"| {'':<{source_name_width}} | {name:<{name_width}} | {version:<{version_width}} | {release:<{release_width}} |"
             )
 
-    return git_hashes
+
+def print_results(results, git_config, rpm_map):
+    """Prints the collected results in a consolidated format."""
+    all_git_hashes = set()
+    for mirrorcache_config, iso_packages in results:
+        print(f"\n## {mirrorcache_config['name']}\n")
+        if iso_packages:
+            print_unified_packages_table(rpm_map, iso_packages)
+            all_git_hashes.update(extract_git_hashes(iso_packages, rpm_map))
+        else:
+            print("  (No packages found)")
+
+    if all_git_hashes and git_config:
+        git_base_url = git_config["url"]
+        print("\n## Git Commits\n")
+        for githash in sorted(list(all_git_hashes)):
+            print(f"- {urljoin(git_base_url, f'commit/{githash}')}")
+    elif not git_config:
+        logging.warning(
+            "No 'git' configuration found in config.yml. Cannot print commit URLs."
+        )
+
+
+def process_mirrorcache(mirrorcache_config):
+    """Processes a single mirrorcache configuration."""
+    logging.info(f"Processing mirrorcache: {mirrorcache_config['name']}")
+    base_url = mirrorcache_config["url"]
+    patterns = mirrorcache_config["files"]
+    iso_urls = find_iso_urls(base_url, patterns)
+
+    if not iso_urls:
+        logging.warning(f"No ISOs found matching patterns {patterns} at {base_url}")
+        return None
+
+    iso_urls.sort()
+    latest_iso_url = iso_urls[-1]
+    logging.debug(f"Determined latest ISO: {latest_iso_url}")
+
+    iso_filename = latest_iso_url.split("/")[-1]
+    iso_filepath = CACHE_DIR / iso_filename
+
+    if not iso_filepath.exists():
+        if not download_file(latest_iso_url, iso_filepath):
+            return None  # Skip if download fails
+    else:
+        logging.info(f"In cache: {iso_filename}")
+
+    mount_point = CACHE_DIR / f"iso_mount_{mirrorcache_config['name']}"
+    if mount_iso(iso_filepath, mount_point):
+        try:
+            iso_packages = get_packages_from_metadata(mount_point)
+            return iso_packages
+        finally:
+            unmount_iso(mount_point)
+    return None
 
 
 def main():
@@ -236,6 +296,11 @@ def main():
         "--verbose",
         action="store_true",
         help="Enable verbose logging (DEBUG level)",
+    )
+    parser.add_argument(
+        "--name",
+        action="append",
+        help="Specify the name of the mirrorcache to process. Can be used multiple times.",
     )
     args = parser.parse_args()
 
@@ -256,54 +321,27 @@ def main():
 
     create_cache_dir(CACHE_DIR)
     config = load_config("config.yml")
-    mirrorcache_config = get_config(config, "mirrorcache")
-    git_config = get_config(config, "git")
+    mirrorcache_configs = get_configs(config, "mirrorcache")
+    git_config = get_configs(config, "git")
+    if git_config:
+        git_config = git_config[0]  # Assuming single git config
 
-    if not mirrorcache_config:
+    if not mirrorcache_configs:
         logging.error("No mirrorcache configuration found in config.yml.")
         sys.exit(1)
+        
+    if args.name:
+        mirrorcache_configs = [
+            cfg for cfg in mirrorcache_configs if cfg["name"] in args.name
+        ]
 
-    base_url = mirrorcache_config["url"]
-    patterns = mirrorcache_config["files"]
-    iso_urls = find_iso_urls(base_url, patterns)
+    results = []
+    rpm_map = config.get("rpms", {})
+    for mirrorcache_config in mirrorcache_configs:
+        iso_packages = process_mirrorcache(mirrorcache_config)
+        results.append((mirrorcache_config, iso_packages))
 
-    if not iso_urls:
-        logging.warning(f"No ISOs found matching patterns {patterns} at {base_url}")
-        sys.exit(0)
-
-    iso_urls.sort()
-    latest_iso_url = iso_urls[-1]
-    logging.debug(f"Determined latest ISO: {latest_iso_url}")
-
-    iso_filename = latest_iso_url.split("/")[-1]
-    iso_filepath = CACHE_DIR / iso_filename
-
-    if not iso_filepath.exists():
-        if not download_file(latest_iso_url, iso_filepath):
-            sys.exit(1)  # Exit if download fails
-    else:
-        logging.info(f"In cache: {iso_filename}")
-
-    mount_point = CACHE_DIR / "iso_mount"
-    if mount_iso(iso_filepath, mount_point):
-        try:
-            iso_packages = get_packages_from_metadata(mount_point)
-            rpm_map = config.get("rpms", {})
-            if iso_packages and rpm_map:
-                git_hashes = print_unified_packages_table(rpm_map, iso_packages)
-                if git_hashes and git_config:
-                    git_base_url = git_config["url"]
-                    print("\n## Git Commits\n")
-                    for githash in sorted(list(git_hashes)):
-                        print(f"- {urljoin(git_base_url, f'commit/{githash}')}")
-                elif not git_config:
-                    logging.warning(
-                        "No 'git' configuration found in config.yml. Cannot print commit URLs."
-                    )
-            else:
-                logging.warning("Could not find packages in ISO or RPM map in config.")
-        finally:
-            unmount_iso(mount_point)
+    print_results(results, git_config, rpm_map)
 
 
 if __name__ == "__main__":
