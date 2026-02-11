@@ -14,6 +14,7 @@ import shutil
 import gzip
 import json
 import argparse
+import re
 
 
 # Configure logging
@@ -30,10 +31,10 @@ def load_config(config_path):
         return yaml.safe_load(f)
 
 
-def get_mirrorcache_config(config):
-    """Extracts and returns the 'mirrorcache' entry from the configuration."""
+def get_config(config, entry_type):
+    """Extracts and returns the entry of a specific type from the configuration."""
     for entry in config.get("stages", []):
-        if entry.get("type") == "mirrorcache":
+        if entry.get("type") == entry_type:
             return entry
     return None
 
@@ -142,10 +143,11 @@ def get_packages_from_metadata(mount_point):
 
 
 def print_grouped_packages_table(rpm_map, iso_packages):
-    """Prints a formatted table of packages grouped by source RPM."""
+    """Prints a formatted table of packages grouped by source RPM and returns a set of git hashes."""
 
     # Create a mapping from binary package name to its details for quick lookup
     iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
+    git_hashes = set()
 
     # Define column widths
     name_width = 30
@@ -167,12 +169,20 @@ def print_grouped_packages_table(rpm_map, iso_packages):
                     name = pkg_details.get("name", "N/A")
                     version = pkg_details.get("version", "N/A")
                     release = pkg_details.get("release", "N/A")
+
+                    # Extract git hash from version
+                    # Look for a hexadecimal string of 7 or more characters
+                    match = re.search(r"([0-9a-fA-F]{7,})$", version)
+                    if match:
+                        git_hashes.add(match.group(1))
+
                     print(
                         f"{name:<{name_width}} {version:<{version_width}} {release:<{release_width}}"
                     )
 
         if not found_any:
             print("  (No matching packages found in ISO)")
+    return git_hashes
 
 
 def main():
@@ -202,7 +212,8 @@ def main():
 
     create_cache_dir(CACHE_DIR)
     config = load_config("config.yml")
-    mirrorcache_config = get_mirrorcache_config(config)
+    mirrorcache_config = get_config(config, "mirrorcache")
+    git_config = get_config(config, "git")
 
     if not mirrorcache_config:
         logging.error("No mirrorcache configuration found in config.yml.")
@@ -235,7 +246,16 @@ def main():
             iso_packages = get_packages_from_metadata(mount_point)
             rpm_map = config.get("rpms", {})
             if iso_packages and rpm_map:
-                print_grouped_packages_table(rpm_map, iso_packages)
+                git_hashes = print_grouped_packages_table(rpm_map, iso_packages)
+                if git_hashes and git_config:
+                    git_base_url = git_config["url"]
+                    print("\n--- Git Commits ---")
+                    for githash in sorted(list(git_hashes)):
+                        print(urljoin(git_base_url, f"commit/{githash}"))
+                elif not git_config:
+                    logging.warning(
+                        "No 'git' configuration found in config.yml. Cannot print commit URLs."
+                    )
             else:
                 logging.warning("Could not find packages in ISO or RPM map in config.")
         finally:
