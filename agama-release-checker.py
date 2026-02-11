@@ -88,13 +88,36 @@ CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
 
 
 def load_config(config_path: Path) -> Dict[str, Any]:
-    """Loads and returns the YAML configuration from the given path."""
+    """Loads and returns the YAML configuration from the given path.
+
+    Example of the returned data structure:
+    {
+        "stages": [
+            {
+                "type": "mirrorcache",
+                "name": "Leap 15.6 Updates",
+                "url": "https://download.opensuse.org/update/leap/15.6/oss/",
+                "files": ["agama-live-*.iso", "agama-debug-*.iso"]
+            }
+        ],
+        "rpms": {
+            "agama-auth-server": ["agama-auth-server*"]
+        }
+    }
+    """
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
 
 def get_configs(config: Dict[str, Any], entry_type: str) -> List[Dict[str, Any]]:
-    """Extracts and returns a list of entries of a specific type from the configuration."""
+    """Extracts and returns a list of entries of a specific type from the configuration.
+
+    Example of the returned data for entry_type="mirrorcache":
+    [
+        {"type": "mirrorcache", "name": "Leap 15.6 Updates"},
+        ...
+    ]
+    """
     return [
         entry for entry in config.get("stages", []) if entry.get("type") == entry_type
     ]
@@ -187,6 +210,12 @@ def unmount_iso(mount_point: Path) -> bool:
 def get_packages_from_metadata(mount_point: Path) -> List[Dict[str, Any]]:
     """
     Parses LiveOS/.packages.json.gz to get a list of all packages.
+
+    Example of the returned data:
+    [
+        {"name": "agama", "version": "19.pre+1415.80da57854", "release": "160099.25.1"},
+        ...
+    ]
     """
     metadata_path = mount_point / "LiveOS" / ".packages.json.gz"
     logging.debug(f"Reading packages from {metadata_path}...")
@@ -206,7 +235,19 @@ def get_packages_from_metadata(mount_point: Path) -> List[Dict[str, Any]]:
 def extract_git_hashes(
     iso_packages: List[Dict[str, Any]], rpm_map: Dict[str, List[str]]
 ) -> Set[str]:
-    """Extracts git hashes from the version strings of packages."""
+    """Extracts git hashes from the version strings of packages.
+
+    :param iso_packages: List of packages from the ISO. Example:
+        [
+            {"name": "agama", "version": "19.pre+1415.80da57854", "release": "160099.25.1"},
+            ...
+        ]
+    :param rpm_map: Mapping of source RPMs to binary RPMs. Example:
+        {
+            "agama": ["agama", "agama-autoinstall", "agama-cli"],
+            ...
+        }
+    """
     git_hashes = set()
     iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
     for source_rpm, binary_patterns in rpm_map.items():
@@ -223,7 +264,19 @@ def extract_git_hashes(
 def print_unified_packages_table(
     rpm_map: Dict[str, List[str]], iso_packages: List[Dict[str, Any]]
 ) -> None:
-    """Prints a formatted table of packages in a single table."""
+    """Prints a formatted table of packages in a single table.
+
+    :param rpm_map: Mapping of source RPMs to binary RPMs. Example:
+        {
+            "agama": ["agama", "agama-autoinstall", "agama-cli"],
+            ...
+        }
+    :param iso_packages: List of packages from the ISO. Example:
+        [
+            {"name": "agama", "version": "19.pre+1415.80da57854", "release": "160099.25.1"},
+            ...
+        ]
+    """
 
     iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
     all_found_packages_by_source = {}
@@ -302,7 +355,26 @@ def print_results(
     git_config: Optional[Dict[str, str]],
     rpm_map: Dict[str, List[str]],
 ) -> None:
-    """Prints the collected results in a consolidated format."""
+    """Prints the collected results in a consolidated format.
+
+    :param results: List of tuples containing mirrorcache config, latest ISO URL, and packages.
+        Example:
+        [
+            (
+                {"name": "sles-16.1-test-iso", "url": "...", "files": ["..."]},
+                "https://download.suse.de/.../SLES-16.1-Online-x86_64-Build21.1.install.iso",
+                [{"name": "agama", "version": "19.pre+1415.80da57854", "release": "160099.25.1"}]
+            ),
+            ...
+        ]
+    :param git_config: Git configuration. Example:
+        {"url": "https://github.com/agama-project/agama/"}
+    :param rpm_map: Mapping of source RPMs to binary RPMs. Example:
+        {
+            "agama": ["agama", "agama-autoinstall", "agama-cli"],
+            ...
+        }
+    """
     all_git_hashes = set()
     for mirrorcache_config, latest_iso_url, iso_packages in results:
         print(f"\n## {mirrorcache_config['name']}\n")
@@ -328,7 +400,20 @@ def print_results(
 def process_mirrorcache(
     mirrorcache_config: Dict[str, Any]
 ) -> Tuple[Optional[str], Optional[List[Dict[str, Any]]]]:
-    """Processes a single mirrorcache configuration."""
+    """Processes a single mirrorcache configuration.
+
+    :param mirrorcache_config: Configuration for a single mirrorcache. Example:
+        {
+            "name": "sles-16.1-test-iso",
+            "url": "https://download.suse.de/ibs/SUSE:/SLFO:/Products:/SLES:/16.1:/TEST/product/iso/",
+            "files": ["SLES-16.1-Online-x86_64-*.iso"]
+        }
+    :return: A tuple containing the latest ISO URL and a list of packages. Example:
+        (
+            "https://download.suse.de/.../SLES-16.1-Online-x86_64-Build21.1.install.iso",
+            [{"name": "agama", "version": "19.pre+1415.80da57854", "release": "160099.25.1"}]
+        )
+    """
     logging.info(f"Processing mirrorcache: {mirrorcache_config['name']}")
     base_url = mirrorcache_config["url"]
     patterns = mirrorcache_config["files"]
