@@ -17,10 +17,7 @@ import argparse
 import re
 
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+
 
 CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
 
@@ -145,47 +142,60 @@ def get_packages_from_metadata(mount_point):
 def print_grouped_packages_table(rpm_map, iso_packages):
     """Prints a formatted table of packages grouped by source RPM and returns a set of git hashes."""
 
-    # Create a mapping from binary package name to its details for quick lookup
     iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
     git_hashes = set()
 
-    # Define column widths
-    name_width = 30
-    version_width = 25
-    release_width = 15
-    header = f"{ 'Name':<{name_width}} { 'Version':<{version_width}} { 'Release':<{release_width}}"
-
     for source_rpm, binary_patterns in rpm_map.items():
-        print(f"\n--- {source_rpm} ---")
-        print(header)
-        print("-" * (name_width + version_width + release_width + 2))
+        print(f"\n## {source_rpm}\n")
 
-        found_any = False
+        found_packages = []
         for pattern in binary_patterns:
-            # Find all matching packages in the ISO
             for pkg_name, pkg_details in iso_pkg_map.items():
                 if fnmatch.fnmatch(pkg_name, pattern):
-                    found_any = True
-                    name = pkg_details.get("name", "N/A")
-                    version = pkg_details.get("version", "N/A")
-                    release = pkg_details.get("release", "N/A")
-
+                    found_packages.append(pkg_details)
                     # Extract git hash from version
-                    # Look for a hexadecimal string of 7 or more characters
+                    version = pkg_details.get("version", "N/A")
                     match = re.search(r"([0-9a-fA-F]{7,})$", version)
                     if match:
                         git_hashes.add(match.group(1))
 
-                    print(
-                        f"{name:<{name_width}} {version:<{version_width}} {release:<{release_width}}"
-                    )
-
-        if not found_any:
+        if not found_packages:
             print("  (No matching packages found in ISO)")
+            continue
+
+        # Calculate column widths
+        name_width = max(len(pkg.get("name", "N/A")) for pkg in found_packages)
+        version_width = max(len(pkg.get("version", "N/A")) for pkg in found_packages)
+        release_width = max(len(pkg.get("release", "N/A")) for pkg in found_packages)
+
+        # Ensure minimum width for headers
+        name_width = max(name_width, len("Name"))
+        version_width = max(version_width, len("Version"))
+        release_width = max(release_width, len("Release"))
+
+        # Print header
+        header = f"| {'Name':<{name_width}} | {'Version':<{version_width}} | {'Release':<{release_width}} |"
+        print(header)
+        print(f"|{'-' * (name_width + 2)}|{'-' * (version_width + 2)}|{'-' * (release_width + 2)}|")
+
+        # Print rows
+        for pkg in sorted(found_packages, key=lambda p: p.get("name")):
+            name = pkg.get("name", "N/A")
+            version = pkg.get("version", "N/A")
+            release = pkg.get("release", "N/A")
+            print(f"| {name:<{name_width}} | {version:<{version_width}} | {release:<{release_width}} |")
+
     return git_hashes
 
 
 def main():
+    # Configure logging
+    log = logging.getLogger()
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    log.addHandler(handler)
+    log.setLevel(logging.INFO)
+
     parser = argparse.ArgumentParser(
         description="Checks for the latest Agama release, downloads it, and verifies package versions."
     )
@@ -200,6 +210,8 @@ def main():
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
         logging.debug("Verbose logging enabled.")
+
+    print("# Agama Release Status")
 
     if not all(map(check_command, ["curl", "fuseiso", "fusermount"])):
         logging.error(
@@ -249,9 +261,9 @@ def main():
                 git_hashes = print_grouped_packages_table(rpm_map, iso_packages)
                 if git_hashes and git_config:
                     git_base_url = git_config["url"]
-                    print("\n--- Git Commits ---")
+                    print("\n## Git Commits\n")
                     for githash in sorted(list(git_hashes)):
-                        print(urljoin(git_base_url, f"commit/{githash}"))
+                        print(f"- {urljoin(git_base_url, f'commit/{githash}')}")
                 elif not git_config:
                     logging.warning(
                         "No 'git' configuration found in config.yml. Cannot print commit URLs."
