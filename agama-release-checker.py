@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-import yaml
+import yaml  # type: ignore
 import pprint
 import os
 from pathlib import Path
-import requests
-from bs4 import BeautifulSoup
+import requests  # type: ignore
+from bs4 import BeautifulSoup  # type: ignore
 import fnmatch
 from urllib.parse import urljoin
 import logging
@@ -15,30 +15,97 @@ import gzip
 import json
 import argparse
 import re
+from typing import List, Dict, Any, Set, Optional, Tuple
 
 
+# --- Data Structure Examples ---
+#
+# config.yml structure:
+# Config = Dict[str, Any]
+# Example:
+# {
+#     "stages": [
+#         {
+#             "type": "mirrorcache",
+#             "name": "Leap 15.6 Updates",
+#             "url": "https://download.opensuse.org/update/leap/15.6/oss/",
+#             "files": ["agama-live-*.iso", "agama-debug-*.iso"]
+#         },
+#         {
+#             "type": "git",
+#             "name": "Agama GitHub",
+#             "url": "https://github.com/agama-project/agama/"
+#         }
+#     ],
+#     "rpms": {
+#         "agama-auth-server": ["agama-auth-server*", "agama-auth-server-debuginfo*"],
+#         "agama-cockpit-websocket": ["agama-cockpit-websocket*"]
+#     }
+# }
+#
+# MirrorcacheConfig (part of Config["stages"] with type "mirrorcache"):
+# MirrorcacheConfig = Dict[str, Any]
+# Example:
+# {
+#     "type": "mirrorcache",
+#     "name": "Leap 15.6 Updates",
+#     "url": "https://download.opensuse.org/update/leap/15.6/oss/",
+#     "files": ["agama-live-*.iso", "agama-debug-*.iso"]
+# }
+#
+# GitConfig (part of Config["stages"] with type "git"):
+# GitConfig = Dict[str, str]
+# Example:
+# {
+#     "type": "git",
+#     "name": "Agama GitHub",
+#     "url": "https://github.com/agama-project/agama/"
+# }
+#
+# RpmMap (Config["rpms"]):
+# RpmMap = Dict[str, List[str]]
+# Example:
+# {
+#     "agama-auth-server": ["agama-auth-server*", "agama-auth-server-debuginfo*"],
+#     "agama-cockpit-websocket": ["agama-cockpit-websocket*"]
+# }
+#
+# Package (item in iso_packages list):
+# Package = Dict[str, Any]
+# Example:
+# {
+#     "name": "agama-auth-server",
+#     "version": "1.0.0-1.g1234567.fc32",
+#     "release": "1.g1234567.fc32",
+#     "arch": "x86_64"
+# }
+#
+# Result (item in results list):
+# Result = Tuple[MirrorcacheConfig, Optional[str], Optional[List[Package]]]
 
 
 CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
 
 
-def load_config(config_path):
+def load_config(config_path: Path) -> Dict[str, Any]:
     """Loads and returns the YAML configuration from the given path."""
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
 
-def get_configs(config, entry_type):
+def get_configs(config: Dict[str, Any], entry_type: str) -> List[Dict[str, Any]]:
     """Extracts and returns a list of entries of a specific type from the configuration."""
-    return [entry for entry in config.get("stages", []) if entry.get("type") == entry_type]
+    return [
+        entry for entry in config.get("stages", []) if entry.get("type") == entry_type
+    ]
 
 
-def create_cache_dir(cache_dir_path):
+def create_cache_dir(cache_dir_path: Path) -> None:
     """Creates the cache directory if it doesn't already exist."""
     cache_dir_path.mkdir(parents=True, exist_ok=True)
 
 
-def find_iso_urls(base_url, patterns):
+def find_iso_urls(base_url: str, patterns: List[str]) -> List[str]:
     """Scrapes the given URL and returns a list of matching ISO URLs."""
     logging.info(f"Fetching ISO directory from: {base_url}")
     logging.debug(f"Scraping with patterns: {patterns}")
@@ -62,7 +129,7 @@ def find_iso_urls(base_url, patterns):
     return iso_urls
 
 
-def download_file(url, destination_path):
+def download_file(url: str, destination_path: Path) -> bool:
     """Downloads a file from a URL using curl."""
     logging.info(f"Dowloading to {destination_path} from {url} with curl.")
     try:
@@ -75,12 +142,12 @@ def download_file(url, destination_path):
         return False
 
 
-def check_command(command):
+def check_command(command: str) -> bool:
     """Checks if a command is available in PATH."""
     return shutil.which(command) is not None
 
 
-def mount_iso(iso_path, mount_point):
+def mount_iso(iso_path: Path, mount_point: Path) -> bool:
     """Mounts an ISO file using fuseiso."""
     logging.debug(f"Mounting ISO {iso_path} to {mount_point}")
     try:
@@ -98,7 +165,7 @@ def mount_iso(iso_path, mount_point):
         return False
 
 
-def unmount_iso(mount_point):
+def unmount_iso(mount_point: Path) -> bool:
     """Unmounts a fuseiso mounted directory."""
     logging.debug(f"Unmounting {mount_point}")
     try:
@@ -117,7 +184,7 @@ def unmount_iso(mount_point):
         return False
 
 
-def get_packages_from_metadata(mount_point):
+def get_packages_from_metadata(mount_point: Path) -> List[Dict[str, Any]]:
     """
     Parses LiveOS/.packages.json.gz to get a list of all packages.
     """
@@ -136,7 +203,9 @@ def get_packages_from_metadata(mount_point):
         return []
 
 
-def extract_git_hashes(iso_packages, rpm_map):
+def extract_git_hashes(
+    iso_packages: List[Dict[str, Any]], rpm_map: Dict[str, List[str]]
+) -> Set[str]:
     """Extracts git hashes from the version strings of packages."""
     git_hashes = set()
     iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
@@ -151,7 +220,9 @@ def extract_git_hashes(iso_packages, rpm_map):
     return git_hashes
 
 
-def print_unified_packages_table(rpm_map, iso_packages):
+def print_unified_packages_table(
+    rpm_map: Dict[str, List[str]], iso_packages: List[Dict[str, Any]]
+) -> None:
     """Prints a formatted table of packages in a single table."""
 
     iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
@@ -165,7 +236,7 @@ def print_unified_packages_table(rpm_map, iso_packages):
                     found_packages.append(pkg_details)
 
         all_found_packages_by_source[source_rpm] = sorted(
-            found_packages, key=lambda p: p.get("name")
+            found_packages, key=lambda p: p.get("name", "")
         )
 
     all_packages_flat = [
@@ -176,7 +247,9 @@ def print_unified_packages_table(rpm_map, iso_packages):
         return
 
     # Calculate column widths
-    source_name_width = max((len(source_rpm) for source_rpm in rpm_map.keys()), default=0)
+    source_name_width = max(
+        (len(source_rpm) for source_rpm in rpm_map.keys()), default=0
+    )
     name_width = (
         max((len(pkg.get("name", "N/A")) for pkg in all_packages_flat), default=0)
         if all_packages_flat
@@ -224,7 +297,11 @@ def print_unified_packages_table(rpm_map, iso_packages):
             )
 
 
-def print_results(results, git_config, rpm_map):
+def print_results(
+    results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Dict[str, Any]]]]],
+    git_config: Optional[Dict[str, str]],
+    rpm_map: Dict[str, List[str]],
+) -> None:
     """Prints the collected results in a consolidated format."""
     all_git_hashes = set()
     for mirrorcache_config, latest_iso_url, iso_packages in results:
@@ -248,7 +325,9 @@ def print_results(results, git_config, rpm_map):
         )
 
 
-def process_mirrorcache(mirrorcache_config):
+def process_mirrorcache(
+    mirrorcache_config: Dict[str, Any]
+) -> Tuple[Optional[str], Optional[List[Dict[str, Any]]]]:
     """Processes a single mirrorcache configuration."""
     logging.info(f"Processing mirrorcache: {mirrorcache_config['name']}")
     base_url = mirrorcache_config["url"]
@@ -282,7 +361,7 @@ def process_mirrorcache(mirrorcache_config):
     return latest_iso_url, None
 
 
-def main():
+def main() -> None:
     # Configure logging
     log = logging.getLogger()
     handler = logging.StreamHandler(sys.stderr)
@@ -322,23 +401,24 @@ def main():
         sys.exit(1)
 
     create_cache_dir(CACHE_DIR)
-    config = load_config("config.yml")
-    mirrorcache_configs = get_configs(config, "mirrorcache")
-    git_config = get_configs(config, "git")
-    if git_config:
-        git_config = git_config[0]  # Assuming single git config
+    config: Dict[str, Any] = load_config(Path("config.yml"))
+    mirrorcache_configs: List[Dict[str, Any]] = get_configs(config, "mirrorcache")
+    git_configs: List[Dict[str, str]] = get_configs(config, "git")
+    git_config: Optional[Dict[str, str]] = git_configs[0] if git_configs else None
 
     if not mirrorcache_configs:
         logging.error("No mirrorcache configuration found in config.yml.")
         sys.exit(1)
-        
+
     if args.name:
         mirrorcache_configs = [
             cfg for cfg in mirrorcache_configs if cfg["name"] in args.name
         ]
 
-    results = []
-    rpm_map = config.get("rpms", {})
+    results: List[
+        Tuple[Dict[str, Any], Optional[str], Optional[List[Dict[str, Any]]]]
+    ] = []
+    rpm_map: Dict[str, List[str]] = config.get("rpms", {})
     for mirrorcache_config in mirrorcache_configs:
         latest_iso_url, iso_packages = process_mirrorcache(mirrorcache_config)
         results.append((mirrorcache_config, latest_iso_url, iso_packages))
