@@ -227,8 +227,10 @@ def print_unified_packages_table(rpm_map, iso_packages):
 def print_results(results, git_config, rpm_map):
     """Prints the collected results in a consolidated format."""
     all_git_hashes = set()
-    for mirrorcache_config, iso_packages in results:
+    for mirrorcache_config, latest_iso_url, iso_packages in results:
         print(f"\n## {mirrorcache_config['name']}\n")
+        if latest_iso_url:
+            print(f"ISO: {latest_iso_url}\n")
         if iso_packages:
             print_unified_packages_table(rpm_map, iso_packages)
             all_git_hashes.update(extract_git_hashes(iso_packages, rpm_map))
@@ -255,7 +257,7 @@ def process_mirrorcache(mirrorcache_config):
 
     if not iso_urls:
         logging.warning(f"No ISOs found matching patterns {patterns} at {base_url}")
-        return None
+        return None, None
 
     iso_urls.sort()
     latest_iso_url = iso_urls[-1]
@@ -266,7 +268,7 @@ def process_mirrorcache(mirrorcache_config):
 
     if not iso_filepath.exists():
         if not download_file(latest_iso_url, iso_filepath):
-            return None  # Skip if download fails
+            return latest_iso_url, None  # Skip if download fails
     else:
         logging.info(f"In cache: {iso_filename}")
 
@@ -274,10 +276,10 @@ def process_mirrorcache(mirrorcache_config):
     if mount_iso(iso_filepath, mount_point):
         try:
             iso_packages = get_packages_from_metadata(mount_point)
-            return iso_packages
+            return latest_iso_url, iso_packages
         finally:
             unmount_iso(mount_point)
-    return None
+    return latest_iso_url, None
 
 
 def main():
@@ -338,8 +340,8 @@ def main():
     results = []
     rpm_map = config.get("rpms", {})
     for mirrorcache_config in mirrorcache_configs:
-        iso_packages = process_mirrorcache(mirrorcache_config)
-        results.append((mirrorcache_config, iso_packages))
+        latest_iso_url, iso_packages = process_mirrorcache(mirrorcache_config)
+        results.append((mirrorcache_config, latest_iso_url, iso_packages))
 
     print_results(results, git_config, rpm_map)
 
