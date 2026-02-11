@@ -13,6 +13,8 @@ import sys
 import shutil
 import gzip
 import json
+import argparse
+
 
 # Configure logging
 logging.basicConfig(
@@ -43,7 +45,8 @@ def create_cache_dir(cache_dir_path):
 
 def find_iso_urls(base_url, patterns):
     """Scrapes the given URL and returns a list of matching ISO URLs."""
-    logging.info(f"Scraping URL: {base_url} with patterns: {patterns}")
+    logging.info(f"Fetching ISO directory from: {base_url}")
+    logging.debug(f"Scraping with patterns: {patterns}")
     try:
         response = requests.get(base_url)
         response.raise_for_status()
@@ -60,17 +63,17 @@ def find_iso_urls(base_url, patterns):
             if fnmatch.fnmatch(filename, pattern):
                 iso_urls.append(urljoin(base_url, href))
                 break
-    logging.info(f"Found {len(iso_urls)} ISO URLs.")
+    logging.debug(f"Found {len(iso_urls)} ISO URLs.")
     return iso_urls
 
 
 def download_file(url, destination_path):
     """Downloads a file from a URL using curl."""
-    logging.info(f"Starting download of {url} to {destination_path} using curl.")
+    logging.info(f"Dowloading to {destination_path} from {url} with curl.")
     try:
         command = ["curl", "-L", url, "-o", str(destination_path), "--progress-bar"]
         subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
-        logging.info(f"Successfully downloaded {destination_path.name}")
+        logging.info(f"Success: {destination_path.name}")
         return True
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         logging.error(f"Download failed: {e}")
@@ -84,7 +87,7 @@ def check_command(command):
 
 def mount_iso(iso_path, mount_point):
     """Mounts an ISO file using fuseiso."""
-    logging.info(f"Mounting ISO {iso_path} to {mount_point}")
+    logging.debug(f"Mounting ISO {iso_path} to {mount_point}")
     try:
         mount_point.mkdir(parents=True, exist_ok=True)
         subprocess.run(
@@ -93,7 +96,7 @@ def mount_iso(iso_path, mount_point):
             stdout=sys.stdout,
             stderr=sys.stderr,
         )
-        logging.info(f"ISO successfully mounted to {mount_point}")
+        logging.debug(f"ISO successfully mounted to {mount_point}")
         return True
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         logging.error(f"Error mounting ISO {iso_path}: {e}")
@@ -102,7 +105,7 @@ def mount_iso(iso_path, mount_point):
 
 def unmount_iso(mount_point):
     """Unmounts a fuseiso mounted directory."""
-    logging.info(f"Unmounting {mount_point}")
+    logging.debug(f"Unmounting {mount_point}")
     try:
         subprocess.run(
             ["fusermount", "-u", str(mount_point)],
@@ -110,9 +113,9 @@ def unmount_iso(mount_point):
             stdout=sys.stdout,
             stderr=sys.stderr,
         )
-        logging.info(f"Successfully unmounted {mount_point}")
+        logging.debug(f"Successfully unmounted {mount_point}")
         shutil.rmtree(mount_point)
-        logging.info(f"Removed mount point directory {mount_point}")
+        logging.debug(f"Removed mount point directory {mount_point}")
         return True
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         logging.error(f"Error unmounting {mount_point}: {e}")
@@ -124,7 +127,7 @@ def get_packages_from_metadata(mount_point):
     Parses LiveOS/.packages.json.gz to get a list of all packages.
     """
     metadata_path = mount_point / "LiveOS" / ".packages.json.gz"
-    logging.info(f"Reading packages from {metadata_path}...")
+    logging.debug(f"Reading packages from {metadata_path}...")
 
     if not metadata_path.exists():
         logging.error(f"Metadata file not found: {metadata_path}")
@@ -173,6 +176,21 @@ def print_grouped_packages_table(rpm_map, iso_packages):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Checks for the latest Agama release, downloads it, and verifies package versions."
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Enable verbose logging (DEBUG level)",
+    )
+    args = parser.parse_args()
+
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.debug("Verbose logging enabled.")
+
     if not all(map(check_command, ["curl", "fuseiso", "fusermount"])):
         logging.error(
             "Required command(s) not found. Please ensure 'curl', 'fuseiso', and 'fusermount' are installed and in your PATH."
@@ -200,7 +218,7 @@ def main():
 
     iso_urls.sort()
     latest_iso_url = iso_urls[-1]
-    logging.info(f"Determined latest ISO: {latest_iso_url}")
+    logging.debug(f"Determined latest ISO: {latest_iso_url}")
 
     iso_filename = latest_iso_url.split("/")[-1]
     iso_filepath = CACHE_DIR / iso_filename
@@ -209,7 +227,7 @@ def main():
         if not download_file(latest_iso_url, iso_filepath):
             sys.exit(1)  # Exit if download fails
     else:
-        logging.info(f"ISO file {iso_filename} already exists in cache.")
+        logging.info(f"In cache: {iso_filename}")
 
     mount_point = CACHE_DIR / "iso_mount"
     if mount_iso(iso_filepath, mount_point):
