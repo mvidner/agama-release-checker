@@ -18,6 +18,17 @@ stages:
   files:
     - SLES-16.1-Online-x86_64-*.iso
 
+- url: https://download.opensuse.org/repositories/systemsmanagement:/Agama:/Release/images/iso/
+  type: mirrorcache
+  name: obs-sm-A-Release-iso
+  files:
+    - agama-installer.x86_64-*-Build*.iso
+
+- url: https://download.opensuse.org/repositories/systemsmanagement:/Agama:/Devel/images/iso/
+  type: mirrorcache
+  name: obs-sm-A-Devel-iso
+  files:
+    - agama-installer.x86_64-*-Build*.iso
 
 # maps from obs package to binary rpms (wildcards)
 rpms:
