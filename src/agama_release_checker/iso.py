@@ -7,6 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import List, Dict, Any
+from .models import Package
 
 
 def check_command(command: str) -> bool:
@@ -51,20 +52,61 @@ def unmount_iso(mount_point: Path) -> bool:
         return False
 
 
-def get_packages_from_metadata(mount_point: Path) -> List[Dict[str, Any]]:
+def get_packages_from_metadata_file(packages_json_maybe_gz: Path) -> List[Package]:
     """
-    Parses LiveOS/.packages.json.gz to get a list of all packages.
+    Parses a .packages.json.gz or .packages.json file to get a list of all packages.
     """
-    metadata_path = mount_point / "LiveOS" / ".packages.json.gz"
-    logging.debug(f"Reading packages from {metadata_path}...")
-
-    if not metadata_path.exists():
-        logging.error(f"Metadata file not found: {metadata_path}")
+    if not packages_json_maybe_gz.exists():
+        logging.error(f"Metadata file not found: {packages_json_maybe_gz}")
         return []
 
+    # Try as gzipped file first
     try:
-        with gzip.open(metadata_path, "rt", encoding="utf-8") as f:
-            return json.load(f)
-    except (gzip.BadGzipFile, json.JSONDecodeError, KeyError) as e:
-        logging.error(f"Failed to parse metadata file {metadata_path}: {e}")
+        with gzip.open(packages_json_maybe_gz, "rt", encoding="utf-8") as f:
+            data = json.load(f)
+            return [Package(**p) for p in data]
+    except OSError as e:  # Catch OSError for non-gzipped files in Python 3.6
+        logging.debug(
+            f"Failed to parse gzipped metadata file {packages_json_maybe_gz} due to OSError: {e}. Trying plain JSON."
+        )
+    except (json.JSONDecodeError, KeyError) as e:
+        logging.error(
+            f"Failed to parse gzipped metadata file {packages_json_maybe_gz}: {e}"
+        )
+        # If it's a JSON error, it's likely a malformed JSON inside a gzip, not a plain file
         return []
+
+    # If gzipped failed, try as plain file
+    try:
+        with open(packages_json_maybe_gz, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return [Package(**p) for p in data]
+    except (json.JSONDecodeError, KeyError) as e:
+        logging.error(
+            f"Failed to parse plain metadata file {packages_json_maybe_gz}: {e}"
+        )
+        return []
+
+    return []  # Should not reach here if file exists and is valid JSON/GZIP-JSON
+
+
+def get_packages_from_metadata(mount_point: Path) -> List[Package]:
+    """
+    Parses LiveOS/.packages.json.gz or LiveOS/.packages.json to get a list of all packages.
+    """
+    metadata_path_gz = mount_point / "LiveOS" / ".packages.json.gz"
+    metadata_path_plain = mount_point / "LiveOS" / ".packages.json"
+
+    logging.debug(
+        f"Reading packages from {metadata_path_gz} or {metadata_path_plain}..."
+    )
+
+    if metadata_path_gz.exists():
+        return get_packages_from_metadata_file(metadata_path_gz)
+    elif metadata_path_plain.exists():
+        return get_packages_from_metadata_file(metadata_path_plain)
+
+    logging.error(
+        f"Neither gzipped nor plain metadata file found at {mount_point / 'LiveOS'}."
+    )
+    return []

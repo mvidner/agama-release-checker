@@ -3,6 +3,14 @@ from typing import List, Dict, Any, Optional
 
 
 @dataclass
+class Package:
+    name: str
+    version: str
+    release: str
+    arch: str
+
+
+@dataclass
 class StageConfig:
     type: str
     name: str

@@ -4,20 +4,20 @@ from typing import List, Dict, Any, Set, Optional, Tuple
 from urllib.parse import urljoin
 import fnmatch
 
-from .models import GitConfig
+from .models import GitConfig, Package
 
 
 def extract_git_hashes(
-    iso_packages: List[Dict[str, Any]], rpm_map: Dict[str, List[str]]
+    iso_packages: List[Package], rpm_map: Dict[str, List[str]]
 ) -> Set[str]:
     """Extracts git hashes from the version strings of packages."""
     git_hashes = set()
-    iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
+    iso_pkg_map = {pkg.name: pkg for pkg in iso_packages}
     for source_rpm, binary_patterns in rpm_map.items():
         for pattern in binary_patterns:
             for pkg_name, pkg_details in iso_pkg_map.items():
                 if fnmatch.fnmatch(pkg_name, pattern):
-                    version = pkg_details.get("version", "N/A")
+                    version = pkg_details.version
                     match = re.search(r"([0-9a-fA-F]{7,})$", version)
                     if match:
                         git_hashes.add(match.group(1))
@@ -25,11 +25,11 @@ def extract_git_hashes(
 
 
 def print_unified_packages_table(
-    rpm_map: Dict[str, List[str]], iso_packages: List[Dict[str, Any]]
+    rpm_map: Dict[str, List[str]], iso_packages: List[Package]
 ) -> None:
     """Prints a formatted table of packages in a single table."""
 
-    iso_pkg_map = {pkg["name"]: pkg for pkg in iso_packages}
+    iso_pkg_map = {pkg.name: pkg for pkg in iso_packages}
     all_found_packages_by_source = {}
 
     for source_rpm, binary_patterns in rpm_map.items():
@@ -40,7 +40,7 @@ def print_unified_packages_table(
                     found_packages.append(pkg_details)
 
         all_found_packages_by_source[source_rpm] = sorted(
-            found_packages, key=lambda p: p.get("name", "")
+            found_packages, key=lambda p: p.name
         )
 
     all_packages_flat = [
@@ -55,17 +55,17 @@ def print_unified_packages_table(
         (len(source_rpm) for source_rpm in rpm_map.keys()), default=0
     )
     name_width = (
-        max((len(pkg.get("name", "N/A")) for pkg in all_packages_flat), default=0)
+        max((len(pkg.name) for pkg in all_packages_flat), default=0)
         if all_packages_flat
         else 0
     )
     version_width = (
-        max((len(pkg.get("version", "N/A")) for pkg in all_packages_flat), default=0)
+        max((len(pkg.version) for pkg in all_packages_flat), default=0)
         if all_packages_flat
         else 0
     )
     release_width = (
-        max((len(pkg.get("release", "N/A")) for pkg in all_packages_flat), default=0)
+        max((len(pkg.release) for pkg in all_packages_flat), default=0)
         if all_packages_flat
         else 0
     )
@@ -93,16 +93,16 @@ def print_unified_packages_table(
             continue
 
         for pkg in found_packages:
-            name = pkg.get("name", "N/A")
-            version = pkg.get("version", "N/A")
-            release = pkg.get("release", "N/A")
+            name = pkg.name
+            version = pkg.version
+            release = pkg.release
             print(
                 f"| {'':<{source_name_width}} | {name:<{name_width}} | {version:<{version_width}} | {release:<{release_width}} |"
             )
 
 
 def print_results(
-    results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Dict[str, Any]]]]],
+    results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Package]]]],
     git_config: Optional[GitConfig],
     rpm_map: Dict[str, List[str]],
 ) -> None:

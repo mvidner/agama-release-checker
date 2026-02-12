@@ -11,7 +11,7 @@ from .iso import (
     unmount_iso,
     get_packages_from_metadata,
 )
-from .models import MirrorcacheConfig, AppConfig
+from .models import MirrorcacheConfig, AppConfig, Package
 from .network import find_iso_urls, download_file
 from .reporting import print_results
 
@@ -25,7 +25,7 @@ def create_cache_dir(cache_dir_path: Path) -> None:
 
 def process_mirrorcache(
     mirrorcache_config: MirrorcacheConfig,
-) -> Tuple[Optional[str], Optional[List[Dict[str, Any]]]]:
+) -> Tuple[Optional[str], Optional[List[Package]]]:
     """Processes a single mirrorcache configuration."""
     logging.info(f"Processing mirrorcache: {mirrorcache_config.name}")
     base_url = mirrorcache_config.url
@@ -111,9 +111,7 @@ def main() -> None:
             cfg for cfg in mirrorcache_configs if cfg.name in args.name
         ]
 
-    results: List[
-        Tuple[Dict[str, Any], Optional[str], Optional[List[Dict[str, Any]]]]
-    ] = []
+    results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Package]]]] = []
     rpm_map: Dict[str, List[str]] = config.rpms
     for mirrorcache_config in mirrorcache_configs:
         # The reporting function still expects a dict, so we convert it back for now
