@@ -1,4 +1,4 @@
-MAIN = agama-release-checker.py
+MAIN = .
 check: check-black check-mypy
 check-black:
 	black --diff --check ${MAIN}

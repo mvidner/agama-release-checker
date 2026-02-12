@@ -1,0 +1,7 @@
+# This pyproject.toml is primarily used to declare the build system.
+# Package metadata and dependencies are defined in setup.cfg for compatibility
+# with older versions of pip/setuptools in Python 3.6 environments.
+
+[build-system]
+requires = ["setuptools>=40.8.0"]
+build-backend = "setuptools.build_meta"
