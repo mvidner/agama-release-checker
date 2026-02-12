@@ -1,0 +1,80 @@
+[
+  {
+    "name": "adwaita-icon-theme",
+    "version": "49.0",
+    "release": "1.1",
+    "arch": "noarch"
+  },
+  {
+    "name": "agama",
+    "version": "19.pre+1452.65cb39696",
+    "release": "67.1",
+    "arch": "x86_64"
+  },
+  {
+    "name": "agama-autoinstall",
+    "version": "19.pre+1452.65cb39696",
+    "release": "67.1",
+    "arch": "x86_64"
+  },
+  {
+    "name": "agama-cli",
+    "version": "19.pre+1452.65cb39696",
+    "release": "67.1",
+    "arch": "x86_64"
+  },
+  {
+    "name": "agama-cli-bash-completion",
+    "version": "19.pre+1452.65cb39696",
+    "release": "67.1",
+    "arch": "noarch"
+  },
+  {
+    "name": "agama-common",
+    "version": "19.pre+1452.65cb39696",
+    "release": "67.1",
+    "arch": "x86_64"
+  },
+  {
+    "name": "agama-integration-tests",
+    "version": "1737365732.90b7e17",
+    "release": "7.14",
+    "arch": "noarch"
+  },
+  {
+    "name": "agama-products-opensuse",
+    "version": "19.pre+1434.2ca82d5b4",
+    "release": "49.1",
+    "arch": "noarch"
+  },
+  {
+    "name": "agama-web-ui",
+    "version": "19.pre+1415.80da57854",
+    "release": "61.1",
+    "arch": "noarch"
+  },
+  {
+    "name": "agama-yast",
+    "version": "19.pre.devel1427.8f4e4f34e",
+    "release": "1.1",
+    "arch": "x86_64"
+  },
+  {
+    "name": "alts",
+    "version": "1.2+31.da24cd4",
+    "release": "1.1",
+    "arch": "x86_64"
+  },
+  {
+    "name": "ruby4.0-rubygem-abstract_method",
+    "version": "1.2.1",
+    "release": "2.38",
+    "arch": "x86_64"
+  },
+  {
+    "name": "ruby4.0-rubygem-agama-yast",
+    "version": "19.pre.devel1427.8f4e4f34e",
+    "release": "1.1",
+    "arch": "x86_64"
+  }
+]
