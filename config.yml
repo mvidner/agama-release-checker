@@ -30,6 +30,15 @@ stages:
   files:
     - agama-installer.x86_64-*-Build*.iso
 
+- url: https://build.opensuse.org/project/show/systemsmanagement:Agama:Devel
+  type: obsproject
+
+- url: https://build.opensuse.org/project/show/systemsmanagement:Agama:Release
+  type: obsproject
+
+- url: https://build.opensuse.org/project/show/openSUSE:Factory
+  type: obsproject
+
 # maps from obs package to binary rpms (wildcards)
 rpms:
   agama-web-ui:

@@ -5,15 +5,10 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 
 from .config import load_config
-from .iso import (
-    check_command,
-    mount_iso,
-    unmount_iso,
-    get_packages_from_metadata,
-)
+from .iso import check_command
 from .models import MirrorcacheConfig, AppConfig, Package
-from .network import find_iso_urls, download_file
 from .reporting import print_results
+from .reports import RpmsOnIsoReport, PackagesInObsReport
 
 CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
 
@@ -21,42 +16,6 @@ CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
 def create_cache_dir(cache_dir_path: Path) -> None:
     """Creates the cache directory if it doesn't already exist."""
     cache_dir_path.mkdir(parents=True, exist_ok=True)
-
-
-def process_mirrorcache(
-    mirrorcache_config: MirrorcacheConfig,
-) -> Tuple[Optional[str], Optional[List[Package]]]:
-    """Processes a single mirrorcache configuration."""
-    logging.info(f"Processing mirrorcache: {mirrorcache_config.name}")
-    base_url = mirrorcache_config.url
-    patterns = mirrorcache_config.files
-    iso_urls = find_iso_urls(base_url, patterns)
-
-    if not iso_urls:
-        logging.warning(f"No ISOs found matching patterns {patterns} at {base_url}")
-        return None, None
-
-    iso_urls.sort()
-    latest_iso_url = iso_urls[-1]
-    logging.debug(f"Determined latest ISO: {latest_iso_url}")
-
-    iso_filename = latest_iso_url.split("/")[-1]
-    iso_filepath = CACHE_DIR / iso_filename
-
-    if not iso_filepath.exists():
-        if not download_file(latest_iso_url, iso_filepath):
-            return latest_iso_url, None  # Skip if download fails
-    else:
-        logging.info(f"In cache: {iso_filename}")
-
-    mount_point = CACHE_DIR / f"iso_mount_{mirrorcache_config.name}"
-    if mount_iso(iso_filepath, mount_point):
-        try:
-            iso_packages = get_packages_from_metadata(mount_point)
-            return latest_iso_url, iso_packages
-        finally:
-            unmount_iso(mount_point)
-    return latest_iso_url, None
 
 
 def main() -> None:
@@ -79,7 +38,7 @@ def main() -> None:
     parser.add_argument(
         "--name",
         action="append",
-        help="Specify the name of the mirrorcache to process. Can be used multiple times.",
+        help="Specify the name of the stage to process. Can be used multiple times.",
     )
     args = parser.parse_args()
 
@@ -100,29 +59,45 @@ def main() -> None:
 
     create_cache_dir(CACHE_DIR)
     config: AppConfig = load_config(Path("config.yml"))
-    mirrorcache_configs: List[MirrorcacheConfig] = config.mirrorcache_configs
-
-    if not mirrorcache_configs:
-        logging.error("No mirrorcache configuration found in config.yml.")
-        sys.exit(1)
-
-    if args.name:
-        mirrorcache_configs = [
-            cfg for cfg in mirrorcache_configs if cfg.name in args.name
-        ]
 
     results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Package]]]] = []
     rpm_map: Dict[str, List[str]] = config.rpms
-    for mirrorcache_config in mirrorcache_configs:
-        # The reporting function still expects a dict, so we convert it back for now
-        # This can be refactored later
-        config_dict = {
-            "name": mirrorcache_config.name,
-            "url": mirrorcache_config.url,
-            "files": mirrorcache_config.files,
-        }
-        latest_iso_url, iso_packages = process_mirrorcache(mirrorcache_config)
-        results.append((config_dict, latest_iso_url, iso_packages))
+
+    stages_to_process = config.stages
+    if args.name:
+        stages_to_process = [s for s in config.stages if s.get("name") in args.name]
+
+    if not stages_to_process:
+        logging.warning("No stages to process found.")
+        # We don't exit here because we might just want to print git info if available?
+        # But usually we want to process something.
+        # Original code exited if no mirrorcache configs found.
+
+    for stage in stages_to_process:
+        stage_type = stage.get("type")
+        if stage_type == "mirrorcache":
+            # Filter known keys for MirrorcacheConfig
+            mc_args = {
+                k: stage[k] for k in ["type", "name", "url", "files"] if k in stage
+            }
+            mirrorcache_config = MirrorcacheConfig(**mc_args)
+
+            iso_report = RpmsOnIsoReport(mirrorcache_config)
+            latest_iso_url, iso_packages = iso_report.run()
+
+            config_dict = {
+                "name": mirrorcache_config.name,
+                "url": mirrorcache_config.url,
+                "files": mirrorcache_config.files,
+            }
+            results.append((config_dict, latest_iso_url, iso_packages))
+
+        elif stage_type == "obsproject":
+            obs_report = PackagesInObsReport(stage)
+            obs_report.run()
+
+        elif stage_type == "git":
+            pass
 
     print_results(results, config.git_config, rpm_map)
 
