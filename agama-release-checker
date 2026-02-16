@@ -1,1 +1,1 @@
-/usr/bin/env python3 -m src.agama_release_checker.main
+/usr/bin/env PYTHONPATH=src python3 -m agama_release_checker.main "$@"
