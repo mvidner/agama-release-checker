@@ -1,0 +1,4 @@
+agama.obsinfo
+agama.spec
+agama.changes
+vendor.tar.zst

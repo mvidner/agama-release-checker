@@ -1,0 +1,3 @@
+Name:           agama
+Version:        0
+Release:        0

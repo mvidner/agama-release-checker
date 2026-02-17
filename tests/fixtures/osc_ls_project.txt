@@ -1,0 +1,5 @@
+agama
+agama-integration-tests
+agama-products
+agama-web-ui
+rubygem-agama-yast

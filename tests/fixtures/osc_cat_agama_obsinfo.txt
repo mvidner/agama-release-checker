@@ -1,0 +1,4 @@
+name: agama
+version: 19.pre+1558.7e90c6ef1
+mtime: 1770980693
+commit: 7e90c6ef161972e0f70f8dac5563c7c9fd9f23e1

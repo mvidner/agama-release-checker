@@ -1,0 +1,3 @@
+rubygem-agama-yast.spec
+agama-yast.spec
+rubygem-agama-yast.changes
