@@ -1,5 +1,6 @@
 import logging
 import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import urlparse
 
@@ -14,10 +15,12 @@ class ObsSubmitRequestsReport:
         config: Dict[str, Any],
         rpm_map: Dict[str, List[str]],
         no_cache: bool = False,
+        recent_requests: bool = False,
     ):
         self.config = config
         self.rpm_map = rpm_map
         self.no_cache = no_cache
+        self.recent_requests = recent_requests
 
     def _get_project_name(self) -> str:
         url = self.config.get("url", "")
@@ -63,12 +66,21 @@ class ObsSubmitRequestsReport:
 
         # Iterate over all defined packages in rpm_map
         for package_name in self.rpm_map.keys():
-            # Construct API query for "new", "review", "declined" requests
-            query = (
-                f"(state/@name='new'+or+state/@name='review'+or+state/@name='declined')"
-                f"+and+action/target/@project='{project}'"
-                f"+and+action/target/@package='{package_name}'"
-            )
+            if self.recent_requests:
+                cutoff_date = (datetime.now() - timedelta(weeks=2)).strftime("%Y-%m-%d")
+                query = (
+                    f"state/@when>'{cutoff_date}'"
+                    f"+and+action/target/@project='{project}'"
+                    f"+and+action/target/@package='{package_name}'"
+                )
+            else:
+                # Construct API query for "new", "review", "declined" requests
+                query = (
+                    f"(state/@name='new'+or+state/@name='review'+or+state/@name='declined')"
+                    f"+and+action/target/@project='{project}'"
+                    f"+and+action/target/@package='{package_name}'"
+                )
+
             # osc api expects just the path part for the command, but we need to pass arguments.
             # However, 'osc api' takes the path as an argument.
             # cmd = ["osc", "api", f"/search/request?match={query}"]

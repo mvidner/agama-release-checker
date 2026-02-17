@@ -46,6 +46,11 @@ def main() -> None:
         action="store_true",
         help="Force refresh of cached command results (e.g. osc commands).",
     )
+    parser.add_argument(
+        "--recent-rq",
+        action="store_true",
+        help="Show requests of all states modified within the past two weeks.",
+    )
     args = parser.parse_args()
 
     if args.verbose:
@@ -126,7 +131,10 @@ def main() -> None:
 
             if stage.get("submit_requests"):
                 requests_report = ObsSubmitRequestsReport(
-                    stage, rpm_map, no_cache=args.no_command_cache
+                    stage,
+                    rpm_map,
+                    no_cache=args.no_command_cache,
+                    recent_requests=args.recent_rq,
                 )
                 _, requests = requests_report.run()
                 if requests:
