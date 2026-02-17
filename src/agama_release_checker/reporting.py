@@ -8,14 +8,14 @@ from .models import GitConfig, Package
 
 
 def extract_git_hashes(
-    iso_packages: List[Package], rpm_map: Dict[str, List[str]]
+    packages: List[Package], rpm_map: Dict[str, List[str]]
 ) -> Set[str]:
     """Extracts git hashes from the version strings of packages."""
     git_hashes = set()
-    iso_pkg_map = {pkg.name: pkg for pkg in iso_packages}
+    pkg_map = {pkg.name: pkg for pkg in packages}
     for source_rpm, binary_patterns in rpm_map.items():
         for pattern in binary_patterns:
-            for pkg_name, pkg_details in iso_pkg_map.items():
+            for pkg_name, pkg_details in pkg_map.items():
                 if fnmatch.fnmatch(pkg_name, pattern):
                     version = pkg_details.version
                     match = re.search(r"([0-9a-fA-F]{7,})$", version)
@@ -24,18 +24,18 @@ def extract_git_hashes(
     return git_hashes
 
 
-def print_unified_packages_table(
-    rpm_map: Dict[str, List[str]], iso_packages: List[Package]
+def print_packages_table(
+    rpm_map: Dict[str, List[str]], packages: List[Package], label: str = "ISO"
 ) -> None:
-    """Prints a formatted table of packages in a single table."""
+    """Prints a formatted table of packages."""
 
-    iso_pkg_map = {pkg.name: pkg for pkg in iso_packages}
+    pkg_map = {pkg.name: pkg for pkg in packages}
     all_found_packages_by_source = {}
 
     for source_rpm, binary_patterns in rpm_map.items():
         found_packages = []
         for pattern in binary_patterns:
-            for pkg_name, pkg_details in iso_pkg_map.items():
+            for pkg_name, pkg_details in pkg_map.items():
                 if fnmatch.fnmatch(pkg_name, pattern):
                     found_packages.append(pkg_details)
 
@@ -47,13 +47,51 @@ def print_unified_packages_table(
         pkg for pkgs in all_found_packages_by_source.values() for pkg in pkgs
     ]
     if not all_packages_flat:
-        print("  (No matching packages found in ISO)")
+        print(f"  (No matching packages found in {label})")
         return
 
+    _print_table(rpm_map.keys(), all_packages_flat, all_found_packages_by_source)
+
+
+def print_obs_packages_table(
+    rpm_map_keys: List[str],
+    specs_map: Dict[str, List[str]],
+    packages: List[Package],
+) -> None:
+    """Prints a formatted table of OBS source packages."""
+    pkg_map = {pkg.name: pkg for pkg in packages}
+    all_found_packages_by_source = {}
+
+    for obs_package in rpm_map_keys:
+        found_packages = []
+        # Get expected source names (specs) for this OBS package
+        source_names = specs_map.get(obs_package, [obs_package])
+
+        for source_name in source_names:
+            if source_name in pkg_map:
+                found_packages.append(pkg_map[source_name])
+
+        all_found_packages_by_source[obs_package] = sorted(
+            found_packages, key=lambda p: p.name
+        )
+
+    all_packages_flat = [
+        pkg for pkgs in all_found_packages_by_source.values() for pkg in pkgs
+    ]
+    if not all_packages_flat:
+        print(f"  (No matching packages found in OBS)")
+        return
+
+    _print_table(rpm_map_keys, all_packages_flat, all_found_packages_by_source)
+
+
+def _print_table(
+    source_names: Any,  # Iterable
+    all_packages_flat: List[Package],
+    grouped_packages: Dict[str, List[Package]],
+) -> None:
     # Calculate column widths
-    source_name_width = max(
-        (len(source_rpm) for source_rpm in rpm_map.keys()), default=0
-    )
+    source_name_width = max((len(s) for s in source_names), default=0)
     name_width = (
         max((len(pkg.name) for pkg in all_packages_flat), default=0)
         if all_packages_flat
@@ -84,7 +122,7 @@ def print_unified_packages_table(
     )
 
     # Print rows
-    for source_rpm, found_packages in sorted(all_found_packages_by_source.items()):
+    for source_rpm, found_packages in sorted(grouped_packages.items()):
         # Print an empty row for the source rpm heading
         print(
             f"| {source_rpm:<{source_name_width}} | {'':<{name_width}} | {'':<{version_width}} | {'':<{release_width}} |"
@@ -101,29 +139,50 @@ def print_unified_packages_table(
             )
 
 
-def print_results(
+def print_iso_results(
     results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Package]]]],
-    git_config: Optional[GitConfig],
     rpm_map: Dict[str, List[str]],
 ) -> None:
-    """Prints the collected results in a consolidated format."""
-    all_git_hashes = set()
+    """Prints results for ISO images."""
     for mirrorcache_config, latest_iso_url, iso_packages in results:
-        print(f"\n## {mirrorcache_config['name']}\n")
+        print(f"\n## ISO: {mirrorcache_config['name']}\n")
         if latest_iso_url:
-            print(f"ISO: {latest_iso_url}\n")
+            print(f"URL: {latest_iso_url}\n")
         if iso_packages:
-            print_unified_packages_table(rpm_map, iso_packages)
-            all_git_hashes.update(extract_git_hashes(iso_packages, rpm_map))
+            print_packages_table(rpm_map, iso_packages, label="ISO")
         else:
             print("  (No packages found)")
 
-    if all_git_hashes and git_config:
+
+def print_obs_results(
+    results: List[Tuple[Dict[str, Any], Optional[List[Package]]]],
+    rpm_map_keys: List[str],
+    specs_map: Dict[str, List[str]],
+) -> None:
+    """Prints results for OBS projects."""
+    for obs_config, packages in results:
+        print(f"\n## OBS: {obs_config['name']}\n")
+        print(f"Project: {obs_config['url']}\n")
+        if packages:
+            print_obs_packages_table(rpm_map_keys, specs_map, packages)
+        else:
+            print("  (No packages found)")
+
+
+def print_git_report(
+    git_hashes: Set[str],
+    git_config: Optional[GitConfig],
+) -> None:
+    """Prints the git commit report."""
+    if not git_hashes:
+        return
+
+    if git_config:
         git_base_url = git_config.url
         print("\n## Git Commits\n")
-        for githash in sorted(list(all_git_hashes)):
+        for githash in sorted(list(git_hashes)):
             print(f"- {urljoin(git_base_url, f'commit/{githash}')}")
-    elif not git_config:
+    else:
         logging.warning(
             "No 'git' configuration found in config.yml. Cannot print commit URLs."
         )

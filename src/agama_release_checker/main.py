@@ -2,12 +2,17 @@ import argparse
 import logging
 import sys
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Tuple, Set
 
 from .config import load_config
 from .iso import check_command
 from .models import MirrorcacheConfig, AppConfig, Package
-from .reporting import print_results
+from .reporting import (
+    print_iso_results,
+    print_obs_results,
+    print_git_report,
+    extract_git_hashes,
+)
 from .reports import RpmsOnIsoReport, PackagesInObsReport
 
 CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
@@ -60,7 +65,11 @@ def main() -> None:
     create_cache_dir(CACHE_DIR)
     config: AppConfig = load_config(Path("config.yml"))
 
-    results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Package]]]] = []
+    iso_results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Package]]]] = (
+        []
+    )
+    obs_results: List[Tuple[Dict[str, Any], Optional[List[Package]]]] = []
+    all_git_hashes: Set[str] = set()
     rpm_map: Dict[str, List[str]] = config.rpms
 
     stages_to_process = config.stages
@@ -69,14 +78,10 @@ def main() -> None:
 
     if not stages_to_process:
         logging.warning("No stages to process found.")
-        # We don't exit here because we might just want to print git info if available?
-        # But usually we want to process something.
-        # Original code exited if no mirrorcache configs found.
 
     for stage in stages_to_process:
         stage_type = stage.get("type")
         if stage_type == "mirrorcache":
-            # Filter known keys for MirrorcacheConfig
             mc_args = {
                 k: stage[k] for k in ["type", "name", "url", "files"] if k in stage
             }
@@ -85,21 +90,45 @@ def main() -> None:
             iso_report = RpmsOnIsoReport(mirrorcache_config)
             latest_iso_url, iso_packages = iso_report.run()
 
-            config_dict = {
-                "name": mirrorcache_config.name,
-                "url": mirrorcache_config.url,
-                "files": mirrorcache_config.files,
-            }
-            results.append((config_dict, latest_iso_url, iso_packages))
+            iso_results.append(
+                (
+                    {
+                        "name": mirrorcache_config.name,
+                        "url": mirrorcache_config.url,
+                        "files": mirrorcache_config.files,
+                    },
+                    latest_iso_url,
+                    iso_packages,
+                )
+            )
+            if iso_packages:
+                all_git_hashes.update(extract_git_hashes(iso_packages, rpm_map))
 
         elif stage_type == "obsproject":
-            obs_report = PackagesInObsReport(stage)
-            obs_report.run()
+            obs_report = PackagesInObsReport(stage, rpm_map, config.specs)
+            latest_url, obs_packages = obs_report.run()
+
+            obs_results.append(
+                (
+                    {
+                        "name": stage.get("name", "Unknown OBS Project"),
+                        "url": stage.get("url"),
+                    },
+                    obs_packages,
+                )
+            )
+            if obs_packages:
+                all_git_hashes.update(extract_git_hashes(obs_packages, rpm_map))
 
         elif stage_type == "git":
             pass
 
-    print_results(results, config.git_config, rpm_map)
+    if iso_results:
+        print_iso_results(iso_results, rpm_map)
+    if obs_results:
+        print_obs_results(obs_results, list(rpm_map.keys()), config.specs)
+
+    print_git_report(all_git_hashes, config.git_config)
 
 
 if __name__ == "__main__":

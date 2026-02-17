@@ -32,12 +32,15 @@ stages:
 
 - url: https://build.opensuse.org/project/show/systemsmanagement:Agama:Devel
   type: obsproject
+  name: obs-sm-A-Devel
 
 - url: https://build.opensuse.org/project/show/systemsmanagement:Agama:Release
   type: obsproject
+  name: obs-sm-A-Release
 
 - url: https://build.opensuse.org/project/show/openSUSE:Factory
   type: obsproject
+  name: obs-factory
 
 # maps from obs package to binary rpms (wildcards)
 rpms:
@@ -57,3 +60,10 @@ rpms:
   - agama-products*
   agama-integration-tests:
   - agama-integration-tests
+
+# Maps obs package to a list of RPM spec files.
+# If not specified, foo maps to a singleton [foo].
+specs:
+  rubygem-agama-yast:
+  - rubygem-agama-yast
+  - agama-yast

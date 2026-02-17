@@ -1,3 +1,5 @@
+Read HACKING.md.
+
 When done with a task, do not foget to suggest updates to the documentation.
 
 Take care about command quoting.

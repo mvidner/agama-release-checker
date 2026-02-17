@@ -31,6 +31,7 @@ class GitConfig(StageConfig):
 class AppConfig:
     stages: List[Dict[str, Any]]
     rpms: Dict[str, List[str]]
+    specs: Dict[str, List[str]] = field(default_factory=dict)
 
     @property
     def mirrorcache_configs(self) -> List[MirrorcacheConfig]:

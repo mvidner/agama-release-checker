@@ -1,11 +1,176 @@
 import logging
-from typing import Dict, Any
+import subprocess
+from typing import Dict, Any, List, Optional, Tuple, Set
+from urllib.parse import urlparse
+
+from agama_release_checker.models import Package
 
 
 class PackagesInObsReport:
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(
+        self,
+        config: Dict[str, Any],
+        rpm_map: Dict[str, List[str]],
+        specs_map: Optional[Dict[str, List[str]]] = None,
+    ):
         self.config = config
+        self.rpm_map = rpm_map
+        self.specs_map = specs_map or {}
 
-    def run(self) -> None:
-        logging.info(f"Processing OBS project: {self.config.get('name')}")
-        # Placeholder for future implementation
+    def _get_project_name(self) -> str:
+        url = self.config.get("url", "")
+        if not url:
+            return ""
+        # Handle cases where URL might end with slash
+        path = urlparse(url).path.strip("/")
+        # Expected format: /project/show/<project_name>
+        parts = path.split("/")
+        return parts[-1]
+
+    def _run_osc_command(self, cmd: List[str]) -> Tuple[bool, str]:
+        """Runs an osc command and returns success status and output."""
+        try:
+            result = subprocess.run(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                check=True,
+            )
+            return True, result.stdout
+        except subprocess.CalledProcessError as e:
+            logging.debug(f"Command failed: {' '.join(cmd)}. Error: {e}")
+            return False, ""
+        except FileNotFoundError:
+            logging.error("The 'osc' command is required but not found.")
+            return False, ""
+
+    def _get_project_packages(self, project: str) -> Set[str]:
+        success, output = self._run_osc_command(["osc", "ls", project])
+        if success:
+            return set(output.splitlines())
+        return set()
+
+    def _get_package_files(self, project: str, package: str) -> List[str]:
+        success, output = self._run_osc_command(["osc", "ls", project, package])
+        if success:
+            return output.splitlines()
+        return []
+
+    def _read_file_content(self, project: str, package: str, filename: str) -> str:
+        success, output = self._run_osc_command(
+            ["osc", "cat", project, package, filename]
+        )
+        if success:
+            return output
+        return ""
+
+    def _parse_obsinfo(self, content: str) -> Optional[str]:
+        """Parses simple key: value format from .obsinfo file."""
+        for line in content.splitlines():
+            if ":" in line:
+                key, value = line.split(":", 1)
+                if key.strip() == "version":
+                    return value.strip()
+        return None
+
+    def _parse_spec(self, content: str) -> Tuple[str, str]:
+        version = ""
+        release = ""
+        for line in content.splitlines():
+            line_lower = line.lower()
+            if line_lower.startswith("version:"):
+                try:
+                    version = line.split(":", 1)[1].strip()
+                except IndexError:
+                    pass
+            elif line_lower.startswith("release:"):
+                try:
+                    release = line.split(":", 1)[1].strip()
+                except IndexError:
+                    pass
+        return version, release
+
+    def run(self) -> Tuple[Optional[str], Optional[List[Package]]]:
+        project = self._get_project_name()
+        if not project:
+            logging.error(
+                f"Could not determine OBS project name from URL: {self.config.get('url')}"
+            )
+            return None, None
+
+        logging.info(f"Processing OBS project: {project}")
+
+        # check for osc availability once
+        if not self._run_osc_command(["osc", "version"])[0]:
+            return None, None
+
+        project_packages = self._get_project_packages(project)
+        if not project_packages:
+            logging.warning(
+                f"No packages found in project {project} or failed to list."
+            )
+            return None, None
+
+        packages: List[Package] = []
+
+        for package_name in self.rpm_map.keys():
+            if package_name not in project_packages:
+                logging.debug(f"Package {package_name} not found in {project}")
+                continue
+
+            files = self._get_package_files(project, package_name)
+            if not files:
+                continue
+
+            # Shared version from .obsinfo if any
+            shared_version = ""
+            obsinfo_files = [f for f in files if f.endswith(".obsinfo")]
+            target_obsinfo = f"{package_name}.obsinfo"
+            if target_obsinfo in obsinfo_files:
+                obsinfo_file = target_obsinfo
+            elif obsinfo_files:
+                obsinfo_file = obsinfo_files[0]
+            else:
+                obsinfo_file = None
+
+            if obsinfo_file:
+                content = self._read_file_content(project, package_name, obsinfo_file)
+                shared_version = self._parse_obsinfo(content) or ""
+
+            spec_basenames = self.specs_map.get(package_name, [package_name])
+
+            for spec_basename in spec_basenames:
+                version = shared_version
+                release = "0"
+
+                spec_file = f"{spec_basename}.spec"
+                if spec_file in files:
+                    content = self._read_file_content(project, package_name, spec_file)
+                    v, r = self._parse_spec(content)
+
+                    if v and v != "0":
+                        version = v
+                        release = r
+                    elif v == "0" and not version:
+                        version = "0"
+                        release = r
+                    elif not v and not version:
+                        # try to get version if we have it from obsinfo but no spec version found?
+                        pass
+                else:
+                    # if spec file not found, but we had shared_version, should we still report it?
+                    # maybe only if it was intended to be there.
+                    pass
+
+                if version:
+                    packages.append(
+                        Package(
+                            name=spec_basename,
+                            version=version,
+                            release=release,
+                            arch="src",
+                        )
+                    )
+
+        return None, packages
