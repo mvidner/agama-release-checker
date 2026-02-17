@@ -14,10 +14,12 @@ class PackagesInObsReport:
         config: Dict[str, Any],
         rpm_map: Dict[str, List[str]],
         specs_map: Optional[Dict[str, List[str]]] = None,
+        no_cache: bool = False,
     ):
         self.config = config
         self.rpm_map = rpm_map
         self.specs_map = specs_map or {}
+        self.no_cache = no_cache
 
     def _get_project_name(self) -> str:
         url = self.config.get("url", "")
@@ -43,7 +45,7 @@ class PackagesInObsReport:
         cache_dir = CACHE_DIR / "obsproject" / stage_name / "osc_commands"
 
         # run_cached_command will handle directory creation and caching
-        return run_cached_command(cmd, cache_dir=cache_dir)
+        return run_cached_command(cmd, cache_dir=cache_dir, force_refresh=self.no_cache)
 
     def _get_project_packages(self, project: str) -> Set[str]:
         success, output = self._run_osc_command(["osc", "ls", project])

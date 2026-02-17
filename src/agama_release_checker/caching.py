@@ -22,7 +22,10 @@ def _generate_cache_filename(cmd: List[str]) -> str:
 
 
 def run_cached_command(
-    cmd: List[str], cache_dir: Optional[Path] = None, max_age: int = 3600
+    cmd: List[str],
+    cache_dir: Optional[Path] = None,
+    max_age: int = 3600,
+    force_refresh: bool = False,
 ) -> Tuple[bool, str]:
     """
     Runs a shell command with caching.
@@ -31,6 +34,7 @@ def run_cached_command(
         cmd: The command to run as a list of strings.
         cache_dir: The directory to store cache files. If None, caching is disabled.
         max_age: Cache validity duration in seconds (default 1 hour).
+        force_refresh: If True, ignore existing cache and run the command.
 
     Returns:
         A tuple (success, output).
@@ -43,7 +47,7 @@ def run_cached_command(
         filename = _generate_cache_filename(cmd)
         cache_file = cache_dir / filename
 
-        if cache_file.exists():
+        if not force_refresh and cache_file.exists():
             mtime = cache_file.stat().st_mtime
             if time.time() - mtime < max_age:
                 logging.debug(f"Cache hit for command: {cmd_str}")
@@ -53,7 +57,7 @@ def run_cached_command(
                 except OSError as e:
                     logging.warning(f"Failed to read cache file {cache_file}: {e}")
 
-    # Cache miss or stale
+    # Cache miss or stale or forced refresh
     try:
         logging.debug(f"Running {cmd_str}")
         # Capture output. We use universal_newlines=True (text=True in newer python)

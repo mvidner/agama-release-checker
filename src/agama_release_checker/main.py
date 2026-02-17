@@ -39,6 +39,11 @@ def main() -> None:
         action="append",
         help="Specify the name of the stage to process. Can be used multiple times.",
     )
+    parser.add_argument(
+        "--no-command-cache",
+        action="store_true",
+        help="Force refresh of cached command results (e.g. osc commands).",
+    )
     args = parser.parse_args()
 
     if args.verbose:
@@ -99,7 +104,9 @@ def main() -> None:
                 all_git_hashes.update(extract_git_hashes(iso_packages, rpm_map))
 
         elif stage_type == "obsproject":
-            obs_report = PackagesInObsReport(stage, rpm_map, config.specs)
+            obs_report = PackagesInObsReport(
+                stage, rpm_map, config.specs, no_cache=args.no_command_cache
+            )
             latest_url, obs_packages = obs_report.run()
 
             obs_results.append(
