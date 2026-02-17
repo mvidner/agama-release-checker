@@ -1,0 +1,2939 @@
+<collection matches="53">
+  <request id="1153006" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Staging" package="agama" rev="441ec8a562132da7a30007a24841d562"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="revoked" who="IGonzalezSosa" when="2024-07-04T11:46:50" created="2024-02-28T18:08:44">
+      <comment>The source project 'systemsmanagement:Agama:Staging' has been removed</comment>
+    </state>
+    <review state="new" when="2024-02-28T18:08:44" by_user="licensedigger"/>
+    <review state="declined" when="2024-02-28T18:10:28" who="factory-auto" by_user="factory-auto">
+      <comment>systemsmanagement:Agama:Staging is not a devel project of openSUSE:Factory, submit the package to a devel project first. See https://en.opensuse.org/openSUSE:How_to_contribute_to_Factory#How_to_request_a_new_devel_project for details.</comment>
+      <history who="factory-auto" when="2024-02-28T18:10:28">
+        <description>Review got declined</description>
+        <comment>systemsmanagement:Agama:Staging is not a devel project of openSUSE:Factory, submit the package to a devel project first. See https://en.opensuse.org/openSUSE:How_to_contribute_to_Factory#How_to_request_a_new_devel_project for details.</comment>
+      </history>
+    </review>
+    <review state="new" when="2024-02-28T18:08:44" by_group="factory-staging"/>
+    <description>Replaces the package agama-cli</description>
+  </request>
+  <request id="1184822" creator="lkocman">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="2ffb545f86d98f2b36f48f204e4641d6"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="lkocman" when="2024-07-02T14:15:08" created="2024-07-02T10:05:41" superseded_by="1184886">
+      <comment>superseded by 1184886</comment>
+    </state>
+    <review state="new" when="2024-07-02T10:05:41" by_package="agama" by_project="systemsmanagement:Agama:Devel"/>
+    <review state="accepted" when="2024-07-02T12:16:05" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-07-02T12:16:05">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-02T10:06:46" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-07-02T10:06:46">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-02T11:03:58" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      <history who="staging-bot" when="2024-07-02T11:03:59">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      </history>
+    </review>
+    <review state="new" when="2024-07-02T10:06:46" who="factory-auto" by_group="opensuse-review-team">
+      <comment>Please review sources</comment>
+    </review>
+    <review state="new" when="2024-07-02T11:03:58" who="staging-bot" by_project="openSUSE:Factory:Staging:adi:50">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:adi:50"</comment>
+    </review>
+    <description>Add Agama 9 installer
+
+  * https://code.opensuse.org/leap/features/issue/158</description>
+  </request>
+  <request id="1184886" creator="lkocman">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="2bbdd91414d8974220718c4b70d1da77"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="1" srcmd5="2bbdd91414d8974220718c4b70d1da77" osrcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2024-07-05T17:46:49" created="2024-07-02T14:15:08">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:50 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-07-03T10:57:19" who="IGonzalezSosa" by_package="agama" by_project="systemsmanagement:Agama:Devel">
+      <comment/>
+      <history who="IGonzalezSosa" when="2024-07-03T10:57:19">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-02T14:40:16" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2024-07-02T14:40:16">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-02T14:16:14" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-07-02T14:16:14">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-02T14:17:06" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      <history who="anag_factory" when="2024-07-02T14:17:06">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-02T15:10:58" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1184886 from user anag+factory
+  </comment>
+      <history who="darix" when="2024-07-02T15:10:58">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1184886 from user anag+factory
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-05T17:46:48" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:50">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:50 got accepted.</comment>
+      <history who="anag_factory" when="2024-07-05T17:46:48">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:50 got accepted.</comment>
+      </history>
+    </review>
+    <description>-Add Agama 9 installer
+
+  - Require new golang-github-google-jsonnet instead of jsonnet
+    jsonnet has an existing weakremover
+
+  - https://code.opensuse.org/leap/features/issue/158</description>
+  </request>
+  <request id="1189755" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="2caaeb7f64eb3453fed6d5ee23d5c37f"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="2" srcmd5="f4da4762c93f8c57fd3c9a90a4da156f" osrcmd5="2bbdd91414d8974220718c4b70d1da77"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2024-07-26T14:16:21" created="2024-07-26T10:05:09">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:30 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-07-26T10:20:15" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2024-07-26T10:20:16">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-26T10:07:25" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-07-26T10:07:25">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-26T10:13:50" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:30"</comment>
+      <history who="staging-bot" when="2024-07-26T10:13:50">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:30"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-26T13:03:46" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2024-07-26T13:03:46">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-07-26T14:16:19" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:30">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:30 got accepted.</comment>
+      <history who="dimstar_suse" when="2024-07-26T14:16:19">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:30 got accepted.</comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1192640" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="89fbd063dbf176ca3ba728bf25b2b106"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="3" srcmd5="fc88a63041e6499485c9b15323fbab1a" osrcmd5="f4da4762c93f8c57fd3c9a90a4da156f"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2024-08-13T11:23:16" created="2024-08-08T15:05:46">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:34 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-08-08T17:20:17" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-08-08T17:20:17">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-08T15:06:07" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-08-08T15:06:07">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-08T15:14:08" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      <history who="staging-bot" when="2024-08-08T15:14:08">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-09T06:02:20" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2024-08-09T06:02:20">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-09T07:42:28" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:11">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:adi:11"</comment>
+      <history who="dimstar_suse" when="2024-08-09T07:42:28">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:adi:11"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-09T07:42:29" who="dimstar_suse" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:34"</comment>
+      <history who="dimstar_suse" when="2024-08-09T07:42:29">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:34"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-13T11:23:14" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:34">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:34 got accepted.</comment>
+      <history who="dimstar_suse" when="2024-08-13T11:23:14">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:34 got accepted.</comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1194877" creator="lkocman">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="76244f31a30bb3e8f7a6480f528892c0"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="4" srcmd5="6aa46f0bf83fa8ab0d3f0de752b5c1ae" osrcmd5="fc88a63041e6499485c9b15323fbab1a"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2024-08-21T21:25:14" created="2024-08-20T09:36:33">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:27 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-08-21T07:56:29" who="jreidinger" by_package="agama" by_project="systemsmanagement:Agama:Devel">
+      <comment/>
+      <history who="jreidinger" when="2024-08-21T07:56:29">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-20T11:50:19" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-08-20T11:50:19">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-20T09:41:01" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-08-20T09:41:01">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-20T10:00:56" who="dimstar_suse" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:27"</comment>
+      <history who="dimstar_suse" when="2024-08-20T10:00:56">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:27"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-21T11:40:10" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2024-08-21T11:40:10">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-08-21T21:25:11" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:27">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:27 got accepted.</comment>
+      <history who="anag_factory" when="2024-08-21T21:25:11">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:27 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Use sd_notify for starting agama-web-service to notify systemd
+    when service is ready. It helps with race condition in agama-auto
+    (gh#openSUSE/agama#1539)
+  - improve systemd dependencies of agama-web-service to ensure that
+    agama service runs
+
+  - For CLI, use HTTP clients instead of D-Bus clients,
+    for Users and Localization (gh#openSUSE/agama#1438)
+    - service clients used by CLI:
+      - added UsersHTTPClient, LocalizationHTTPClient
+      - removed LocalizationClient
+      - BaseHTTPClient API reworked:
+        - return () or deserialized objects
+        - added PUT and PATCH
+    - web service:
+      - PUT /api/users/first: do report backend errors
+      - PATCH /api/users/root: report the (potential) backend errors
+    - tests:
+      - added tests using httpmock
+      - env_logger added to dev-dependencies</description>
+  </request>
+  <request id="1199046" creator="lkocman">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="80cc03213fc665f059cf8f3be8b5d69e"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="lkocman" when="2024-09-08T06:45:48" created="2024-09-05T18:47:56" superseded_by="1199423">
+      <comment>superseded by 1199423</comment>
+    </state>
+    <review state="new" when="2024-09-05T18:47:56" by_package="agama" by_project="systemsmanagement:Agama:Devel"/>
+    <review state="accepted" when="2024-09-05T21:00:49" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-09-05T21:00:49">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-05T18:50:47" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-09-05T18:50:47">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-05T18:52:27" who="dimstar_suse" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      <history who="dimstar_suse" when="2024-09-05T18:52:27">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-06T14:03:24" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1199046 from user dimstar_suse
+  </comment>
+      <history who="darix" when="2024-09-06T14:03:24">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1199046 from user dimstar_suse
+  </comment>
+      </history>
+    </review>
+    <review state="new" when="2024-09-05T18:52:27" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:11">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:adi:11"</comment>
+    </review>
+    <description>- Show product logo in product selector (gh#openSUSE/agama#1415).
+
+  - Expose the DASD D-Bus API through HTTP (gh#openSUSE/agama#1532).
+
+  - Schema definition for basic storage settings
+    (gh#openSUSE/agama#1455).
+
+  - For CLI, use HTTP clients instead of D-Bus clients,
+    for Software (gh#openSUSE/agama#1548)
+    - added SoftwareHTTPClient
+
+      (/etc/agama.d/ssl) is checked for a certificate</description>
+  </request>
+  <request id="1199423" creator="lkocman">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="a3f0742e146bf7ab9d3eb63abfc82676"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2024-09-13T09:21:50" created="2024-09-08T06:45:48" superseded_by="1200781">
+      <comment>superseded by 1200781</comment>
+    </state>
+    <review state="accepted" when="2024-09-10T08:24:07" who="IGonzalezSosa" by_package="agama" by_project="systemsmanagement:Agama:Devel">
+      <comment/>
+      <history who="IGonzalezSosa" when="2024-09-10T08:23:58">
+        <description>Review got declined</description>
+      </history>
+      <history who="IGonzalezSosa" when="2024-09-10T08:24:07">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-08T06:45:52" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-09-08T06:45:52">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-08T06:46:21" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-09-08T06:46:21">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-08T07:03:47" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      <history who="staging-bot" when="2024-09-08T07:03:47">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-09T12:56:38" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1199423 from user anag+factory
+  </comment>
+      <history who="darix" when="2024-09-09T12:56:38">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1199423 from user anag+factory
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-09T10:16:55" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:11">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:adi:11"</comment>
+      <history who="anag_factory" when="2024-09-09T10:16:55">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:adi:11"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-09T10:18:29" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      <history who="anag_factory" when="2024-09-09T10:18:29">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      </history>
+    </review>
+    <review state="new" when="2024-09-09T10:18:29" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:11">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:adi:11"</comment>
+    </review>
+    <description>- Show product logo in product selector (gh#openSUSE/agama#1415).
+
+  - Expose the DASD D-Bus API through HTTP (gh#openSUSE/agama#1532).
+
+  - Schema definition for basic storage settings
+    (gh#openSUSE/agama#1455).
+
+  - For CLI, use HTTP clients instead of D-Bus clients,
+    for Software (gh#openSUSE/agama#1548)
+    - added SoftwareHTTPClient
+
+      (/etc/agama.d/ssl) is checked for a certificate</description>
+  </request>
+  <request id="1200781" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="5761ca7a71a5e2d560026e442f03bb5e"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="5" srcmd5="20688ea884a2288f41377165a6398af6" osrcmd5="6aa46f0bf83fa8ab0d3f0de752b5c1ae"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2024-09-13T12:30:37" created="2024-09-13T09:21:50">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:11 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-09-13T11:35:19" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-09-13T11:35:19">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-13T09:25:40" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-09-13T09:25:40">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-13T09:22:02" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      <history who="anag_factory" when="2024-09-13T09:22:02">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:11"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-13T12:30:28" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:11">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:11 got accepted.</comment>
+      <history who="anag_factory" when="2024-09-13T12:30:28">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:11 got accepted.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-13T10:38:29" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2024-09-13T10:38:29">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <description>- Implement 802.1x (EAP) in network settings (gh#openSUSE/agama#1597).
+
+  - For CLI, use HTTP clients instead of D-Bus clients,
+    for Product (name and registration) (gh#openSUSE/agama#1548)
+    - added ProductHTTPClient
+
+  - Show product logo in product selector (gh#openSUSE/agama#1415).
+
+  - Expose the DASD D-Bus API through HTTP (gh#openSUSE/agama#1532).
+
+  - Schema definition for basic storage settings
+    (gh#openSUSE/agama#1455).
+
+  - For CLI, use HTTP clients instead of D-Bus clients,
+    for Software (gh#openSUSE/agama#1548)
+    - added SoftwareHTTPClient
+
+      (/etc/agama.d/ssl) is checked for a certificate</description>
+  </request>
+  <request id="1202589" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="8260206f089199ec64359592057bc1fd"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="6" srcmd5="ef85d577517c39d2de1c3312ad7dced1" osrcmd5="20688ea884a2288f41377165a6398af6"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2024-09-23T13:23:58" created="2024-09-23T09:35:46">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:68 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-09-23T09:40:30" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2024-09-23T09:40:30">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-23T09:40:25" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-09-23T09:40:25">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-23T09:46:50" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:68"</comment>
+      <history who="anag_factory" when="2024-09-23T09:46:50">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:68"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-23T11:25:34" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2024-09-23T11:25:34">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-09-23T13:23:56" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:68">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:68 got accepted.</comment>
+      <history who="anag_factory" when="2024-09-23T13:23:56">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:68 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Version 10
+
+  - Change the license to GPL-2.0-or-later (gh#openSUSE/agama#1621).
+
+  - Expose the zFCP D-Bus API through HTTP (gh#openSUSE/agama#1570).
+
+  - For CLI, use HTTP clients instead of D-Bus clients,
+    final piece: Storage (gh#openSUSE/agama#1600)
+    - added StorageHTTPClient
+
+  - Add additional wireless settings (gh#openSUSE/agama#1602).</description>
+  </request>
+  <request id="1220523" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="527094293f8b12c273297f198932d5ce"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="7" srcmd5="5dd1386495f9bd8e096ae39983fe3e51" osrcmd5="ef85d577517c39d2de1c3312ad7dced1"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2024-11-04T21:42:29" created="2024-11-04T10:05:40">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:28 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-11-04T12:20:17" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-11-04T12:20:17">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-04T10:06:13" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-11-04T10:06:13">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-04T10:09:56" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:28"</comment>
+      <history who="staging-bot" when="2024-11-04T10:09:56">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:28"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-04T10:13:03" who="mstrigl" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1220523 from user staging-bot
+  </comment>
+      <history who="mstrigl" when="2024-11-04T10:13:03">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1220523 from user staging-bot
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-04T21:42:27" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:28">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:28 got accepted.</comment>
+      <history who="anag_factory" when="2024-11-04T21:42:27">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:28 got accepted.</comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1225635" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="99f7fb99cb6e5cd586a2ea0b658e7dd9"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="8" srcmd5="3cda36c95526b4f8ee983e7bbea029cd" osrcmd5="5dd1386495f9bd8e096ae39983fe3e51"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2024-11-21T21:02:09" created="2024-11-21T18:06:37">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:13 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-11-21T20:20:14" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-11-21T20:20:14">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-21T18:10:35" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-11-21T18:10:35">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-21T19:05:28" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:13"</comment>
+      <history who="staging-bot" when="2024-11-21T19:05:28">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:13"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-21T19:36:39" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2024-11-21T19:36:39">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2024-11-21T21:02:07" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:13">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:13 got accepted.</comment>
+      <history who="dimstar_suse" when="2024-11-21T21:02:07">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:13 got accepted.</comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1229847" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="bf749980e9049997f8f052c393da0d0f"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="9" srcmd5="ea408ea8d8dbf5b445a1970eb7743b73" osrcmd5="3cda36c95526b4f8ee983e7bbea029cd"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2024-12-10T22:49:42" created="2024-12-10T15:05:30">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:53 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-12-10T17:16:10" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-12-10T17:16:10">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-12-10T15:09:14" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-12-10T15:09:14">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-12-10T15:06:56" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:53"</comment>
+      <history who="anag_factory" when="2024-12-10T15:06:56">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:53"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-12-10T22:49:39" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:53">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:53 got accepted.</comment>
+      <history who="anag_factory" when="2024-12-10T22:49:39">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:53 got accepted.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-12-10T19:11:16" who="mstrigl" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1229847 from user factory-auto
+  </comment>
+      <history who="mstrigl" when="2024-12-10T19:11:16">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1229847 from user factory-auto
+  </comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1233560" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="08ce3c90f8517407cf569c4183ace973"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="10" srcmd5="06b977ffa2c7081e7cba19aaa4418daa" osrcmd5="ea408ea8d8dbf5b445a1970eb7743b73"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-01-01T22:04:15" created="2024-12-27T13:05:17">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:31 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2024-12-27T15:16:21" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2024-12-27T15:16:21">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-12-27T13:08:56" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2024-12-27T13:08:56">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2024-12-27T13:07:17" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:31"</comment>
+      <history who="staging-bot" when="2024-12-27T13:07:17">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:31"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-01T22:04:12" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:31">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:31 got accepted.</comment>
+      <history who="anag_factory" when="2025-01-01T22:04:12">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:31 got accepted.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-01T15:38:19" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-01-01T15:38:19">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1236914" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="ee7cf74a506f3b4bf84b607cb404226a"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="11" srcmd5="4317fc49712d17011eb8020c4d26d6b5" osrcmd5="06b977ffa2c7081e7cba19aaa4418daa"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-01-12T10:21:35" created="2025-01-10T16:30:03">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:67 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-01-10T18:45:50" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-01-10T18:45:50">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-10T16:32:12" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-01-10T16:32:12">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-10T16:35:05" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:67"</comment>
+      <history who="anag_factory" when="2025-01-10T16:35:05">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:67"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-10T21:34:22" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-01-10T21:34:22">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-12T10:21:33" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:67">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:67 got accepted.</comment>
+      <history who="anag_factory" when="2025-01-12T10:21:33">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:67 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Disable the browser cache setting the "Cache-Control" header to
+    "no-store" (gh#agama-project/agama#1880).
+
+  - Increase disk size in _constraints to fix build on ppc
+    (gh#agama-project/agama#1876).
+
+  - Add support for products registration (jsc#PED-11192,
+    gh#agama-project/agama#1809).</description>
+  </request>
+  <request id="1237709" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="bd339999ea6975d4b6f13f9cac3d631a"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="12" srcmd5="a0febd5b131ea9af116619b3bf7cd031" osrcmd5="4317fc49712d17011eb8020c4d26d6b5"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-01-14T15:24:16" created="2025-01-14T10:25:54">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:47 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-01-14T10:31:06" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2025-01-14T10:31:06">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-14T10:31:30" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-01-14T10:31:30">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-14T11:07:41" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:47"</comment>
+      <history who="staging-bot" when="2025-01-14T11:07:41">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:47"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-14T13:52:19" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-01-14T13:52:19">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-14T15:24:12" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:47">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:47 got accepted.</comment>
+      <history who="anag_factory" when="2025-01-14T15:24:12">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:47 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Version 11</description>
+  </request>
+  <request id="1239064" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="e823c466b9e5c141da056f489c244d17"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2025-01-21T14:40:30" created="2025-01-20T16:14:20" superseded_by="1239315">
+      <comment>superseded by 1239315</comment>
+    </state>
+    <review state="accepted" when="2025-01-20T18:25:16" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-01-20T18:25:16">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-20T16:16:40" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-01-20T16:16:40">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-20T16:16:19" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:1"</comment>
+      <history who="anag_factory" when="2025-01-20T16:16:19">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:1"</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-01-20T16:16:19" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:1">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:adi:1"</comment>
+    </review>
+    <review state="accepted" when="2025-01-20T16:25:42" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1239064 from user factory-auto
+  </comment>
+      <history who="darix" when="2025-01-20T16:25:42">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1239064 from user factory-auto
+  </comment>
+      </history>
+    </review>
+    <description>- Add support for specifying a license for each product
+    (jsc#PED-11987).
+
+  - Stop the WebSocket handler when the client is disconnected
+    (gh#agama-project/agama#1909).
+  - Log the events.
+
+  - Fix typo in `agama profile import --help` (bsc#1235827)</description>
+  </request>
+  <request id="1239315" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="23c3e32bda1eebef9ff4de0e06f30beb"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="13" srcmd5="5033cba6e85f93ddc525cb5906d3caf1" osrcmd5="a0febd5b131ea9af116619b3bf7cd031"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-01-21T20:10:18" created="2025-01-21T14:40:30">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:1 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-01-21T17:01:07" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-01-21T17:01:07">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-21T14:40:45" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-01-21T14:40:45">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-21T15:04:16" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:1"</comment>
+      <history who="anag_factory" when="2025-01-21T15:04:16">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:1"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-21T15:13:26" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1239315 from user anag+factory
+  </comment>
+      <history who="darix" when="2025-01-21T15:13:26">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1239315 from user anag+factory
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-21T20:10:16" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:1">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:1 got accepted.</comment>
+      <history who="anag_factory" when="2025-01-21T20:10:16">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:1 got accepted.</comment>
+      </history>
+    </review>
+    <description>- The web server provides /api/software/repositories endpoint
+    for reading the currently configured repositories,
+    related to (gh#agama-project/agama#1894)
+
+  - Add support for specifying a license for each product
+    (jsc#PED-11987).
+
+  - Stop the WebSocket handler when the client is disconnected
+    (gh#agama-project/agama#1909).
+  - Log the events.
+
+  - Fix typo in `agama profile import --help` (bsc#1235827)</description>
+  </request>
+  <request id="1240159" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="c4edde68d0611d8017088a83081a2e7a"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="14" srcmd5="92add55597af6069cd3ec79b7ae579c8" osrcmd5="5033cba6e85f93ddc525cb5906d3caf1"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2025-01-25T18:12:25" created="2025-01-24T13:30:40">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:1 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-01-24T15:45:49" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-01-24T15:45:49">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-24T13:31:37" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-01-24T13:31:37">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-24T14:05:18" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:1"</comment>
+      <history who="staging-bot" when="2025-01-24T14:05:18">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:1"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-24T18:30:29" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-01-24T18:30:29">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-01-25T18:12:23" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:1">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:1 got accepted.</comment>
+      <history who="dimstar_suse" when="2025-01-25T18:12:23">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:1 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Introduce a new installation phase "finish"
+    (gh#agama-project/agama#1616).
+
+  - Change the registration property in a product's definition to a
+    boolean (gh#agama-project/agama#1938).
+
+  - Added a workaround for stuck web UI when importing auto
+    installation profile with unreachable software repository
+    (gh#agama-project/agama#1933)</description>
+  </request>
+  <request id="1241836" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="a237df9b081979989ec683513544b9d0"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2025-02-26T08:53:04" created="2025-01-31T18:05:27" superseded_by="1248595">
+      <comment>superseded by 1248595</comment>
+    </state>
+    <review state="new" when="2025-01-31T18:05:27" by_user="licensedigger"/>
+    <review state="declined" when="2025-01-31T18:06:44" who="factory-auto" by_user="factory-auto">
+      <comment>No changelog. Please use 'osc vc' to update the changes file(s).</comment>
+      <history who="factory-auto" when="2025-01-31T18:06:44">
+        <description>Review got declined</description>
+        <comment>No changelog. Please use 'osc vc' to update the changes file(s).</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-01-31T18:05:27" by_group="factory-staging"/>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1248595" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="02a58bccd34b39cb39a4dcb9011e2937"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="15" srcmd5="9e8dd37c46da4aa0bfc448a77afc58df" osrcmd5="92add55597af6069cd3ec79b7ae579c8"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2025-02-26T16:23:40" created="2025-02-26T08:53:03">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:73 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-02-26T11:08:11" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-02-26T11:08:11">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-02-26T08:56:14" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-02-26T08:56:14">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-02-26T09:19:49" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:73"</comment>
+      <history who="staging-bot" when="2025-02-26T09:19:49">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:73"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-02-26T14:18:40" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-02-26T14:18:40">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-02-26T16:23:36" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:73">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:73 got accepted.</comment>
+      <history who="dimstar_suse" when="2025-02-26T16:23:36">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:73 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Version 12
+
+  - Add the missing shebang line to the agama-scripts.sh shell script
+    (gh#agama-project/agama#2077).
+  - Save logs after running post installation scripts
+    (gh#agama-project/agama#2078).
+
+  - Keep the encoding when storing the locale (gh#agama-project/agama#2062).
+
+  - Extend storage model schema to support global encryption
+    (gh#agama-project/agama#2031).
+
+  - Introduce the storage model to support the new storage user
+    interface (gh#openSUSE/agama#2033)
+
+  - Expose root and first user passwords (gh#agama-project/agama#2005).
+  - Remove support for auto-login.
+
+  - Added reboot command to the CLI (gh#agama-project/agama#1970)
+
+  - Set console and X11 keymaps when changing the installer keymap
+    (bsc#1236174).
+  - Use the "dashed" form of the keymap identifier when calling
+    systemd-firstboot (bsc#1236174).
+
+  - Fixup: Make the "lang" URL query optional, do not fail when it
+    is missing. This fixes crash on non-UEFI systems.
+
+  - Forward the "lang" URL query parameter when redirecting in the
+    "/login" endpoint (this allows to define the default language</description>
+  </request>
+  <request id="1250094" creator="mvidner">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="607991e92a5f8b4a1c86f679214c95c6"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="16" srcmd5="41a62b8354222464c5d91c0ff26a31a4" osrcmd5="9e8dd37c46da4aa0bfc448a77afc58df"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-03-04T17:33:50" created="2025-03-04T14:35:09">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:49 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-03-04T16:46:37" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-03-04T16:46:37">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-04T14:35:47" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-03-04T14:35:47">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-04T14:36:51" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:49"</comment>
+      <history who="anag_factory" when="2025-03-04T14:36:51">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:49"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-04T15:00:52" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1250094 from user anag+factory
+  </comment>
+      <history who="darix" when="2025-03-04T15:00:52">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1250094 from user anag+factory
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-04T17:33:47" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:49">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:49 got accepted.</comment>
+      <history who="anag_factory" when="2025-03-04T17:33:47">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:49 got accepted.</comment>
+      </history>
+    </review>
+    <description>- install and package also storage.schema.json (bsc#1238367)&#xD;
+  </description>
+  </request>
+  <request id="1254593" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="a22bc6aad6eb0b42455b587089ccbeef"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="17" srcmd5="60d91813c8bd20181b6c17ec3b03b415" osrcmd5="41a62b8354222464c5d91c0ff26a31a4"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-03-20T18:25:29" created="2025-03-20T07:08:09">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:13 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-03-20T09:20:19" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-03-20T09:20:19">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-20T07:10:29" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-03-20T07:10:29">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-20T08:03:54" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:13"</comment>
+      <history who="anag_factory" when="2025-03-20T08:03:54">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:13"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-20T12:41:44" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-03-20T12:41:44">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-20T18:25:26" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:13">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:13 got accepted.</comment>
+      <history who="anag_factory" when="2025-03-20T18:25:26">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:13 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Allow selecting individual packages through a configuration file
+    (gh#agama-project/agama#2153).
+
+  - Introduced the hostname model in order to start managing it
+    (gh#agama-project/agama#2118).
+
+  - Set the extension in the disposition "filename" so Chrome uses
+    the correct name (gh#agama-project/agama#2141).
+
+  - Package and install the storage model schema
+    (gh#agama-project/agama#2135).
+
+  - Extend agama download to support most of YaST-like URLs
+    (device:, usb:, label:, cd:, dvd: and hd:) (gh#agama-project/agama#2118).
+
+  - Extend storage model schema to support file system label (needed
+    for jsc#AGM-122 and bsc#1237165).</description>
+  </request>
+  <request id="1256447" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="18da2e426cc8aa222fc00fdd4c13cd91"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2025-03-27T13:33:52" created="2025-03-27T11:12:06" superseded_by="1256465">
+      <comment>superseded by 1256465</comment>
+    </state>
+    <review state="accepted" when="2025-03-27T13:25:18" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-03-27T13:25:18">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-27T11:16:40" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-03-27T11:16:40">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-27T11:15:18" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      <history who="anag_factory" when="2025-03-27T11:15:18">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-03-27T11:15:18" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:50">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:adi:50"</comment>
+    </review>
+    <review state="new" when="2025-03-27T11:16:40" who="factory-auto" by_group="opensuse-review-team">
+      <comment>Please review sources</comment>
+    </review>
+    <description>- Support for manual files deployment in unattended mode
+    (gh#agama-project/agama#2121)
+
+  - Do not try to connect to the HTTP server when it is not needed
+    (gh#agama-project/agama#2192).
+
+  - Add extensions from the registration server (automatic
+    installation only) (jsc#AGM-100)
+
+  - Improve init scripts execution (gh#agama-project/agama#2161):
+    * Properly run the scripts (gh#agama-project/agama#2144).
+    * Allow setting the scripts path with the SCRIPTS_DIR
+      environment variable.
+    * Do not exit with an error if there are not scripts.
+    * Make agama-scripts.sh idempotent.</description>
+  </request>
+  <request id="1256465" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="f2ed39d93460cd1b51b61e28f40ebadd"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="18" srcmd5="9c72a6fe0d87b3270532b00e98166aaf" osrcmd5="60d91813c8bd20181b6c17ec3b03b415"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-03-27T21:33:38" created="2025-03-27T13:33:52">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:50 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-03-27T15:45:57" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-03-27T15:45:57">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-27T13:36:05" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-03-27T13:36:05">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-27T13:34:23" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      <history who="anag_factory" when="2025-03-27T13:34:23">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:50"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-27T21:33:35" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:50">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:50 got accepted.</comment>
+      <history who="anag_factory" when="2025-03-27T21:33:35">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:50 got accepted.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-03-27T15:34:41" who="oertel" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1256465 from user factory-auto
+  </comment>
+      <history who="oertel" when="2025-03-27T15:34:41">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1256465 from user factory-auto
+  </comment>
+      </history>
+    </review>
+    <description>- Version 13
+
+  - Support for manual files deployment in unattended mode
+    (gh#agama-project/agama#2121)
+
+  - Do not try to connect to the HTTP server when it is not needed
+    (gh#agama-project/agama#2192).
+
+  - Add extensions from the registration server (automatic
+    installation only) (jsc#AGM-100)
+
+  - Improve init scripts execution (gh#agama-project/agama#2161):
+    * Properly run the scripts (gh#agama-project/agama#2144).
+    * Allow setting the scripts path with the SCRIPTS_DIR
+      environment variable.
+    * Do not exit with an error if there are not scripts.
+    * Make agama-scripts.sh idempotent.
+
+  - Extend storage model schema with LVM (gh#agama-project/agama#2089).</description>
+  </request>
+  <request id="1271954" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="6a2d87c9a242aaf711cd51ffb03714bc"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="revoked" who="IGonzalezSosa" when="2025-04-22T16:20:13" created="2025-04-22T15:28:03">
+      <comment>Submitted the wrong version number (14.pre...). A correct submission will follow from the :Release project.</comment>
+    </state>
+    <review state="new" when="2025-04-22T15:28:03" by_user="licensedigger"/>
+    <review state="accepted" when="2025-04-22T15:31:36" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-04-22T15:31:36">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-04-22T15:29:34" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:2"</comment>
+      <history who="anag_factory" when="2025-04-22T15:29:35">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:2"</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-04-22T15:29:34" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:2">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:adi:2"</comment>
+    </review>
+    <review state="accepted" when="2025-04-22T15:57:05" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1271954 from user factory-auto
+  </comment>
+      <history who="darix" when="2025-04-22T15:57:05">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1271954 from user factory-auto
+  </comment>
+      </history>
+    </review>
+    <description>- Version 14
+
+  - CLI: wait a bit between selecting the product to install and
+    registering it so the Web UI has enough time to process all
+    events (gh#agama-project/agama#2274)
+
+  - Allow to log in into multiple systems (gh#agama-project/agama#2261).
+  - Do not interactively ask for accepting insecure connections.
+
+  - Report and emit changes to the connections states. (gh#agama-project/agama#2247).
+  - Do not write wireless security settings when they are not used.
+
+  - Add missing help to finish command (gh#agama-project/agama#2272).
+
+  - Replace --api option by --host (gh#agama-project/agama#2271).
+
+  - Prevent agama-web-server from getting stuck in the POST
+    /api/profile/autoyast calls (gh#agama-project/agama#2259).
+  - Temporarily disable AutoYaST profiles fetch errors.
+
+  - Allow to specify extra kernel parameters in profile
+    (jsc#PED-10810)
+
+  - Made `--api URL` work with `agama profile`
+    (gh#agama-project/agama#2103)
+    - Added /api/profile on the backend
+    - JSON validation error are more readable now
+    - Error messages do not start with "Anyhow(...)"
+    - Backend errors include causes</description>
+  </request>
+  <request id="1271979" creator="IGonzalezSosa">
+    <action type="change_devel">
+      <source project="systemsmanagement:Agama:Release" package="agama"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-04-23T07:09:28" created="2025-04-22T16:14:59">
+      <comment/>
+    </state>
+    <review state="accepted" when="2025-04-22T16:16:06" who="licensedigger" by_user="licensedigger">
+      <comment/>
+      <history who="licensedigger" when="2025-04-22T16:16:06">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-04-22T16:16:35" who="factory-auto" by_user="factory-auto">
+      <comment>ok: unhandled request type change_devel</comment>
+      <history who="factory-auto" when="2025-04-22T16:16:35">
+        <description>Review got accepted</description>
+        <comment>ok: unhandled request type change_devel</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-04-22T16:14:59" by_group="factory-staging"/>
+    <description>systemsmanagement:Agama:Release contains the stable code</description>
+  </request>
+  <request id="1272124" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="08c655d42acab9070ca42e479dba2d56"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="19" srcmd5="0dc2189b7969e35269c2e2ae11a312e2" osrcmd5="9c72a6fe0d87b3270532b00e98166aaf"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-04-23T16:39:45" created="2025-04-23T09:54:50">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:23 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-04-23T09:55:15" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2025-04-23T09:55:15">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-04-23T09:55:59" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-04-23T09:55:59">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-04-23T10:07:41" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:23"</comment>
+      <history who="anag_factory" when="2025-04-23T10:07:41">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:23"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-04-23T16:16:45" who="oertel" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1272124 from user anag_factory
+  </comment>
+      <history who="oertel" when="2025-04-23T16:16:45">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1272124 from user anag_factory
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-04-23T16:39:43" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:23">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:23 got accepted.</comment>
+      <history who="anag_factory" when="2025-04-23T16:39:43">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:23 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Version 14
+
+  - CLI: wait a bit between selecting the product to install and
+    registering it so the Web UI has enough time to process all
+    events (gh#agama-project/agama#2274)
+
+  - Allow to log in into multiple systems (gh#agama-project/agama#2261).
+  - Do not interactively ask for accepting insecure connections.
+
+  - Report and emit changes to the connections states. (gh#agama-project/agama#2247).
+  - Do not write wireless security settings when they are not used.
+
+  - Add missing help to finish command (gh#agama-project/agama#2272).
+
+  - Replace --api option by --host (gh#agama-project/agama#2271).
+
+  - Prevent agama-web-server from getting stuck in the POST
+    /api/profile/autoyast calls (gh#agama-project/agama#2259).
+  - Temporarily disable AutoYaST profiles fetch errors.
+
+  - Allow to specify extra kernel parameters in profile
+    (jsc#PED-10810)
+
+  - Made `--api URL` work with `agama profile`
+    (gh#agama-project/agama#2103)
+    - Added /api/profile on the backend
+    - JSON validation error are more readable now
+    - Error messages do not start with "Anyhow(...)"
+    - Backend errors include causes</description>
+  </request>
+  <request id="1280489" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="0ed41eed081d53256a7f903db1cc9af2"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="20" srcmd5="afebacc9603ed992cf91e23fe817d4dd" osrcmd5="0dc2189b7969e35269c2e2ae11a312e2"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-05-27T16:43:14" created="2025-05-27T08:44:02">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:27 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-05-27T11:00:47" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-05-27T11:00:47">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-05-27T08:46:36" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-05-27T08:46:36">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-05-27T09:17:16" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:17"</comment>
+      <history who="anag_factory" when="2025-05-27T09:17:16">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:17"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-05-27T09:17:39" who="mstrigl" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1280489 from user factory-auto
+  </comment>
+      <history who="mstrigl" when="2025-05-27T09:17:39">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1280489 from user factory-auto
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-05-27T10:01:50" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:17">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:adi:17"</comment>
+      <history who="anag_factory" when="2025-05-27T10:01:50">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:adi:17"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-05-27T10:02:14" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:27"</comment>
+      <history who="anag_factory" when="2025-05-27T10:02:14">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:27"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-05-27T16:43:10" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:27">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:27 got accepted.</comment>
+      <history who="anag_factory" when="2025-05-27T16:43:10">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:27 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Version 15
+
+  - Proper handling of WebSocket secure connections (gh#agama-project/agama#2391):
+    - "agama monitor" does not use "insecure" by default.
+    - Do not encrypt the connection when using ws: URLs.
+
+  - Cache progress reporting to avoid blocking the clients
+    (gh#agama-project/agama#2389).
+
+  - Update schema of the storage model (gh#agama-project/agama#2346).
+
+  - Provide software conflicts HTTP API (gh#agama-project/agama#2348)
+
+  - Cache issues to avoid blocking the clients
+    (gh#agama-project/agama#2379).
+
+  - Cache the software configuration and products in the web server,
+    the software backend is blocked during package installation
+    (bsc#1241208)
+
+  - Add support for bridge connections (gh#openSUSE/agama#2258).
+
+  - Do not crash when network events do not contain "addresses",
+    "nameservers", "dnsSearchlist", "routes4" or "routes6"
+    (gh#agama-project/agama#2371).
+
+  - Adapt "install", "probe" and "finish" to use the HTTP API
+    (gh#agama-project/agama#2368).
+  - Add commands for monitoring Agama (gh#agama-project/agama#2368):
+    - "monitor": to display the progress.</description>
+  </request>
+  <request id="1284539" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="67f55239e70666273c028567b1c69146"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="21" srcmd5="a0bd4a0707e893873c961bcede3a05e2" osrcmd5="afebacc9603ed992cf91e23fe817d4dd"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-06-11T14:24:09" created="2025-06-10T16:06:38">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:62 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-06-10T16:10:19" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2025-06-10T16:10:19">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-10T16:10:39" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-06-10T16:10:39">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-10T17:05:04" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:62"</comment>
+      <history who="staging-bot" when="2025-06-10T17:05:04">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:62"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-11T00:31:59" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1284539 from user staging-bot
+  </comment>
+      <history who="darix" when="2025-06-11T00:31:59">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1284539 from user staging-bot
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-11T14:24:05" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:62">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:62 got accepted.</comment>
+      <history who="anag_factory" when="2025-06-11T14:24:05">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:62 got accepted.</comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1287980" creator="lslezak">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="1cd9b04277bdfef3e5ae64c63d75b04e"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="22" srcmd5="1cd9b04277bdfef3e5ae64c63d75b04e" osrcmd5="a0bd4a0707e893873c961bcede3a05e2"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-06-24T18:48:07" created="2025-06-23T14:57:33">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:12 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-06-23T17:15:13" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-06-23T17:15:13">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-23T15:01:22" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-06-23T15:01:22">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-23T15:04:41" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:12"</comment>
+      <history who="staging-bot" when="2025-06-23T15:04:41">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:12"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-23T15:51:26" who="oertel" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1287980 from user staging-bot
+  </comment>
+      <history who="oertel" when="2025-06-23T15:51:26">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1287980 from user staging-bot
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-24T18:48:06" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:12">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:12 got accepted.</comment>
+      <history who="anag_factory" when="2025-06-24T18:48:06">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:12 got accepted.</comment>
+      </history>
+    </review>
+    <description>weekly snapshot</description>
+  </request>
+  <request id="1289316" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="37fc775873828ab46e48e75fa8238889"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2025-06-30T16:30:58" created="2025-06-30T16:30:18" superseded_by="1289317">
+      <comment>superseded by 1289317</comment>
+    </state>
+    <review state="new" when="2025-06-30T16:30:18" by_user="licensedigger"/>
+    <review state="new" when="2025-06-30T16:30:18" by_user="factory-auto"/>
+    <review state="new" when="2025-06-30T16:30:18" by_group="factory-staging"/>
+    <description>- Version 16
+
+  - Reprobe storage if need while loading a config (bsc#1245114).
+
+  - Add an end-point to check passwords strenght (bsc#1237480).
+
+  - Fix error messages formatting (gh#agama-project/agama#2471).
+
+  - Allow to specify onlyRequired in software config and in software
+    section of agama profile (jsc#AGM-154)</description>
+  </request>
+  <request id="1289317" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="37fc775873828ab46e48e75fa8238889"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="23" srcmd5="37fc775873828ab46e48e75fa8238889" osrcmd5="1cd9b04277bdfef3e5ae64c63d75b04e"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-07-01T09:34:57" created="2025-06-30T16:30:57">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:31 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-06-30T18:45:22" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-06-30T18:45:22">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-30T16:31:21" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-06-30T16:31:21">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-06-30T16:35:55" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:31"</comment>
+      <history who="anag_factory" when="2025-06-30T16:35:55">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:31"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-01T07:04:57" who="bigironman" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1289317 from user anag_factory
+  </comment>
+      <history who="bigironman" when="2025-07-01T07:04:57">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1289317 from user anag_factory
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-01T09:34:56" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:31">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:31 got accepted.</comment>
+      <history who="anag_factory" when="2025-07-01T09:34:56">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:31 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Version 16
+
+  - Reprobe storage if need while loading a config (bsc#1245114).
+
+  - Add an end-point to check passwords strenght (bsc#1237480).
+
+  - Fix error messages formatting (gh#agama-project/agama#2471).
+
+  - Allow to specify onlyRequired in software config and in software
+    section of agama profile (jsc#AGM-154)</description>
+  </request>
+  <request id="1294904" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="99117a62484d6173487a73f8681591e3"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="mvidner" when="2025-07-22T15:32:15" created="2025-07-21T21:58:55" superseded_by="1295145">
+      <comment>superseded by 1295145</comment>
+    </state>
+    <review state="new" when="2025-07-21T21:58:55" by_user="licensedigger"/>
+    <review state="declined" when="2025-07-21T22:01:40" who="factory-auto" by_user="factory-auto">
+      <comment>Source validator failed. Try "osc service runall source_validator"
+  ERROR: '' is not a date (agama/agama.changes:106)
+  Please fix with your own tools or try /usr/lib/obs/service/source_validators/helpers/fix_changelog
+  changelog not in sequence:
+  Wed Jul 16 15:37:34 UTC 2025 - Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  * Wed Jul 16 2025 Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  - When searching for a translation of a license, use the first
+    language in the same territory as fallback (bsc#1238364,
+    gh#agama-project/agama#2571).
+  - Add the language tag to the /licences/:id endpoint.
+
+  Thu Jul 17 10:35:10 UTC 2025 - Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  * Thu Jul 17 2025 Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  - Adjust the information included in the logs (gh#agama-project/agama#2575).
+
+  Please fix with your own tools or try /usr/lib/obs/service/source_validators/helpers/fix_changelog
+  </comment>
+      <history who="factory-auto" when="2025-07-21T22:01:41">
+        <description>Review got declined</description>
+        <comment>Source validator failed. Try "osc service runall source_validator"
+  ERROR: '' is not a date (agama/agama.changes:106)
+  Please fix with your own tools or try /usr/lib/obs/service/source_validators/helpers/fix_changelog
+  changelog not in sequence:
+  Wed Jul 16 15:37:34 UTC 2025 - Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  * Wed Jul 16 2025 Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  - When searching for a translation of a license, use the first
+    language in the same territory as fallback (bsc#1238364,
+    gh#agama-project/agama#2571).
+  - Add the language tag to the /licences/:id endpoint.
+
+  Thu Jul 17 10:35:10 UTC 2025 - Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  * Thu Jul 17 2025 Imobach Gonzalez Sosa &lt;igonzalezsosa@suse.com&gt;
+  - Adjust the information included in the logs (gh#agama-project/agama#2575).
+
+  Please fix with your own tools or try /usr/lib/obs/service/source_validators/helpers/fix_changelog
+  </comment>
+      </history>
+    </review>
+    <review state="new" when="2025-07-21T21:58:55" by_group="factory-staging"/>
+    <description>- Version 17
+
+  - Add support for an inst.script that allows to run an arbitrary
+    script (bsc#1246702, gh#agama-project/agama#2589).
+
+  - Ensure software cache is updated even if part of its config
+    cause error (gh#agama-project/agama#2585)
+
+  - Fix device type detection when reading a VLAN connection
+    (gh#agama-project/agama#2586).
+
+  - Add support to configure VLANs through the CLI or HTTP API
+    (gh#agama-project/agama#2580).
+
+  - Fix crash when an Agama profile contains only the zfcp section by
+    providing better error report when product selection have to be
+    done before or in the same profile (bsc#1246601)
+
+  - When searching for a translation of a license, use the first
+    language in the same territory as fallback (bsc#1238364,
+    gh#agama-project/agama#2571).
+  - Add the language tag to the /licences/:id endpoint.
+
+  - Adjust the information included in the logs (gh#agama-project/agama#2575).
+
+  - Fix deletion of controller connections (gh#agama-project/agama#2564)
+
+  - Make the method4 and method6 default to be "auto" in case of
+    absense (bsc#1246194).</description>
+  </request>
+  <request id="1295145" creator="mvidner">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="f4843009a01400551801c665a870098d"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="24" srcmd5="f4843009a01400551801c665a870098d" osrcmd5="37fc775873828ab46e48e75fa8238889"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-07-23T14:35:56" created="2025-07-22T15:32:14">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:30 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-07-22T17:55:22" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-07-22T17:55:22">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-22T15:35:59" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-07-22T15:35:59">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-22T16:06:55" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:26"</comment>
+      <history who="staging-bot" when="2025-07-22T16:06:55">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:26"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-22T16:04:11" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1295145 from user factory-auto
+  </comment>
+      <history who="darix" when="2025-07-22T16:04:11">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1295145 from user factory-auto
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-23T10:29:34" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:26">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:adi:26"</comment>
+      <history who="anag_factory" when="2025-07-23T10:29:34">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:adi:26"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-23T10:29:35" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:30"</comment>
+      <history who="anag_factory" when="2025-07-23T10:29:35">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:30"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-23T14:35:55" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:30">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:30 got accepted.</comment>
+      <history who="anag_factory" when="2025-07-23T14:35:55">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:30 got accepted.</comment>
+      </history>
+    </review>
+    <description>- fix .changes errors reported by obs-service-source_validator
+    (gh#agama-project/agama#2593)
+
+  - Version 17
+
+  - Add support for an inst.script that allows to run an arbitrary
+    script (bsc#1246702, gh#agama-project/agama#2589).
+
+  - Ensure software cache is updated even if part of its config
+    cause error (gh#agama-project/agama#2585)
+
+  - Fix device type detection when reading a VLAN connection
+    (gh#agama-project/agama#2586).
+
+  - Add support to configure VLANs through the CLI or HTTP API
+    (gh#agama-project/agama#2580).
+
+  - Adjust the information included in the logs (gh#agama-project/agama#2575).
+
+  - Fix crash when an Agama profile contains only the zfcp section by
+    providing better error report when product selection have to be
+    done before or in the same profile (bsc#1246601)
+
+  - When searching for a translation of a license, use the first
+    language in the same territory as fallback (bsc#1238364,
+    gh#agama-project/agama#2571).
+  - Add the language tag to the /licences/:id endpoint.
+
+  - Fix deletion of controller connections (gh#agama-project/agama#2564)</description>
+  </request>
+  <request id="1295725" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="9fc0dc4933487b1e1d0df3c6050a667e"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="25" srcmd5="9fc0dc4933487b1e1d0df3c6050a667e" osrcmd5="f4843009a01400551801c665a870098d"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2025-07-31T15:45:20" created="2025-07-25T10:54:35">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:33 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-07-25T13:02:24" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-07-25T13:02:24">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-25T10:55:59" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-07-25T10:55:59">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-25T11:04:25" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:33"</comment>
+      <history who="staging-bot" when="2025-07-25T11:04:25">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:33"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-25T13:35:17" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1295725 from user staging-bot
+  </comment>
+      <history who="darix" when="2025-07-25T13:35:17">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1295725 from user staging-bot
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-07-31T15:45:20" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:33">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:33 got accepted.</comment>
+      <history who="dimstar_suse" when="2025-07-31T15:45:20">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:33 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Introduce inst.auto_insecure and inst.script_insecure to disable
+    SSL checks for inst.auto and inst.script (bsc#1246836).
+
+  - Added "--insecure" option to "agama config load" and
+    "agama config generate" commands (related to bsc#1246836)
+
+  - Fix CLI connection update when using an special character in
+    the connection ID (bsc#1246930, gh#agama-project/agama#2605).
+
+  - Add support for an inst.script option that allows to run an
+    arbitrary script (bsc#1246702, gh#agama-project/agama#2589).</description>
+  </request>
+  <request id="1297889" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="89d428e1865857df5b6a95a0993a5789"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="26" srcmd5="89d428e1865857df5b6a95a0993a5789" osrcmd5="9fc0dc4933487b1e1d0df3c6050a667e"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2025-08-06T12:34:40" created="2025-08-06T08:06:18">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:46 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-08-06T10:20:19" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-08-06T10:20:19">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-06T08:10:42" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-08-06T08:10:42">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-06T08:27:07" who="dimstar_suse" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:46"</comment>
+      <history who="dimstar_suse" when="2025-08-06T08:27:07">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:46"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-06T12:00:07" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-08-06T12:00:07">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-06T12:34:39" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:46">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:46 got accepted.</comment>
+      <history who="dimstar_suse" when="2025-08-06T12:34:39">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:46 got accepted.</comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1299039" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="3fb020523de258a20ae31e048311d80c"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2025-08-12T14:54:49" created="2025-08-12T10:47:50" superseded_by="1299101">
+      <comment>superseded by 1299101</comment>
+    </state>
+    <review state="accepted" when="2025-08-12T13:01:08" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-08-12T13:01:08">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-12T10:50:49" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-08-12T10:50:49">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-12T11:04:53" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:47"</comment>
+      <history who="staging-bot" when="2025-08-12T11:04:53">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:47"</comment>
+      </history>
+    </review>
+    <review state="declined" when="2025-08-12T14:43:15" who="dimstar" by_group="opensuse-review-team">
+      <comment>lost fix for&#xD;
+  CVE-2025-5791 Deleted&#xD;
+  boo#1244200 Deleted Martin Vidner's avatar mvidner</comment>
+      <history who="dimstar" when="2025-08-12T14:43:15">
+        <description>Review got declined</description>
+        <comment>lost fix for&#xD;
+  CVE-2025-5791 Deleted&#xD;
+  boo#1244200 Deleted Martin Vidner's avatar mvidner</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-08-12T11:04:53" who="staging-bot" by_project="openSUSE:Factory:Staging:adi:47">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:adi:47"</comment>
+    </review>
+    <description>- Allow to "add" or "remove" patterns from the current or defined
+    user selection patterns list (bsc#1247456).
+
+  - Automatically retry registration when a network error happens
+    during autoinstallation (bsc#1246990)
+
+  - Emit HTTP event when storage is configured, including the client
+    id (gh#agama-project/agama#2640).
+
+  - Do not return an Err when a connection is not activated or 
+    deactivated when adding or updating it but just log the error
+    and write the connections profiles (bsc#1245548).
+
+  - Fixed "agama config edit" when used with a remote --host option
+    (gh#agama-project/agama#2628).
+
+  - Add support for a "questions" section in the Agama configuration
+    that allows defining how to answer questions (bsc#1246997).
+
+  - Do not complain about missing a selected product when it is not
+    required (bsc#1247248).
+  - Fixed a potential race condition when deleting network connections
+    in deactivate_connection() (gh#agama-project/agama#2582).
+
+  - Log ProgressChanged events (gh#agama-project/agama#2597).</description>
+  </request>
+  <request id="1299101" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="0b3da6b241a28d21d53788d3b619a3e8"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="27" srcmd5="0b3da6b241a28d21d53788d3b619a3e8" osrcmd5="89d428e1865857df5b6a95a0993a5789"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2025-08-13T14:29:30" created="2025-08-12T14:54:49">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:47 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-08-12T17:05:20" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-08-12T17:05:20">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-12T14:58:41" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-08-12T14:58:41">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-12T15:01:57" who="dimstar_suse" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:47"</comment>
+      <history who="dimstar_suse" when="2025-08-12T15:01:57">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:47"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-12T15:11:23" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-08-12T15:11:23">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-13T14:29:29" who="dimstar_suse" by_project="openSUSE:Factory:Staging:adi:47">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:47 got accepted.</comment>
+      <history who="dimstar_suse" when="2025-08-13T14:29:29">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:47 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Allow to "add" or "remove" patterns from the current or defined
+    user selection patterns list (bsc#1247456).
+
+  - Automatically retry registration when a network error happens
+    during autoinstallation (bsc#1246990)
+
+  - Emit HTTP event when storage is configured, including the client
+    id (gh#agama-project/agama#2640).
+
+  - Do not return an Err when a connection is not activated or 
+    deactivated when adding or updating it but just log the error
+    and write the connections profiles (bsc#1245548).
+
+  - Fixed "agama config edit" when used with a remote --host option
+    (gh#agama-project/agama#2628).
+
+  - Add support for a "questions" section in the Agama configuration
+    that allows defining how to answer questions (bsc#1246997).
+
+  - Do not complain about missing a selected product when it is not
+    required (bsc#1247248).
+
+  - Fixed a potential race condition when deleting network connections
+    in deactivate_connection() (gh#agama-project/agama#2582).
+
+  - Log ProgressChanged events (gh#agama-project/agama#2597).</description>
+  </request>
+  <request id="1300494" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="6997920c02d75fb01ea91264a55eeb29"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="28" srcmd5="6997920c02d75fb01ea91264a55eeb29" osrcmd5="0b3da6b241a28d21d53788d3b619a3e8"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-08-21T14:54:43" created="2025-08-20T11:51:29">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:3 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-08-20T14:10:17" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-08-20T14:10:17">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-20T11:55:45" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-08-20T11:55:45">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-20T12:03:52" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:3"</comment>
+      <history who="staging-bot" when="2025-08-20T12:03:52">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:3"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-20T13:01:48" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-08-20T13:01:48">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-21T14:54:43" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:3">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:3 got accepted.</comment>
+      <history who="anag_factory" when="2025-08-21T14:54:43">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:3 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Fix software configuration cache (bsc#1247933).
+
+  - Allow to specify "bootloader" and "files" section in agama
+    profile without specified product (bsc#1247248)
+
+  - Do not return an Err when a connection is not activated or</description>
+  </request>
+  <request id="1301276" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="51cfaf75f0f7c3dfdbbd8058d8dede9e"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2025-08-28T12:18:09" created="2025-08-25T13:22:43" superseded_by="1301796">
+      <comment>superseded by 1301796</comment>
+    </state>
+    <review state="new" when="2025-08-25T13:22:43" by_user="licensedigger"/>
+    <review state="declined" when="2025-08-25T13:25:54" who="factory-auto" by_user="factory-auto">
+      <comment>No changelog. Please use 'osc vc' to update the changes file(s).</comment>
+      <history who="factory-auto" when="2025-08-25T13:25:54">
+        <description>Review got declined</description>
+        <comment>No changelog. Please use 'osc vc' to update the changes file(s).</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-08-25T13:22:43" by_group="factory-staging"/>
+    <description>Update to SLE-16 branch.</description>
+  </request>
+  <request id="1301796" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="ea547e27fce232fc21df3606c0ab5d93"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="29" srcmd5="ea547e27fce232fc21df3606c0ab5d93" osrcmd5="6997920c02d75fb01ea91264a55eeb29"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-08-28T15:20:00" created="2025-08-28T12:18:09">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:40 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-08-28T14:31:16" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-08-28T14:31:16">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-28T12:20:25" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-08-28T12:20:25">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-28T12:48:21" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:40"</comment>
+      <history who="anag_factory" when="2025-08-28T12:48:21">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:40"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-28T13:44:22" who="darix" by_group="opensuse-review-team">
+      <comment>Accepted review for by_group opensuse-review-team request 1301796 from user anag_factory
+  </comment>
+      <history who="darix" when="2025-08-28T13:44:22">
+        <description>Review got accepted</description>
+        <comment>Accepted review for by_group opensuse-review-team request 1301796 from user anag_factory
+  </comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-08-28T15:20:00" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:40">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:40 got accepted.</comment>
+      <history who="anag_factory" when="2025-08-28T15:20:00">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:40 got accepted.</comment>
+      </history>
+    </review>
+    <description>- Update the software cache when the patterns selection changes (bsc#1248826).
+
+  - Include the output of the "agama config" commands when
+    agama-autoinstall fails (related to bsc#1248779).</description>
+  </request>
+  <request id="1302942" creator="mfilka">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="f4be2da4d2e3e31aaafcb5ea16ec5507"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="declined" who="factory-auto" when="2025-09-05T14:55:46" created="2025-09-05T14:53:29">
+      <comment>Expected submission from devel package systemsmanagement:Agama:Release/agama</comment>
+    </state>
+    <review state="accepted" when="2025-09-05T14:55:17" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2025-09-05T14:55:17">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="declined" when="2025-09-05T14:55:46" who="factory-auto" by_user="factory-auto">
+      <comment>Expected submission from devel package systemsmanagement:Agama:Release/agama</comment>
+      <history who="factory-auto" when="2025-09-05T14:55:46">
+        <description>Review got declined</description>
+        <comment>Expected submission from devel package systemsmanagement:Agama:Release/agama</comment>
+      </history>
+    </review>
+    <review state="new" when="2025-09-05T14:53:30" by_group="factory-staging"/>
+    <description>Current development branch of agama.&#xD;
+  Contains complete agama's frontend and backend.</description>
+  </request>
+  <request id="1306659" creator="factory-maintainer">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="fc5c9a44661f25b2ff8f2c16b27457c9"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="30" srcmd5="fc5c9a44661f25b2ff8f2c16b27457c9" osrcmd5="ea547e27fce232fc21df3606c0ab5d93"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-09-23T14:07:57" created="2025-09-23T08:05:38">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:22 got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-09-23T10:25:19" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-09-23T10:25:19">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T08:06:09" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-09-23T08:06:09">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T08:07:13" who="staging-bot" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:19"</comment>
+      <history who="staging-bot" when="2025-09-23T08:07:13">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:19"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T11:45:21" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-09-23T11:45:21">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T09:06:40" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:19">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:adi:19"</comment>
+      <history who="anag_factory" when="2025-09-23T09:06:40">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:adi:19"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T09:06:41" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:14"</comment>
+      <history who="anag_factory" when="2025-09-23T09:06:41">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:14"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T09:22:08" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:14">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:adi:14"</comment>
+      <history who="anag_factory" when="2025-09-23T09:22:08">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:adi:14"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T09:22:21" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:adi:22"</comment>
+      <history who="anag_factory" when="2025-09-23T09:22:21">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:adi:22"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-09-23T14:07:56" who="anag_factory" by_project="openSUSE:Factory:Staging:adi:22">
+      <comment>Staging Project openSUSE:Factory:Staging:adi:22 got accepted.</comment>
+      <history who="anag_factory" when="2025-09-23T14:07:56">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:adi:22 got accepted.</comment>
+      </history>
+    </review>
+    <description>Automatic submission by obs-autosubmit</description>
+  </request>
+  <request id="1317453" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="33522888c95fc2a711a800b38355722d"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="31" srcmd5="33522888c95fc2a711a800b38355722d" osrcmd5="fc5c9a44661f25b2ff8f2c16b27457c9"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2025-11-14T15:10:56" created="2025-11-12T22:49:37">
+      <comment>Staging Project openSUSE:Factory:Staging:I got accepted.</comment>
+    </state>
+    <review state="accepted" when="2025-11-13T01:02:50" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2025-11-13T01:02:50">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-11-12T22:52:16" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2025-11-12T22:52:16">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-11-13T07:41:23" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:I"</comment>
+      <history who="anag_factory" when="2025-11-13T07:41:23">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:I"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2025-11-13T07:07:59" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2025-11-13T07:07:59">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2025-11-14T15:10:54" who="anag_factory" by_project="openSUSE:Factory:Staging:I">
+      <comment>Staging Project openSUSE:Factory:Staging:I got accepted.</comment>
+      <history who="anag_factory" when="2025-11-14T15:10:54">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:I got accepted.</comment>
+      </history>
+    </review>
+    <description>- Do not log errors when retrieving NetworkManager secrets to prevent
+    leaking them (bsc#1251898).</description>
+  </request>
+  <request id="1327356" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="d7e2079f90b0d0fe383dd52998f00f0d"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="32" srcmd5="d7e2079f90b0d0fe383dd52998f00f0d" osrcmd5="33522888c95fc2a711a800b38355722d"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2026-01-17T13:51:29" created="2026-01-15T10:58:08">
+      <comment>Staging Project openSUSE:Factory:Staging:K got accepted.</comment>
+    </state>
+    <review state="accepted" when="2026-01-15T13:15:18" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2026-01-15T13:15:18">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-15T11:01:55" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-01-15T11:01:55">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-15T11:01:55" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:K"</comment>
+      <history who="anag_factory" when="2026-01-15T11:01:55">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:K"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-15T11:46:30" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-01-15T11:46:30">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-17T13:51:28" who="dimstar_suse" by_project="openSUSE:Factory:Staging:K">
+      <comment>Staging Project openSUSE:Factory:Staging:K got accepted.</comment>
+      <history who="dimstar_suse" when="2026-01-17T13:51:28">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:K got accepted.</comment>
+      </history>
+    </review>
+    <description>- Implement support for users and authentication configuration.
+  - Initialize and copy the network configuration to the target
+    system.
+  - Execute post-installation scripts.
+
+  - Version 19.pre
+  - Introduce the version 2 of the HTTP API (gh#agama-project/agama#2997).
+  - Add new services, ported from Ruby:
+    - hostname
+    - files
+    - manager
+    - storage
+  - Replace the old API with the new one.
+  - Adapt most parts of the CLI to the new HTTP API.
+  - Missing pieces:
+    - Users and authentication handling.
+    - iSCSI, DASD, zFCP.
+    - Network proxy.
+    - IPMI.
+    - Use self-signed certificates for registration.
+
+  - Do not build on 32bit arches (like i586) and PPC64-BE,
+    the dependant libsuseconnect does not support these (bsc#1251846)
+
+  - Fixed passing arguments when "agama config generate" with an
+    AutoYast profile.
+  - Removed unhandled unwrap, reorganized validation result reporting
+    (gh#agama-project/agama#2893).
+
+  - Version 18</description>
+  </request>
+  <request id="1328664" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="58fa9bdd7e9967b9ea66398c3fca8e6c"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2026-01-27T09:55:05" created="2026-01-22T11:42:30" superseded_by="1329457">
+      <comment>superseded by 1329457</comment>
+    </state>
+    <review state="accepted" when="2026-01-22T12:00:49" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2026-01-22T12:00:49">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-22T11:46:30" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-01-22T11:46:30">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-22T12:19:03" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:G"</comment>
+      <history who="anag_factory" when="2026-01-22T12:19:03">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:G"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-22T11:58:34" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-01-22T11:58:34">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-23T09:35:09" who="anag_factory" by_project="openSUSE:Factory:Staging:G">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:G"</comment>
+      <history who="anag_factory" when="2026-01-23T09:35:10">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:G"</comment>
+      </history>
+    </review>
+    <review state="new" when="2026-01-23T09:35:09" by_group="factory-staging">
+      <comment>Being evaluated by group "factory-staging"</comment>
+    </review>
+    <description>- Allow importing SSL certificates from registration servers
+    (gh#agama-project/agama#3055).
+    
+
+  - Fix enabling NetworkManager service in the target system
+    (gh#agama-project/agama#3056).
+
+  - Fix inst.finish=stop option (gh#agama-project/agama#3047)
+
+  - Fix unattended installation (bsc#1256898).
+  - Add first user to wheel group (gh#agama-project/agama#3030).
+  - Implement using inst.install_url instead of Product repositories
+    (gh#agama-project/agama#3030).</description>
+  </request>
+  <request id="1329457" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="e227e8847face0b07dd0552b0a09f457"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="33" srcmd5="e227e8847face0b07dd0552b0a09f457" osrcmd5="d7e2079f90b0d0fe383dd52998f00f0d"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2026-01-28T14:05:49" created="2026-01-27T09:55:04">
+      <comment>Staging Project openSUSE:Factory:Staging:G got accepted.</comment>
+    </state>
+    <review state="accepted" when="2026-01-27T10:10:26" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2026-01-27T10:10:26">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-27T09:57:37" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-01-27T09:57:37">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-27T10:08:27" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:G"</comment>
+      <history who="anag_factory" when="2026-01-27T10:08:27">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:G"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-27T10:08:34" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-01-27T10:08:34">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-28T14:05:47" who="anag_factory" by_project="openSUSE:Factory:Staging:G">
+      <comment>Staging Project openSUSE:Factory:Staging:G got accepted.</comment>
+      <history who="anag_factory" when="2026-01-28T14:05:47">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:G got accepted.</comment>
+      </history>
+    </review>
+    <description>- Fixed removing automatically selected recommended patterns
+    (gh#agama-project/agama#3072)
+
+  - Follow suit, do not package /usr/share/locale itself
+    (gh#agama-project/agama#3071).
+
+  - Copy the SCC credentials and the libzypp services 
+    (gh#agama-project/agama#3053).
+
+  - Use the right architecture when regisrering a system in ppc64le
+    (gh#agama-project/agama#3068).
+
+  - Consider inst.register_url as part of the "extended configuration"
+    (bsc#1256907).
+  - Try to register the system even if only a registration URL was
+    specified (without a code).
+  - When the registration fails, retry it on the next SetConfig call.
+
+  - Allow importing SSL certificates from registration servers
+    (gh#agama-project/agama#3055).
+    
+
+  - Fix enabling NetworkManager service in the target system
+    (gh#agama-project/agama#3056).
+
+  - Fix inst.finish=stop option (gh#agama-project/agama#3047)
+
+  - Fix unattended installation (bsc#1256898).
+  - Add first user to wheel group (gh#agama-project/agama#3030).
+  - Implement using inst.install_url instead of Product repositories</description>
+  </request>
+  <request id="1329817" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="bc04313b18abf98e0accab5219c0cb06"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="superseded" who="IGonzalezSosa" when="2026-01-30T11:10:47" created="2026-01-29T13:43:38" superseded_by="1330000">
+      <comment>superseded by 1330000</comment>
+    </state>
+    <review state="accepted" when="2026-01-29T16:01:03" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2026-01-29T16:01:03">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-29T13:46:31" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-01-29T13:46:31">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-29T14:17:11" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:E"</comment>
+      <history who="anag_factory" when="2026-01-29T14:17:11">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:E"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-29T13:59:42" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-01-29T13:59:42">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="new" when="2026-01-29T14:17:11" who="anag_factory" by_project="openSUSE:Factory:Staging:E">
+      <comment>Being evaluated by staging project "openSUSE:Factory:Staging:E"</comment>
+    </review>
+    <description>- Do not wait for the storage service when setting the configuration
+    (gh#agama-project/agama#3096, related to bsc#1257067).
+
+  - Expose the product configuration even in the software service is busy
+    (bsc#1257443).
+
+  - Fix answers validation (gh#agama-project/agama#3094).
+
+  - Import the security settings correctly (bsc#1257290).
+
+  - Use the first product mode if none is given (related to jsc#PED-14307).
+
+  - Add agama-iscsi service and integrate iSCSI into the new HTTP API
+    (gh#agama-project/agama#3064).
+
+  - Fix the handling of HTTP actions (gh#agama-project/agama#3088).
+  - Add more details when a request fails because there are pending issues
+    or the installer is busy.
+  - Include in the logs markers for the start and the end of the
+    installation.
+
+  - Add support to define product modes (jsc#PED-14307).
+
+  - Support "gpgFingerprints" and "allowUnsigned" keys in
+    "software/extraRepositories" section of profile
+    (gh#agama-project/agama#3087)
+
+  - Enable the SSH service and open the SSH port in firewall when
+    an SSH key for the root user is set (bsc#1257212)</description>
+  </request>
+  <request id="1330000" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="271b7768581fbada576a69ac389d3385"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="34" srcmd5="271b7768581fbada576a69ac389d3385" osrcmd5="e227e8847face0b07dd0552b0a09f457"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2026-01-30T17:19:56" created="2026-01-30T11:10:46">
+      <comment>Staging Project openSUSE:Factory:Staging:E got accepted.</comment>
+    </state>
+    <review state="accepted" when="2026-01-30T11:30:23" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2026-01-30T11:30:23">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-30T11:16:03" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-01-30T11:16:03">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-30T11:19:49" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:E"</comment>
+      <history who="anag_factory" when="2026-01-30T11:19:49">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:E"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-30T11:27:47" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-01-30T11:27:47">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2026-01-30T17:19:55" who="anag_factory" by_project="openSUSE:Factory:Staging:E">
+      <comment>Staging Project openSUSE:Factory:Staging:E got accepted.</comment>
+      <history who="anag_factory" when="2026-01-30T17:19:55">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:E got accepted.</comment>
+      </history>
+    </review>
+    <description>- Do not export neither network/connections nor network/state when
+    they are None (related to bsc#1257400).
+
+  - Add support for "onlyRequired" key in "software" section
+    using new libzypp zypp.conf.d directory.
+    (gh#agama-project/agama#3100)
+
+  - Fix "agama config edit" subcommand to update the configuration
+    (bsc#1257198).
+
+  - Do not wait for the storage service when setting the configuration
+    (gh#agama-project/agama#3096, related to bsc#1257067).
+
+  - Expose the product configuration even in the software service is busy
+    (bsc#1257443).
+
+  - Fix answers validation (gh#agama-project/agama#3094).
+
+  - Import the security settings correctly (bsc#1257290).
+
+  - Use the first product mode if none is given (related to jsc#PED-14307).
+
+  - Add agama-iscsi service and integrate iSCSI into the new HTTP API
+    (gh#agama-project/agama#3064).
+
+  - Fix the handling of HTTP actions (gh#agama-project/agama#3088).
+  - Add more details when a request fails because there are pending issues
+    or the installer is busy.
+  - Include in the logs markers for the start and the end of the
+    installation.</description>
+  </request>
+  <request id="1330409" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="7441a233abc91e9210a698d1349b4762"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="35" srcmd5="7441a233abc91e9210a698d1349b4762" osrcmd5="271b7768581fbada576a69ac389d3385"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2026-02-03T20:25:51" created="2026-02-02T13:18:38">
+      <comment>Staging Project openSUSE:Factory:Staging:E got accepted.</comment>
+    </state>
+    <review state="accepted" when="2026-02-02T15:35:17" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2026-02-02T15:35:17">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-02T13:20:44" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-02-02T13:20:44">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-02T13:31:43" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:G"</comment>
+      <history who="anag_factory" when="2026-02-02T13:31:43">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:G"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-02T13:24:16" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-02-02T13:24:16">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-03T10:52:04" who="anag_factory" by_project="openSUSE:Factory:Staging:G">
+      <comment>Unstaged from project "openSUSE:Factory:Staging:G"</comment>
+      <history who="anag_factory" when="2026-02-03T10:52:04">
+        <description>Review got accepted</description>
+        <comment>Unstaged from project "openSUSE:Factory:Staging:G"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-03T10:52:05" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:E"</comment>
+      <history who="anag_factory" when="2026-02-03T10:52:05">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:E"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-03T20:25:51" who="anag_factory" by_project="openSUSE:Factory:Staging:E">
+      <comment>Staging Project openSUSE:Factory:Staging:E got accepted.</comment>
+      <history who="anag_factory" when="2026-02-03T20:25:51">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:E got accepted.</comment>
+      </history>
+    </review>
+    <description>- Fixed opening the SSH firewall port when the firewall is not
+    installed because of the set "onlyRequires" flag in the software
+    configuration (bsc#1257212)
+
+  - Implement modification of kernel parameters when SELinux pattern
+    is selected (gh#agama-project/agama#3103)
+
+  - Update schemas for storage model and volume templates (related to
+    jsc#PED-14307).
+
+  - Added proxy service allowing to configure the proxy through the 
+    kernel cmdline proxy argument and with HTTP API
+    (gh#agama-project/agama#3069).</description>
+  </request>
+  <request id="1331727" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="45afa86653b633f51cdbdde3b6e3f521"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="36" srcmd5="45afa86653b633f51cdbdde3b6e3f521" osrcmd5="7441a233abc91e9210a698d1349b4762"/>
+    </action>
+    <state name="accepted" who="dimstar_suse" when="2026-02-07T14:33:28" created="2026-02-06T17:25:34">
+      <comment>Staging Project openSUSE:Factory:Staging:L got accepted.</comment>
+    </state>
+    <review state="accepted" when="2026-02-06T17:45:49" who="licensedigger" by_user="licensedigger">
+      <comment>ok</comment>
+      <history who="licensedigger" when="2026-02-06T17:45:49">
+        <description>Review got accepted</description>
+        <comment>ok</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-06T17:26:04" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-02-06T17:26:04">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-06T17:55:36" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:L"</comment>
+      <history who="anag_factory" when="2026-02-06T17:55:36">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:L"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-06T19:02:23" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-02-06T19:02:23">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-07T14:33:26" who="dimstar_suse" by_project="openSUSE:Factory:Staging:L">
+      <comment>Staging Project openSUSE:Factory:Staging:L got accepted.</comment>
+      <history who="dimstar_suse" when="2026-02-07T14:33:26">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:L got accepted.</comment>
+      </history>
+    </review>
+    <description>- Fix parsing of the answers file (bsc#1257400).
+
+  - Allow loading a profile with no product (bsc#1257067 and bsc#1257082).
+  - Make the bootloader proposal after the storage one is ready (bsc#1257530).
+  - Run pre-scripts only once to prevent potential infinite loops.
+
+  - Sort the list of languages, keymaps and timezones (bsc#1257497).
+
+  - Fix usage of local repositories on full medium
+    (bsc#1257475)
+
+  - Correct the /etc/resolv.conf link in the chroot to
+    /run/NetworkManager/resolv.conf (bsc#257468).
+
+    they are None (related to bsc#1257230).</description>
+  </request>
+  <request id="1332403" creator="IGonzalezSosa">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Release" package="agama" rev="d11203cfd36b8221e4708ace281f9971"/>
+      <target project="openSUSE:Factory" package="agama"/>
+      <acceptinfo rev="37" srcmd5="d11203cfd36b8221e4708ace281f9971" osrcmd5="45afa86653b633f51cdbdde3b6e3f521"/>
+    </action>
+    <state name="accepted" who="anag_factory" when="2026-02-11T17:53:52" created="2026-02-11T07:29:09">
+      <comment>Staging Project openSUSE:Factory:Staging:L got accepted.</comment>
+    </state>
+    <review state="accepted" when="2026-02-11T09:45:46" who="licensedigger" by_user="licensedigger">
+      <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      <history who="licensedigger" when="2026-02-11T09:45:46">
+        <description>Review got accepted</description>
+        <comment>The legal review is accepted preliminary. The package may require actions later on.</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-11T07:31:49" who="factory-auto" by_user="factory-auto">
+      <comment>Check script succeeded</comment>
+      <history who="factory-auto" when="2026-02-11T07:31:49">
+        <description>Review got accepted</description>
+        <comment>Check script succeeded</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-11T09:32:55" who="anag_factory" by_group="factory-staging">
+      <comment>Picked "openSUSE:Factory:Staging:L"</comment>
+      <history who="anag_factory" when="2026-02-11T09:32:55">
+        <description>Review got accepted</description>
+        <comment>Picked "openSUSE:Factory:Staging:L"</comment>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-11T07:42:47" who="dimstar" by_group="opensuse-review-team">
+      <comment/>
+      <history who="dimstar" when="2026-02-11T07:42:47">
+        <description>Review got accepted</description>
+      </history>
+    </review>
+    <review state="accepted" when="2026-02-11T17:53:51" who="anag_factory" by_project="openSUSE:Factory:Staging:L">
+      <comment>Staging Project openSUSE:Factory:Staging:L got accepted.</comment>
+      <history who="anag_factory" when="2026-02-11T17:53:51">
+        <description>Review got accepted</description>
+        <comment>Staging Project openSUSE:Factory:Staging:L got accepted.</comment>
+      </history>
+    </review>
+    <description>- Prevent set config and install actions to run at the same time (bsc#1257935).</description>
+  </request>
+</collection>

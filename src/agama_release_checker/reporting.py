@@ -182,8 +182,10 @@ def print_obs_requests_results(
             continue
 
         # Simple table
-        print(f"{'ID':<8} {'State':<10} {'Source':<50} {'Target':<50} {'Description'}")
-        print(f"{'-'*8} {'-'*10} {'-'*50} {'-'*50} {'-'*30}")
+        print(
+            f"{'ID':<8} {'State':<10} {'Created':<20} {'Updated':<20} {'Source':<40} {'Target':<40} {'Description'}"
+        )
+        print(f"{'-'*8} {'-'*10} {'-'*20} {'-'*20} {'-'*40} {'-'*40} {'-'*30}")
 
         for req in requests:
             source = f"{req.source_project}/{req.source_package}"
@@ -193,7 +195,9 @@ def print_obs_requests_results(
             if len(desc) > 50:
                 desc = desc[:47] + "..."
 
-            print(f"{req.id:<8} {req.state:<10} {source:<50} {target:<50} {desc}")
+            print(
+                f"{req.id:<8} {req.state:<10} {req.created_at:<20} {req.updated_at:<20} {source:<40} {target:<40} {desc}"
+            )
 
 
 def print_git_report(
