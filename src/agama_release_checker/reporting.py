@@ -4,7 +4,7 @@ from typing import List, Dict, Any, Set, Optional, Tuple
 from urllib.parse import urljoin
 import fnmatch
 
-from .models import GitConfig, Package
+from .models import GitConfig, Package, ObsRequest
 
 
 def extract_git_hashes(
@@ -167,6 +167,33 @@ def print_obs_results(
             print_obs_packages_table(rpm_map_keys, specs_map, packages)
         else:
             print("  (No packages found)")
+
+
+def print_obs_requests_results(
+    results: List[Tuple[Dict[str, Any], List[ObsRequest]]]
+) -> None:
+    """Prints results for OBS submit requests."""
+    for obs_config, requests in results:
+        print(f"\n## OBS Submit Requests: {obs_config.get('name', 'Unknown')}\n")
+        print(f"Project: {obs_config.get('url', 'Unknown')}\n")
+
+        if not requests:
+            print("  (No pending requests found)")
+            continue
+
+        # Simple table
+        print(f"{'ID':<8} {'State':<10} {'Source':<50} {'Target':<50} {'Description'}")
+        print(f"{'-'*8} {'-'*10} {'-'*50} {'-'*50} {'-'*30}")
+
+        for req in requests:
+            source = f"{req.source_project}/{req.source_package}"
+            target = f"{req.target_project}/{req.target_package}"
+            # Truncate description if too long
+            desc = req.description.strip().split("\n")[0]
+            if len(desc) > 50:
+                desc = desc[:47] + "..."
+
+            print(f"{req.id:<8} {req.state:<10} {source:<50} {target:<50} {desc}")
 
 
 def print_git_report(

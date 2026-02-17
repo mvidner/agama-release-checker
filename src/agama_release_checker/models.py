@@ -11,6 +11,19 @@ class Package:
 
 
 @dataclass
+class ObsRequest:
+    id: str
+    state: str
+    source_project: str
+    source_package: str
+    target_project: str
+    target_package: str
+    created_at: str
+    updated_at: str
+    description: str
+
+
+@dataclass
 class StageConfig:
     type: str
     name: str

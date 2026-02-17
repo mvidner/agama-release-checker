@@ -41,6 +41,7 @@ stages:
 - url: https://build.opensuse.org/project/show/openSUSE:Factory
   type: obsproject
   name: obs-factory
+  submit_requests: true
 
 # maps from obs package to binary rpms (wildcards)
 rpms:

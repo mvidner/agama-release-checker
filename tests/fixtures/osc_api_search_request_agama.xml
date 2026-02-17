@@ -1,0 +1,13 @@
+<collection matches="1">
+  <request id="1302942" creator="mfilka">
+    <action type="submit">
+      <source project="systemsmanagement:Agama:Devel" package="agama" rev="f4be2da4d2e3e31aaafcb5ea16ec5507"/>
+      <target project="openSUSE:Factory" package="agama"/>
+    </action>
+    <state name="declined" who="factory-auto" when="2025-09-05T14:55:46" created="2025-09-05T14:53:29">
+      <comment>Expected submission from devel package systemsmanagement:Agama:Release/agama</comment>
+    </state>
+    <description>Current development branch of agama.&#xD;
+  Contains complete agama's frontend and backend.</description>
+  </request>
+</collection>
