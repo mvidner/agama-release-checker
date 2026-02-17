@@ -1,7 +1,5 @@
 import subprocess
 from pathlib import Path
-
-# https://docs.python.org/3/library/unittest.mock.html
 from unittest.mock import MagicMock, patch
 
 import pytest  # type: ignore
@@ -16,20 +14,17 @@ def load_fixture(filename):
         return f.read()
 
 
-@patch("agama_release_checker.reports.obs_report.subprocess.run")
-def test_packages_in_obs_report(mock_run):
+@patch("agama_release_checker.reports.obs_report.run_cached_command")
+def test_packages_in_obs_report(mock_run_cached):
     # Setup mock responses
     def side_effect(cmd, **kwargs):
-        mock_proc = MagicMock()
-        mock_proc.returncode = 0
-
         args = cmd
         if args == ["osc", "version"]:
-            mock_proc.stdout = "osc 0.180.0"
+            return True, "osc 0.180.0"
         elif args == ["osc", "ls", "systemsmanagement:Agama:Devel"]:
-            mock_proc.stdout = load_fixture("osc_ls_project.txt")
+            return True, load_fixture("osc_ls_project.txt")
         elif args == ["osc", "ls", "systemsmanagement:Agama:Devel", "agama"]:
-            mock_proc.stdout = load_fixture("osc_ls_package_agama.txt")
+            return True, load_fixture("osc_ls_package_agama.txt")
         elif args == [
             "osc",
             "cat",
@@ -37,7 +32,7 @@ def test_packages_in_obs_report(mock_run):
             "agama",
             "agama.obsinfo",
         ]:
-            mock_proc.stdout = load_fixture("osc_cat_agama_obsinfo.txt")
+            return True, load_fixture("osc_cat_agama_obsinfo.txt")
         elif args == [
             "osc",
             "cat",
@@ -45,14 +40,14 @@ def test_packages_in_obs_report(mock_run):
             "agama",
             "agama.spec",
         ]:
-            mock_proc.stdout = load_fixture("osc_cat_agama_spec.txt")
+            return True, load_fixture("osc_cat_agama_spec.txt")
         elif args == [
             "osc",
             "ls",
             "systemsmanagement:Agama:Devel",
             "rubygem-agama-yast",
         ]:
-            mock_proc.stdout = load_fixture("osc_ls_package_rubygem_agama_yast.txt")
+            return True, load_fixture("osc_ls_package_rubygem_agama_yast.txt")
         elif args == [
             "osc",
             "cat",
@@ -60,7 +55,7 @@ def test_packages_in_obs_report(mock_run):
             "rubygem-agama-yast",
             "rubygem-agama-yast.spec",
         ]:
-            mock_proc.stdout = load_fixture("osc_cat_rubygem_agama_yast_spec.txt")
+            return True, load_fixture("osc_cat_rubygem_agama_yast_spec.txt")
         elif args == [
             "osc",
             "cat",
@@ -68,17 +63,11 @@ def test_packages_in_obs_report(mock_run):
             "rubygem-agama-yast",
             "agama-yast.spec",
         ]:
-            mock_proc.stdout = load_fixture("osc_cat_agama_yast_spec.txt")
+            return True, load_fixture("osc_cat_agama_yast_spec.txt")
         else:
-            mock_proc.returncode = 1
-            mock_proc.stdout = ""
-            # Raise CalledProcessError for unknown commands if check=True is used
-            if kwargs.get("check"):
-                raise subprocess.CalledProcessError(1, cmd)
+            return False, ""
 
-        return mock_proc
-
-    mock_run.side_effect = side_effect
+    mock_run_cached.side_effect = side_effect
 
     config = {
         "url": "https://build.opensuse.org/project/show/systemsmanagement:Agama:Devel",
@@ -114,9 +103,10 @@ def test_packages_in_obs_report(mock_run):
     assert pkg_map["agama-yast"].version == "19.pre.devel1558.7e90c6ef1"
 
 
-@patch("agama_release_checker.reports.obs_report.subprocess.run")
-def test_osc_missing(mock_run):
-    mock_run.side_effect = FileNotFoundError("No such file or directory")
+@patch("agama_release_checker.reports.obs_report.run_cached_command")
+def test_osc_missing(mock_run_cached):
+    # Simulate run_cached_command returning failure (e.g. osc not found)
+    mock_run_cached.return_value = (False, "")
 
     config = {"url": "https://build.opensuse.org/project/show/foo"}
     report = PackagesInObsReport(config, {}, {})

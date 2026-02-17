@@ -1,9 +1,11 @@
 import logging
-import subprocess
+from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple, Set
 from urllib.parse import urlparse
 
 from agama_release_checker.models import Package
+from agama_release_checker.utils import CACHE_DIR
+from agama_release_checker.caching import run_cached_command
 
 
 class PackagesInObsReport:
@@ -28,23 +30,20 @@ class PackagesInObsReport:
         return parts[-1]
 
     def _run_osc_command(self, cmd: List[str]) -> Tuple[bool, str]:
-        """Runs an osc command and returns success status and output."""
-        try:
-            logging.debug(f"Running {cmd}")
-            result = subprocess.run(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,
-                check=True,
-            )
-            return True, result.stdout
-        except subprocess.CalledProcessError as e:
-            logging.debug(f"Command failed: {' '.join(cmd)}. Error: {e}")
-            return False, ""
-        except FileNotFoundError:
-            logging.error("The 'osc' command is required but not found.")
-            return False, ""
+        """Runs an osc command and returns success status and output, with caching."""
+
+        # Don't cache 'osc version'
+        if cmd == ["osc", "version"]:
+            return run_cached_command(cmd, cache_dir=None)
+
+        # Directory structure: CACHE_DIR/obsproject/stage_name/osc_commands/
+        stage_name = self.config.get("name", "unknown")
+        # Ensure we don't have spaces or invalid chars in directory name if possible
+        # but stage_name is from config. usually safe.
+        cache_dir = CACHE_DIR / "obsproject" / stage_name / "osc_commands"
+
+        # run_cached_command will handle directory creation and caching
+        return run_cached_command(cmd, cache_dir=cache_dir)
 
     def _get_project_packages(self, project: str) -> Set[str]:
         success, output = self._run_osc_command(["osc", "ls", project])
