@@ -14,13 +14,7 @@ from .reporting import (
     extract_git_hashes,
 )
 from .reports import RpmsOnIsoReport, PackagesInObsReport
-
-CACHE_DIR = Path.home() / ".cache" / "agama-release-checker"
-
-
-def create_cache_dir(cache_dir_path: Path) -> None:
-    """Creates the cache directory if it doesn't already exist."""
-    cache_dir_path.mkdir(parents=True, exist_ok=True)
+from .utils import CACHE_DIR, ensure_dir
 
 
 def main() -> None:
@@ -62,7 +56,7 @@ def main() -> None:
             logging.info("On Debian/Ubuntu, try: sudo apt-get install fuseiso")
         sys.exit(1)
 
-    create_cache_dir(CACHE_DIR)
+    ensure_dir(CACHE_DIR)
     config: AppConfig = load_config(Path("config.yml"))
 
     iso_results: List[Tuple[Dict[str, Any], Optional[str], Optional[List[Package]]]] = (
