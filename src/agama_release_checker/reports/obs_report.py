@@ -30,6 +30,7 @@ class PackagesInObsReport:
     def _run_osc_command(self, cmd: List[str]) -> Tuple[bool, str]:
         """Runs an osc command and returns success status and output."""
         try:
+            logging.debug(f"Running {cmd}")
             result = subprocess.run(
                 cmd,
                 stdout=subprocess.PIPE,
