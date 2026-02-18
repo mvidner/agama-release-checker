@@ -24,6 +24,38 @@ def extract_git_hashes(
     return git_hashes
 
 
+def print_markdown_table(headers: List[str], rows: List[List[str]]) -> None:
+    """Prints a generic markdown table."""
+    if not headers:
+        return
+
+    # Calculate column widths
+    widths = [len(h) for h in headers]
+    for row in rows:
+        for i, cell in enumerate(row):
+            if i < len(widths):
+                widths[i] = max(widths[i], len(str(cell)))
+
+    # Print header
+    header_str = (
+        "| " + " | ".join(f"{h:<{widths[i]}}" for i, h in enumerate(headers)) + " |"
+    )
+    print(header_str)
+
+    # Print separator
+    sep_str = "|-" + "-|-".join("-" * widths[i] for i in range(len(widths))) + "-|"
+    print(sep_str)
+
+    # Print rows
+    for row in rows:
+        row_str = (
+            "| "
+            + " | ".join(f"{str(cell):<{widths[i]}}" for i, cell in enumerate(row))
+            + " |"
+        )
+        print(row_str)
+
+
 def print_packages_table(
     rpm_map: Dict[str, List[str]], packages: List[Package], label: str = "ISO"
 ) -> None:
@@ -50,7 +82,14 @@ def print_packages_table(
         print(f"  (No matching packages found in {label})")
         return
 
-    _print_table(rpm_map.keys(), all_packages_flat, all_found_packages_by_source)
+    headers = ["Source Name", "Name", "Version", "Release"]
+    rows = []
+    for source_rpm, found_packages in sorted(all_found_packages_by_source.items()):
+        rows.append([source_rpm, "", "", ""])
+        for pkg in found_packages:
+            rows.append(["", pkg.name, pkg.version, pkg.release])
+
+    print_markdown_table(headers, rows)
 
 
 def print_obs_packages_table(
@@ -82,61 +121,14 @@ def print_obs_packages_table(
         print(f"  (No matching packages found in OBS)")
         return
 
-    _print_table(rpm_map_keys, all_packages_flat, all_found_packages_by_source)
-
-
-def _print_table(
-    source_names: Any,  # Iterable
-    all_packages_flat: List[Package],
-    grouped_packages: Dict[str, List[Package]],
-) -> None:
-    # Calculate column widths
-    source_name_width = max((len(s) for s in source_names), default=0)
-    name_width = (
-        max((len(pkg.name) for pkg in all_packages_flat), default=0)
-        if all_packages_flat
-        else 0
-    )
-    version_width = (
-        max((len(pkg.version) for pkg in all_packages_flat), default=0)
-        if all_packages_flat
-        else 0
-    )
-    release_width = (
-        max((len(pkg.release) for pkg in all_packages_flat), default=0)
-        if all_packages_flat
-        else 0
-    )
-
-    # Ensure minimum width for headers
-    source_name_width = max(source_name_width, len("Source Name"))
-    name_width = max(name_width, len("Name"))
-    version_width = max(version_width, len("Version"))
-    release_width = max(release_width, len("Release"))
-
-    # Print header
-    header = f"| {'Source Name':<{source_name_width}} | {'Name':<{name_width}} | {'Version':<{version_width}} | {'Release':<{release_width}} |"
-    print(header)
-    print(
-        f"|{'-' * (source_name_width + 2)}|{'-' * (name_width + 2)}|{'-' * (version_width + 2)}|{'-' * (release_width + 2)}|"
-    )
-
-    # Print rows
-    for source_rpm, found_packages in sorted(grouped_packages.items()):
-        # Print an empty row for the source rpm heading
-        print(
-            f"| {source_rpm:<{source_name_width}} | {'':<{name_width}} | {'':<{version_width}} | {'':<{release_width}} |"
-        )
-        if not found_packages:
-            continue
-
+    headers = ["Source Name", "Name", "Version", "Release"]
+    rows = []
+    for source_rpm, found_packages in sorted(all_found_packages_by_source.items()):
+        rows.append([source_rpm, "", "", ""])
         for pkg in found_packages:
-            name = pkg.name
-            version = pkg.version
-            release = pkg.release
-            print(
-                f"| {'':<{source_name_width}} | {name:<{name_width}} | {version:<{version_width}} | {release:<{release_width}} |"
-            )
+            rows.append(["", pkg.name, pkg.version, pkg.release])
+
+    print_markdown_table(headers, rows)
 
 
 def print_iso_results(
@@ -181,23 +173,23 @@ def print_obs_requests_results(
             print("  (No pending requests found)")
             continue
 
-        # Simple table
-        print(
-            f"{'ID':<8} {'State':<10} {'Created':<20} {'Updated':<20} {'Source':<40} {'Target':<40} {'Description'}"
-        )
-        print(f"{'-'*8} {'-'*10} {'-'*20} {'-'*20} {'-'*40} {'-'*40} {'-'*30}")
-
+        headers = ["ID", "State", "Created", "Updated", "Source", "Target"]
+        rows = []
         for req in requests:
             source = f"{req.source_project}/{req.source_package}"
             target = f"{req.target_project}/{req.target_package}"
-            # Truncate description if too long
-            desc = req.description.strip().split("\n")[0]
-            if len(desc) > 50:
-                desc = desc[:47] + "..."
-
-            print(
-                f"{req.id:<8} {req.state:<10} {req.created_at:<20} {req.updated_at:<20} {source:<40} {target:<40} {desc}"
+            rows.append(
+                [
+                    req.id,
+                    req.state,
+                    req.created_at,
+                    req.updated_at,
+                    source,
+                    target,
+                ]
             )
+
+        print_markdown_table(headers, rows)
 
 
 def print_git_report(
