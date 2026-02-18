@@ -15,7 +15,7 @@ def find_iso_urls(base_url: str, patterns: List[str]) -> List[str]:
     logging.info(f"Fetching ISO directory from: {base_url}")
     logging.debug(f"Scraping with patterns: {patterns}")
     try:
-        response = requests.get(base_url)
+        response = requests.get(base_url, timeout=15)  # 15 seconds
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         logging.error(f"Error fetching URL {base_url}: {e}")

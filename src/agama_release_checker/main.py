@@ -51,6 +51,12 @@ def main() -> None:
         action="store_true",
         help="Show requests of all states modified within the past two weeks.",
     )
+    parser.add_argument(
+        "-i",
+        "--internal",
+        action="store_true",
+        help="Enable processing of internal resources (reachable only by VPN).",
+    )
     args = parser.parse_args()
 
     if args.verbose:
@@ -79,9 +85,12 @@ def main() -> None:
     all_git_hashes: Set[str] = set()
     rpm_map: Dict[str, List[str]] = config.rpms
 
-    stages_to_process = config.stages
-    if args.name:
-        stages_to_process = [s for s in config.stages if s.get("name") in args.name]
+    stages_to_process = [
+        s
+        for s in config.stages
+        if (args.internal or not s.get("internal", False))
+        and (not args.name or s.get("name") in args.name)
+    ]
 
     if not stages_to_process:
         logging.warning("No stages to process found.")
