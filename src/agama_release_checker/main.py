@@ -65,9 +65,9 @@ def main() -> None:
 
     print("# Agama Release Status")
 
-    if not all(map(check_command, ["curl", "fuseiso", "fusermount"])):
+    if not all(map(check_command, ["curl", "fuseiso", "fusermount", "git"])):
         logging.error(
-            "Required command(s) not found. Please ensure 'curl', 'fuseiso', and 'fusermount' are installed and in your PATH."
+            "Required command(s) not found. Please ensure 'curl', 'fuseiso', 'fusermount', and 'git' are installed and in your PATH."
         )
         if not check_command("fuseiso"):
             logging.info("On openSUSE/SLES, try: sudo zypper install fuseiso")
@@ -82,7 +82,7 @@ def main() -> None:
     )
     obs_results: List[Tuple[Dict[str, Any], Optional[List[Package]]]] = []
     obs_requests_results: List[Tuple[Dict[str, Any], List[ObsRequest]]] = []
-    all_git_hashes: Set[str] = set()
+    all_git_hashes: Dict[str, Set[str]] = {}
     rpm_map: Dict[str, List[str]] = config.rpms
 
     stages_to_process = [
@@ -118,7 +118,11 @@ def main() -> None:
                 )
             )
             if iso_packages:
-                all_git_hashes.update(extract_git_hashes(iso_packages, rpm_map))
+                new_hashes = extract_git_hashes(iso_packages, rpm_map)
+                for repo, hashes in new_hashes.items():
+                    if repo not in all_git_hashes:
+                        all_git_hashes[repo] = set()
+                    all_git_hashes[repo].update(hashes)
 
         elif stage_type == "obsproject":
             obs_report = PackagesInObsReport(
@@ -136,7 +140,11 @@ def main() -> None:
                 )
             )
             if obs_packages:
-                all_git_hashes.update(extract_git_hashes(obs_packages, rpm_map))
+                new_hashes = extract_git_hashes(obs_packages, rpm_map)
+                for repo, hashes in new_hashes.items():
+                    if repo not in all_git_hashes:
+                        all_git_hashes[repo] = set()
+                    all_git_hashes[repo].update(hashes)
 
             if stage.get("submit_requests"):
                 requests_report = ObsSubmitRequestsReport(
@@ -167,7 +175,7 @@ def main() -> None:
     if obs_requests_results:
         print_obs_requests_results(obs_requests_results)
 
-    print_git_report(all_git_hashes, config.git_config)
+    print_git_report(all_git_hashes, config.git_configs)
 
 
 if __name__ == "__main__":

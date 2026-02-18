@@ -55,8 +55,5 @@ class AppConfig:
         ]
 
     @property
-    def git_config(self) -> Optional[GitConfig]:
-        for stage in self.stages:
-            if stage.get("type") == "git":
-                return GitConfig(**stage)
-        return None
+    def git_configs(self) -> List[GitConfig]:
+        return [GitConfig(**s) for s in self.stages if s.get("type") == "git"]

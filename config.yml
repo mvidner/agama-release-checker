@@ -1,7 +1,11 @@
 stages:
 - url: https://github.com/agama-project/agama/
   type: git
-  name: git
+  name: agama
+
+- url: https://github.com/agama-project/integration-tests/
+  type: git
+  name: agama-integration-tests
 
 #- url: https://src.suse.de/pool/agama-web-ui/pulls/17
 
