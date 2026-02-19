@@ -191,21 +191,24 @@ def print_obs_requests_results(
             print("  (No pending requests found)")
             continue
 
-        headers = ["ID", "State", "Created", "Updated", "Source", "Target"]
+        headers = ["Updated", "Created", "ID", "State", "Source", "Target"]
         rows = []
         for req in requests:
             source = f"{req.source_project}/{req.source_package}"
             target = f"{req.target_project}/{req.target_package}"
             rows.append(
                 [
+                    req.updated_at,
+                    req.created_at,
                     req.id,
                     req.state,
-                    req.created_at,
-                    req.updated_at,
                     source,
                     target,
                 ]
             )
+
+        # Sort by Updated (column 0)
+        rows.sort(key=lambda x: x[0])
 
         print_markdown_table(headers, rows)
 
