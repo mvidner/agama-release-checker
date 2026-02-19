@@ -48,6 +48,10 @@ stages:
   name: obs-factory
   submit_requests: true
 
+- url: https://src.suse.de/pool/
+  type: giteaproject
+  name: ibs-pool
+
 # maps from obs package to binary rpms (wildcards)
 rpms:
   agama-web-ui:

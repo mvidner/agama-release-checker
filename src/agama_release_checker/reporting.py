@@ -164,6 +164,21 @@ def print_obs_results(
             print("  (No packages found)")
 
 
+def print_gitea_results(
+    results: List[Tuple[Dict[str, Any], Optional[List[Package]]]],
+    rpm_map_keys: List[str],
+    specs_map: Dict[str, List[str]],
+) -> None:
+    """Prints results for Gitea projects."""
+    for gitea_config, packages in results:
+        print(f"\n## Gitea: {gitea_config['name']}\n")
+        print(f"URL: {gitea_config['url']}\n")
+        if packages:
+            print_obs_packages_table(rpm_map_keys, specs_map, packages)
+        else:
+            print("  (No packages found)")
+
+
 def print_obs_requests_results(
     results: List[Tuple[Dict[str, Any], List[ObsRequest]]]
 ) -> None:

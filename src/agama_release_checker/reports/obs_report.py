@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from agama_release_checker.models import Package
 from agama_release_checker.utils import CACHE_DIR
 from agama_release_checker.caching import run_cached_command
+from agama_release_checker.parsing import parse_obsinfo, parse_spec
 
 
 class PackagesInObsReport:
@@ -67,32 +68,6 @@ class PackagesInObsReport:
             return output
         return ""
 
-    def _parse_obsinfo(self, content: str) -> Optional[str]:
-        """Parses simple key: value format from .obsinfo file."""
-        for line in content.splitlines():
-            if ":" in line:
-                key, value = line.split(":", 1)
-                if key.strip() == "version":
-                    return value.strip()
-        return None
-
-    def _parse_spec(self, content: str) -> Tuple[str, str]:
-        version = ""
-        release = ""
-        for line in content.splitlines():
-            line_lower = line.lower()
-            if line_lower.startswith("version:"):
-                try:
-                    version = line.split(":", 1)[1].strip()
-                except IndexError:
-                    pass
-            elif line_lower.startswith("release:"):
-                try:
-                    release = line.split(":", 1)[1].strip()
-                except IndexError:
-                    pass
-        return version, release
-
     def run(self) -> Tuple[Optional[str], Optional[List[Package]]]:
         project = self._get_project_name()
         if not project:
@@ -138,7 +113,7 @@ class PackagesInObsReport:
 
             if obsinfo_file:
                 content = self._read_file_content(project, package_name, obsinfo_file)
-                shared_version = self._parse_obsinfo(content) or ""
+                shared_version = parse_obsinfo(content) or ""
 
             spec_basenames = self.specs_map.get(package_name, [package_name])
 
@@ -149,7 +124,7 @@ class PackagesInObsReport:
                 spec_file = f"{spec_basename}.spec"
                 if spec_file in files:
                     content = self._read_file_content(project, package_name, spec_file)
-                    v, r = self._parse_spec(content)
+                    v, r = parse_spec(content)
 
                     if v and v != "0":
                         version = v
