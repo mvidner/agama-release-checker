@@ -16,8 +16,22 @@ class GitManager:
         if self.repo_path.exists():
             logging.info(f"Updating git repo in {self.repo_path}")
             try:
+                # Ensure the repo is configured as a mirror if it wasn't
                 subprocess.run(
-                    ["git", "fetch", "--all"],
+                    [
+                        "git",
+                        "config",
+                        "--replace-all",
+                        "remote.origin.fetch",
+                        "+refs/*:refs/*",
+                    ],
+                    cwd=str(self.repo_path),
+                    check=True,
+                    stderr=subprocess.PIPE,
+                    universal_newlines=True,
+                )
+                subprocess.run(
+                    ["git", "fetch", "--prune"],
                     cwd=str(self.repo_path),
                     check=True,
                     stdout=subprocess.PIPE,
@@ -31,7 +45,7 @@ class GitManager:
             ensure_dir(self.repo_path.parent)
             try:
                 subprocess.run(
-                    ["git", "clone", "--bare", self.repo_url, str(self.repo_path)],
+                    ["git", "clone", "--mirror", self.repo_url, str(self.repo_path)],
                     check=True,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
