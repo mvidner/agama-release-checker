@@ -4,7 +4,7 @@ from typing import List, Dict, Any, Set, Optional, Tuple
 from urllib.parse import urljoin
 import fnmatch
 
-from .models import GitConfig, Package, ObsRequest
+from .models import GitConfig, Package, ObsRequest, GiteaPullRequest
 from .git_manager import GitManager
 
 
@@ -177,6 +177,47 @@ def print_gitea_results(
             print_obs_packages_table(rpm_map_keys, specs_map, packages)
         else:
             print("  (No packages found)")
+
+
+def print_gitea_pull_requests_results(
+    results: List[Tuple[Dict[str, Any], List[GiteaPullRequest]]]
+) -> None:
+    """Prints results for Gitea pull requests."""
+    for gitea_config, prs in results:
+        print(f"\n## Gitea Pull Requests: {gitea_config.get('name', 'Unknown')}\n")
+        print(f"URL: {gitea_config.get('url', 'Unknown')}\n")
+
+        if not prs:
+            print("  (No matching pull requests found)")
+            continue
+
+        headers = [
+            "Updated",
+            "Index",
+            "State",
+            "Mergeable",
+            "Title",
+            "Author",
+            "Comments",
+        ]
+        rows = []
+        for pr in prs:
+            rows.append(
+                [
+                    pr.updated_at,
+                    f"[{pr.index}]({pr.url})",
+                    pr.state,
+                    "Yes" if pr.mergeable else "No",
+                    pr.title,
+                    pr.author,
+                    pr.comments,
+                ]
+            )
+
+        # Sort by Updated (column 0)
+        rows.sort(key=lambda x: x[0])
+
+        print_markdown_table(headers, rows)
 
 
 def print_obs_requests_results(

@@ -24,6 +24,20 @@ class ObsRequest:
 
 
 @dataclass
+class GiteaPullRequest:
+    index: str
+    state: str
+    author: str
+    url: str
+    title: str
+    mergeable: bool
+    base: str
+    created_at: str
+    updated_at: str
+    comments: str
+
+
+@dataclass
 class StageConfig:
     type: str
     name: str

@@ -6,17 +6,19 @@ from typing import List, Dict, Any, Optional, Tuple, Set
 
 from .config import load_config
 from .iso import check_command
-from .models import MirrorcacheConfig, AppConfig, Package, ObsRequest
+from .models import MirrorcacheConfig, AppConfig, Package, ObsRequest, GiteaPullRequest
 from .reporting import (
     print_iso_results,
     print_obs_results,
     print_gitea_results,
+    print_gitea_pull_requests_results,
     print_git_report,
     print_obs_requests_results,
     extract_git_hashes,
 )
 from .reports import RpmsOnIsoReport, PackagesInObsReport, PackagesInGiteaReport
 from .reports.obs_requests import ObsSubmitRequestsReport
+from .reports.gitea_pull_requests import GiteaPullRequestsReport
 from .utils import CACHE_DIR, ensure_dir
 
 
@@ -84,6 +86,7 @@ def main() -> None:
     )
     obs_results: List[Tuple[Dict[str, Any], Optional[List[Package]]]] = []
     gitea_results: List[Tuple[Dict[str, Any], Optional[List[Package]]]] = []
+    gitea_pr_results: List[Tuple[Dict[str, Any], List[GiteaPullRequest]]] = []
     obs_requests_results: List[Tuple[Dict[str, Any], List[ObsRequest]]] = []
     all_git_hashes: Dict[str, Set[str]] = {}
     rpm_map: Dict[str, List[str]] = config.rpms
@@ -190,6 +193,21 @@ def main() -> None:
                         all_git_hashes[repo] = set()
                     all_git_hashes[repo].update(hashes)
 
+            gitea_pr_report = GiteaPullRequestsReport(
+                stage, rpm_map, no_cache=args.no_command_cache
+            )
+            _, prs = gitea_pr_report.run()
+            if prs:
+                gitea_pr_results.append(
+                    (
+                        {
+                            "name": stage.get("name", "Unknown Gitea Project"),
+                            "url": stage.get("url"),
+                        },
+                        prs,
+                    )
+                )
+
         elif stage_type == "git":
             pass
 
@@ -199,6 +217,8 @@ def main() -> None:
         print_obs_results(obs_results, list(rpm_map.keys()), config.specs)
     if gitea_results:
         print_gitea_results(gitea_results, list(rpm_map.keys()), config.specs)
+    if gitea_pr_results:
+        print_gitea_pull_requests_results(gitea_pr_results)
     if obs_requests_results:
         print_obs_requests_results(obs_requests_results)
 
