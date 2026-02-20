@@ -1,6 +1,7 @@
 import argparse
 import logging
 import sys
+import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple, Set
 
@@ -68,6 +69,10 @@ def main() -> None:
         logging.debug("Verbose logging enabled.")
 
     print("# Agama Release Status")
+    print()
+    print(
+        f"Generated on {datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M:%S %z')}"
+    )
 
     if not all(map(check_command, ["curl", "fuseiso", "fusermount", "git"])):
         logging.error(
