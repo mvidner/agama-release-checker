@@ -81,7 +81,7 @@ class GiteaPullRequestsReport:
             return prs
         except subprocess.CalledProcessError as e:
             # If repo doesn't exist or other error, just log and return empty
-            logging.debug(f"Tea command failed for {repo}: {e.stderr.strip()}")
+            logging.error(f"Tea command failed for {repo}: {e.stderr.strip()}")
             return []
         except json.JSONDecodeError as e:
             logging.error(f"Failed to decode tea output for {repo}: {e}")
