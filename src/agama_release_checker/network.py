@@ -1,27 +1,64 @@
 import logging
 import subprocess
 import sys
+import time
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from urllib.parse import urljoin
 
 import requests  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 import fnmatch
 
+from .utils import ensure_dir
 
-def find_iso_urls(base_url: str, patterns: List[str]) -> List[str]:
+
+def cached_get(url: str, cache_file: Optional[Path] = None) -> Optional[str]:
+    """
+    Fetches the content of a URL, using a cache file if available and fresh.
+    """
+    content = ""
+    if cache_file and cache_file.exists():
+        if time.time() - cache_file.stat().st_mtime < 3600:
+            logging.info(f"Using cached index: {cache_file}")
+            try:
+                with open(cache_file, "r") as f:
+                    content = f.read()
+            except OSError as e:
+                logging.warning(f"Failed to read cache file {cache_file}: {e}")
+
+    if not content:
+        try:
+            response = requests.get(url, timeout=15)  # 15 seconds
+            response.raise_for_status()
+            content = response.text
+
+            if cache_file:
+                ensure_dir(cache_file.parent)
+                try:
+                    with open(cache_file, "w") as f:
+                        f.write(content)
+                except OSError as e:
+                    logging.warning(f"Failed to write cache file {cache_file}: {e}")
+
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Error fetching URL {url}: {e}")
+            return None
+    return content
+
+
+def find_iso_urls(
+    base_url: str, patterns: List[str], cache_file: Optional[Path] = None
+) -> List[str]:
     """Scrapes the given URL and returns a list of matching ISO URLs."""
     logging.info(f"Fetching ISO directory from: {base_url}")
     logging.debug(f"Scraping with patterns: {patterns}")
-    try:
-        response = requests.get(base_url, timeout=15)  # 15 seconds
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching URL {base_url}: {e}")
+
+    content = cached_get(base_url, cache_file)
+    if content is None:
         return []
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(content, "html.parser")
     iso_urls = []
     for a_tag in soup.find_all("a", href=True):
         href = a_tag["href"]

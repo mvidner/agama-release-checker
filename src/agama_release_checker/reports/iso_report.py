@@ -45,7 +45,14 @@ class RpmsOnIsoReport:
         logging.info(f"Processing mirrorcache: {self.config.name}")
         base_url = self.config.url
         patterns = self.config.files
-        iso_urls = find_iso_urls(base_url, patterns)
+
+        # Directory structure: CACHE_DIR/stage_type/stage_name/
+        stage_dir = CACHE_DIR / self.config.type / self.config.name
+        ensure_dir(stage_dir)
+
+        iso_urls = find_iso_urls(
+            base_url, patterns, cache_file=stage_dir / "index.html"
+        )
 
         if not iso_urls:
             logging.warning(f"No ISOs found matching patterns {patterns} at {base_url}")
@@ -54,10 +61,6 @@ class RpmsOnIsoReport:
         iso_urls.sort()
         latest_iso_url = iso_urls[-1]
         logging.debug(f"Determined latest ISO: {latest_iso_url}")
-
-        # Directory structure: CACHE_DIR/stage_type/stage_name/
-        stage_dir = CACHE_DIR / self.config.type / self.config.name
-        ensure_dir(stage_dir)
 
         iso_filename = latest_iso_url.split("/")[-1]
         iso_filepath = stage_dir / iso_filename

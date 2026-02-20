@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 import pytest  # type: ignore
 import requests_mock  # type: ignore
 from agama_release_checker.network import find_iso_urls
@@ -28,3 +29,42 @@ def test_find_iso_urls(requests_mock):
     found_urls = find_iso_urls(base_url, patterns)
 
     assert sorted(found_urls) == sorted(expected_urls)
+
+
+def test_find_iso_urls_caching(requests_mock, tmp_path):
+    """Tests the caching mechanism of find_iso_urls."""
+    base_url = "http://example.com/iso_dir/"
+    cache_file = tmp_path / "index.html"
+    patterns = ["*.iso"]
+
+    # 1. First call: Should fetch and write to cache
+    mock_response_1 = '<html><body><a href="test1.iso">test1.iso</a></body></html>'
+    requests_mock.get(base_url, text=mock_response_1)
+
+    urls = find_iso_urls(base_url, patterns, cache_file=cache_file)
+    assert urls == ["http://example.com/iso_dir/test1.iso"]
+    assert cache_file.read_text() == mock_response_1
+    assert requests_mock.call_count == 1
+
+    # 2. Second call: Should use the cache (no network request)
+    # We change the mock to return something else to prove it's NOT called
+    requests_mock.get(base_url, text="STALE")
+
+    urls = find_iso_urls(base_url, patterns, cache_file=cache_file)
+    assert urls == ["http://example.com/iso_dir/test1.iso"]
+    assert requests_mock.call_count == 1  # Still 1
+
+    # 3. Third call: Cache is old, should fetch and update cache
+    # "Aging" the cache file
+    old_time = time.time() - 4000
+    import os
+
+    os.utime(cache_file, (old_time, old_time))
+
+    mock_response_2 = '<html><body><a href="test2.iso">test2.iso</a></body></html>'
+    requests_mock.get(base_url, text=mock_response_2)
+
+    urls = find_iso_urls(base_url, patterns, cache_file=cache_file)
+    assert urls == ["http://example.com/iso_dir/test2.iso"]
+    assert cache_file.read_text() == mock_response_2
+    assert requests_mock.call_count == 2
