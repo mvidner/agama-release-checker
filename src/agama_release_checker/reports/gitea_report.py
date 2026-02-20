@@ -53,6 +53,7 @@ class PackagesInGiteaReport:
     def _fetch_package_data(self, package_name: str) -> Optional[List[Package]]:
         remote_url = self._get_remote_url(package_name)
         stage_name = self.config.get("name", "unknown")
+        branch = self.config.get("branch")
         repo_path = CACHE_DIR / "giteaproject" / stage_name / package_name
 
         if self.no_cache and repo_path.exists():
@@ -63,18 +64,20 @@ class PackagesInGiteaReport:
         if not repo_path.exists():
             ensure_dir(repo_path.parent)
             # Partial clone: no blobs, shallow, sparse
-            success, _ = self._run_git_command(
-                [
-                    "git",
-                    "clone",
-                    "--filter=blob:none",
-                    "--sparse",
-                    "--depth",
-                    "1",
-                    remote_url,
-                    str(repo_path),
-                ]
-            )
+            cmd = [
+                "git",
+                "clone",
+                "--filter=blob:none",
+                "--sparse",
+                "--depth",
+                "1",
+            ]
+            if branch:
+                cmd.extend(["--branch", branch])
+
+            cmd.extend([remote_url, str(repo_path)])
+
+            success, _ = self._run_git_command(cmd)
             if not success:
                 return None
 
@@ -89,9 +92,11 @@ class PackagesInGiteaReport:
             # This is safe regarding binary blobs because git reset --hard respects the
             # current sparse-checkout patterns, which should only include small text files
             # from the previous run.
-            self._run_git_command(
-                ["git", "fetch", "--depth", "1", "origin"], cwd=repo_path
-            )
+            fetch_cmd = ["git", "fetch", "--depth", "1", "origin"]
+            if branch:
+                fetch_cmd.append(branch)
+
+            self._run_git_command(fetch_cmd, cwd=repo_path)
             self._run_git_command(
                 ["git", "reset", "--hard", "FETCH_HEAD"], cwd=repo_path
             )

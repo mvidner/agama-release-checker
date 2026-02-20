@@ -41,6 +41,11 @@ class GitConfig(StageConfig):
 
 
 @dataclass
+class GiteaConfig(StageConfig):
+    branch: Optional[str] = None
+
+
+@dataclass
 class AppConfig:
     stages: List[Dict[str, Any]]
     rpms: Dict[str, List[str]]
@@ -57,3 +62,9 @@ class AppConfig:
     @property
     def git_configs(self) -> List[GitConfig]:
         return [GitConfig(**s) for s in self.stages if s.get("type") == "git"]
+
+    @property
+    def gitea_configs(self) -> List[GiteaConfig]:
+        return [
+            GiteaConfig(**s) for s in self.stages if s.get("type") == "giteaproject"
+        ]

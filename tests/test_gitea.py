@@ -1,5 +1,5 @@
 from pathlib import Path
-from unittest.mock import MagicMock, patch, ANY
+from unittest.mock import MagicMock, patch, call, ANY
 import pytest  # type: ignore
 import subprocess
 
@@ -78,3 +78,87 @@ def test_get_remote_url():
     report = PackagesInGiteaReport(config, {}, {})
     remote_url = report._get_remote_url("agama")
     assert remote_url == "gitea@src.suse.de:pool/agama.git"
+
+
+@patch(
+    "agama_release_checker.reports.gitea_report.PackagesInGiteaReport._run_git_command"
+)
+@patch("agama_release_checker.reports.gitea_report.Path.exists")
+@patch("agama_release_checker.reports.gitea_report.ensure_dir")
+def test_gitea_clone_with_branch(mock_ensure_dir, mock_exists, mock_run_git):
+    # Repo does not exist
+    mock_exists.return_value = False
+
+    # Mock git command results
+    # 1. clone (success)
+    # 2. sparse-checkout init (success)
+    # 3. ls-tree (success, empty) - stops here
+    mock_run_git.side_effect = [
+        (True, ""),
+        (True, ""),
+        (True, ""),
+    ]
+
+    config = {
+        "url": "https://src.suse.de/pool/",
+        "name": "ibs-pool",
+        "branch": "mybranch",
+    }
+    rpm_map = {"agama": ["agama"]}
+    report = PackagesInGiteaReport(config, rpm_map, {})
+
+    report.run()
+
+    # Verify clone command has --branch mybranch
+    # Use ANY for path arguments to avoid constructing complex path checks
+    mock_run_git.assert_any_call(
+        [
+            "git",
+            "clone",
+            "--filter=blob:none",
+            "--sparse",
+            "--depth",
+            "1",
+            "--branch",
+            "mybranch",
+            "gitea@src.suse.de:pool/agama.git",
+            ANY,  # repo path
+        ]
+    )
+
+
+@patch(
+    "agama_release_checker.reports.gitea_report.PackagesInGiteaReport._run_git_command"
+)
+@patch("agama_release_checker.reports.gitea_report.Path.exists")
+def test_gitea_update_with_branch(mock_exists, mock_run_git):
+    # Repo exists
+    mock_exists.return_value = True
+
+    # Mock git command results
+    # 1. fetch (success)
+    # 2. reset (success)
+    # 3. init (success)
+    # 4. ls-tree (success, empty)
+    mock_run_git.side_effect = [
+        (True, ""),
+        (True, ""),
+        (True, ""),
+        (True, ""),
+    ]
+
+    config = {
+        "url": "https://src.suse.de/pool/",
+        "name": "ibs-pool",
+        "branch": "mybranch",
+    }
+    rpm_map = {"agama": ["agama"]}
+    report = PackagesInGiteaReport(config, rpm_map, {})
+
+    report.run()
+
+    # Verify fetch command has branch
+    mock_run_git.assert_any_call(
+        ["git", "fetch", "--depth", "1", "origin", "mybranch"],
+        cwd=ANY,
+    )
