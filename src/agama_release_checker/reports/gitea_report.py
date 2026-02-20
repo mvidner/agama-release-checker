@@ -47,7 +47,7 @@ class PackagesInGiteaReport:
             )
             return True, result.stdout
         except subprocess.CalledProcessError as e:
-            logging.debug(f"Git command failed: {' '.join(cmd)}\n{e.stderr}")
+            logging.error(f"Git command failed: {' '.join(cmd)}\n{e.stderr}")
             return False, e.stderr
 
     def _fetch_package_data(self, package_name: str) -> Optional[List[Package]]:
