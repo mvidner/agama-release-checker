@@ -38,7 +38,8 @@ def main() -> None:
         help="Enable verbose logging (DEBUG level)",
     )
     parser.add_argument(
-        "--name",
+        "-s",
+        "--stage",
         action="append",
         help="Specify the name of the stage to process. Can be used multiple times.",
     )
@@ -91,7 +92,7 @@ def main() -> None:
         s
         for s in config.stages
         if (args.internal or not s.get("internal", False))
-        and (not args.name or s.get("name") in args.name)
+        and (not args.stage or s.get("name") in args.stage)
     ]
 
     if not stages_to_process:
