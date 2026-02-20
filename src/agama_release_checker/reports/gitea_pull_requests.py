@@ -1,10 +1,11 @@
 import json
 import logging
-import subprocess
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import urlparse
 
 from agama_release_checker.models import GiteaPullRequest
+from agama_release_checker.caching import run_cached_command
+from agama_release_checker.utils import CACHE_DIR
 
 
 class GiteaPullRequestsReport:
@@ -34,6 +35,7 @@ class GiteaPullRequestsReport:
         repo = self._get_repo_path(package_name)
         login = self._get_login()
         branch = self.config.get("branch")
+        stage_name = self.config.get("name", "unknown")
 
         cmd = [
             "tea",
@@ -48,16 +50,18 @@ class GiteaPullRequestsReport:
             "index,state,author,url,title,mergeable,base,created,updated,comments",
         ]
 
-        logging.debug(f"Executing tea command: {' '.join(cmd)}")
+        cache_dir = CACHE_DIR / "giteaproject" / stage_name / "tea_commands"
+
         try:
-            result = subprocess.run(
-                cmd,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,
+            success, output = run_cached_command(
+                cmd, cache_dir=cache_dir, force_refresh=self.no_cache
             )
-            data = json.loads(result.stdout)
+
+            if not success:
+                logging.error(f"Tea command failed for {repo}: {output.strip()}")
+                return []
+
+            data = json.loads(output)
             prs = []
             for item in data:
                 # Filter by branch if specified
@@ -79,10 +83,6 @@ class GiteaPullRequestsReport:
                     )
                 )
             return prs
-        except subprocess.CalledProcessError as e:
-            # If repo doesn't exist or other error, just log and return empty
-            logging.error(f"Tea command failed for {repo}: {e.stderr.strip()}")
-            return []
         except json.JSONDecodeError as e:
             logging.error(f"Failed to decode tea output for {repo}: {e}")
             return []

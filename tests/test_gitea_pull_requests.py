@@ -1,5 +1,4 @@
 import json
-import subprocess
 from unittest.mock import MagicMock, patch
 from typing import List, Dict, Any
 
@@ -7,7 +6,7 @@ from agama_release_checker.reports.gitea_pull_requests import GiteaPullRequestsR
 from agama_release_checker.models import GiteaPullRequest
 
 
-@patch("subprocess.run")
+@patch("agama_release_checker.reports.gitea_pull_requests.run_cached_command")
 def test_gitea_pull_requests_report(mock_run):
     # Mock data from tea
     tea_output = [
@@ -25,9 +24,7 @@ def test_gitea_pull_requests_report(mock_run):
         }
     ]
 
-    mock_run.return_value = MagicMock(
-        stdout=json.dumps(tea_output), check=True, returncode=0
-    )
+    mock_run.return_value = (True, json.dumps(tea_output))
 
     config = {
         "url": "https://src.suse.de/pool/",
@@ -56,9 +53,10 @@ def test_gitea_pull_requests_report(mock_run):
     assert "src.suse.de" in cmd
     assert "--repo" in cmd
     assert "pool/rubygem-agama-yast" in cmd
+    assert kwargs["cache_dir"] is not None
 
 
-@patch("subprocess.run")
+@patch("agama_release_checker.reports.gitea_pull_requests.run_cached_command")
 def test_gitea_pull_requests_report_branch_filtering(mock_run):
     # Mock data from tea with different base branches
     tea_output = [
@@ -74,9 +72,7 @@ def test_gitea_pull_requests_report_branch_filtering(mock_run):
         },
     ]
 
-    mock_run.return_value = MagicMock(
-        stdout=json.dumps(tea_output), check=True, returncode=0
-    )
+    mock_run.return_value = (True, json.dumps(tea_output))
 
     config = {
         "url": "https://src.suse.de/pool/",
