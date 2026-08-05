@@ -166,7 +166,7 @@ class ReleaseMaker:
         )
         fork_org = strategy.fork_org or self.config.gitea_submissions.fork_org
 
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with tempfile.TemporaryDirectory(prefix="agama-release-maker-") as tmpdir:
             tmp_path = Path(tmpdir)
 
             # 1. Clone source repo
@@ -335,7 +335,7 @@ class ReleaseMaker:
 
             target_branch = default_target_branch
 
-            with tempfile.TemporaryDirectory() as tmpdir:
+            with tempfile.TemporaryDirectory(prefix="agama-release-maker-") as tmpdir:
                 tmp_path = Path(tmpdir)
 
                 # 1. Checkout from OBS
