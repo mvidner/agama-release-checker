@@ -514,14 +514,10 @@ def main() -> None:
     config = MakerConfig.from_file(Path(args.config))
     maker = ReleaseMaker(config)
 
-    try:
-        if args.command == "obs-submit":
-            maker.submit_to_obs(args.packages)
-        elif args.command == "gitea-submit":
-            maker.submit_to_gitea(args.packages)
-    except Exception as e:
-        logging.error(f"Command failed: {e}")
-        sys.exit(1)
+    if args.command == "obs-submit":
+        maker.submit_to_obs(args.packages)
+    elif args.command == "gitea-submit":
+        maker.submit_to_gitea(args.packages)
 
 
 if __name__ == "__main__":
