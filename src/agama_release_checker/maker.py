@@ -72,12 +72,15 @@ class ReleaseMaker:
             logging.debug(f"Failed to get changes diff for {pkg}: {e}")
             return ""
 
-    def submit_to_obs(self) -> None:
+    def submit_to_obs(self, packages: list[str]) -> None:
         """Submit all configured packages from source to target OBS project."""
         source_project = self.config.obs_submissions.source_project
         target_project = self.config.obs_submissions.target_project
 
-        for pkg in self.config.package_submissions.keys():
+        if not packages:
+            packages = list(self.config.package_submissions.keys())
+
+        for pkg in packages:
             logging.info(f"Submitting {pkg} from {source_project} to {target_project}")
 
             message = f"Automatic update from {source_project}"
@@ -163,7 +166,7 @@ class ReleaseMaker:
         )
         fork_org = strategy.fork_org or self.config.gitea_submissions.fork_org
 
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with tempfile.TemporaryDirectory(prefix="agama-release-maker-") as tmpdir:
             tmp_path = Path(tmpdir)
 
             # 1. Clone source repo
@@ -172,6 +175,10 @@ class ReleaseMaker:
             self._run_command(
                 ["git", "clone", strategy.source_repo, str(source_repo_dir)]
             )
+
+            # TODO: source_branch not implemented yet
+            if strategy.source_branch:
+                raise RuntimeError("source_branch not implemented yet")
 
             # 2. Run build command
             logging.info(f"Running build command: {strategy.source_run}")
@@ -299,6 +306,7 @@ class ReleaseMaker:
 
     def submit_to_gitea(
         self,
+        packages: list[str],
         obs_api: str = "https://api.suse.de",
         gitea_host: str = "src.suse.de",
     ) -> None:
@@ -312,7 +320,12 @@ class ReleaseMaker:
         default_target_branch = self.config.gitea_submissions.target_branch
         fork_org = self.config.gitea_submissions.fork_org
 
-        for pkg, pkg_cfg in self.config.package_submissions.items():
+        if not packages:
+            packages = list(self.config.package_submissions.keys())
+
+        for pkg in packages:
+            pkg_cfg = self.config.package_submissions[pkg]
+
             if pkg_cfg.gitea_submit:
                 self._submit_to_gitea_custom(
                     pkg,
@@ -322,7 +335,7 @@ class ReleaseMaker:
 
             target_branch = default_target_branch
 
-            with tempfile.TemporaryDirectory() as tmpdir:
+            with tempfile.TemporaryDirectory(prefix="agama-release-maker-") as tmpdir:
                 tmp_path = Path(tmpdir)
 
                 # 1. Checkout from OBS
@@ -370,11 +383,10 @@ class ReleaseMaker:
                     ["git", "checkout", "-b", branch_name], cwd=git_repo_dir
                 )
 
-                # 5. Sync files (excluding .git and .gitattributes)
+                # 5. Sync files (excluding .git .gitattributes .gitignore)
                 logging.info("Syncing files from OBS to Gitea")
-                # Remove all files in git repo except .git and .gitattributes
                 for item in git_repo_dir.iterdir():
-                    if item.name in (".git", ".gitattributes"):
+                    if item.name in (".git", ".gitattributes", ".gitignore"):
                         continue
                     if item.is_dir():
                         shutil.rmtree(item)
@@ -484,9 +496,15 @@ def main() -> None:
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    subparsers.add_parser("obs-submit", help="Submit packages to OBS.")
+    parser_obs = subparsers.add_parser("obs-submit", help="Submit packages to OBS.")
+    parser_obs.add_argument("packages", nargs="*", help="Limit to these packages only")
 
-    subparsers.add_parser("gitea-submit", help="Submit packages to Gitea.")
+    parser_gitea = subparsers.add_parser(
+        "gitea-submit", help="Submit packages to Gitea."
+    )
+    parser_gitea.add_argument(
+        "packages", nargs="*", help="Limit to these packages only"
+    )
 
     args = parser.parse_args()
 
@@ -496,14 +514,10 @@ def main() -> None:
     config = MakerConfig.from_file(Path(args.config))
     maker = ReleaseMaker(config)
 
-    try:
-        if args.command == "obs-submit":
-            maker.submit_to_obs()
-        elif args.command == "gitea-submit":
-            maker.submit_to_gitea()
-    except Exception as e:
-        logging.error(f"Command failed: {e}")
-        sys.exit(1)
+    if args.command == "obs-submit":
+        maker.submit_to_obs(args.packages)
+    elif args.command == "gitea-submit":
+        maker.submit_to_gitea(args.packages)
 
 
 if __name__ == "__main__":
