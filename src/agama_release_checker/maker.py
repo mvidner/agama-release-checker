@@ -166,7 +166,10 @@ class ReleaseMaker:
         )
         fork_org = strategy.fork_org or self.config.gitea_submissions.fork_org
 
-        with tempfile.TemporaryDirectory(prefix="agama-release-maker-") as tmpdir:
+        temp_obj = tempfile.TemporaryDirectory(
+            prefix="agama-release-maker-", delete=False
+        )
+        with temp_obj as tmpdir:
             tmp_path = Path(tmpdir)
 
             # 1. Clone source repo
@@ -304,6 +307,9 @@ class ReleaseMaker:
                 logging.error(f"Failed to check or create PR for {pkg}: {e}")
                 raise
 
+        # This will not run if a command fails, enabling us do debug the problem
+        temp_obj.cleanup()
+
     def submit_to_gitea(
         self,
         packages: list[str],
@@ -335,7 +341,10 @@ class ReleaseMaker:
 
             target_branch = default_target_branch
 
-            with tempfile.TemporaryDirectory(prefix="agama-release-maker-") as tmpdir:
+            temp_obj = tempfile.TemporaryDirectory(
+                prefix="agama-release-maker-", delete=False
+            )
+            with temp_obj as tmpdir:
                 tmp_path = Path(tmpdir)
 
                 # 1. Checkout from OBS
@@ -477,6 +486,9 @@ class ReleaseMaker:
                 except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
                     logging.error(f"Failed to check or create PR for {pkg}: {e}")
                     raise
+
+            # This will not run if a command fails, enabling us do debug the problem
+            temp_obj.cleanup()
 
 
 def main() -> None:

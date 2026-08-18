@@ -85,7 +85,7 @@ If those are not available, install uv:
 
 Then install dependencies with:
 
-    uv venv --python python3.11
+    uv venv --python python3.12
     . .venv/bin/activate
     uv pip install '.[test]'
 
