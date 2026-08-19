@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import json
+from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -154,6 +155,133 @@ class ReleaseMaker:
         self._run_command(["git", "commit", "-m", commit_msg], cwd=repo_dir)
         return pr_description
 
+    def _submit_to_gitea_repo(
+        self,
+        *,
+        pkg: str,
+        target_repo_url: str,
+        target_branch: str,
+        fork_org: str | None,
+        branch_name: str,
+        sync_func: Callable[[Path], None],
+        commit_msg: str,
+        pr_title: str,
+        pr_desc_base: str,
+        tmp_path: Path,
+    ) -> None:
+        """Clones a target Gitea repo, runs a sync callback, commits, pushes, and creates/updates a Gitea PR."""
+        # 1. Clone target repo
+        target_repo_dir = tmp_path / f"{pkg}-target"
+        logging.info(f"Cloning target repo {target_repo_url} (branch {target_branch})")
+        self._run_command(
+            [
+                "git",
+                "clone",
+                "--branch",
+                target_branch,
+                target_repo_url,
+                str(target_repo_dir),
+            ]
+        )
+
+        # 2. Handle Fork remote
+        host, target_owner, repo_name = self._get_gitea_info(target_repo_url)
+        push_remote = "origin"
+        push_owner = target_owner
+
+        if fork_org and fork_org != target_owner:
+            fork_url = f"gitea@{host}:{fork_org}/{repo_name}.git"
+            logging.info(f"Adding fork remote: {fork_url}")
+            self._run_command(
+                ["git", "remote", "add", "fork", fork_url], cwd=target_repo_dir
+            )
+            push_remote = "fork"
+            push_owner = fork_org
+
+        # 3. Create branch
+        logging.info(f"Creating branch {branch_name}")
+        self._run_command(["git", "checkout", "-b", branch_name], cwd=target_repo_dir)
+
+        # 4. Sync files via callback
+        sync_func(target_repo_dir)
+
+        # 5. Commit and push
+        pr_description = self._commit_and_get_pr_description(
+            target_repo_dir,
+            commit_msg,
+            pr_desc_base,
+        )
+        if not pr_description:
+            return
+
+        self._run_command(
+            ["git", "config", "lfs.allowincompletepush", "true"],
+            cwd=target_repo_dir,
+        )
+        self._run_command(
+            ["git", "push", push_remote, branch_name, "--force"],
+            cwd=target_repo_dir,
+        )
+
+        # 6. Create or verify PR using tea
+        repo_path = f"{target_owner}/{repo_name}"
+        head_spec = f"{push_owner}:{branch_name}"
+
+        logging.info(f"Creating PR for {pkg} in {repo_path}")
+        check_pr_cmd = [
+            "tea",
+            "pr",
+            "list",
+            "--repo",
+            repo_path,
+            "--state",
+            "open",
+            "-f",
+            "index,title,state,author,milestone,updated,labels,head,base,url",
+            "--output",
+            "json",
+        ]
+
+        try:
+            res = self._run_command(check_pr_cmd)
+            all_prs = json.loads(res.stdout)
+            existing_prs = [
+                pr
+                for pr in all_prs
+                if pr.get("head") in (branch_name, head_spec)
+                and pr.get("base") == target_branch
+            ]
+            if existing_prs:
+                logging.info(
+                    f"Pull request already exists for {pkg}: {existing_prs[0].get('url')}"
+                )
+            else:
+                pr_cmd = [
+                    "tea",
+                    "pr",
+                    "create",
+                    "--repo",
+                    repo_path,
+                    "--base",
+                    target_branch,
+                    "--head",
+                    head_spec,
+                    "--title",
+                    pr_title,
+                    "--description",
+                    pr_description,
+                ]
+                try:
+                    self._run_command(pr_cmd)
+                except subprocess.CalledProcessError as e:
+                    if "pull request already exists" in e.stderr:
+                        logging.info(f"Pull request already exists for {pkg}")
+                    else:
+                        raise
+        except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
+            logging.error(f"Failed to check or create PR for {pkg}: {e}")
+            raise
+
     def _submit_to_gitea_custom(
         self,
         pkg: str,
@@ -187,131 +315,34 @@ class ReleaseMaker:
             logging.info(f"Running build command: {strategy.source_run}")
             self._run_command(strategy.source_run.split(), cwd=source_repo_dir)
 
-            # 3. Clone target repo
-            target_repo_dir = tmp_path / f"{pkg}-target"
-            logging.info(
-                f"Cloning target repo {strategy.target_repo} (branch {target_branch})"
-            )
-            self._run_command(
-                [
-                    "git",
-                    "clone",
-                    "--branch",
-                    target_branch,
-                    strategy.target_repo,
-                    str(target_repo_dir),
-                ]
-            )
+            # 3. Synchronize using our custom logic
+            def sync_files(target_repo_dir: Path) -> None:
+                source_dist_dir = source_repo_dir / strategy.source_dir
+                target_dist_dir = target_repo_dir / strategy.target_dir
 
-            # 4. Handle Fork
-            host, target_owner, repo_name = self._get_gitea_info(strategy.target_repo)
-            push_remote = "origin"
-            push_owner = target_owner
-
-            if fork_org and fork_org != target_owner:
-                fork_url = f"gitea@{host}:{fork_org}/{repo_name}.git"
-                logging.info(f"Adding fork remote: {fork_url}")
-                self._run_command(
-                    ["git", "remote", "add", "fork", fork_url], cwd=target_repo_dir
+                logging.info(
+                    f"Syncing files from {source_dist_dir} to {target_dist_dir}"
                 )
-                push_remote = "fork"
-                push_owner = fork_org
+                if target_dist_dir.exists():
+                    shutil.rmtree(target_dist_dir)
+                shutil.copytree(source_dist_dir, target_dist_dir)
 
-            # 5. Create branch
             branch_name = f"{target_branch}-update-{pkg}"
-            logging.info(f"Creating branch {branch_name}")
-            self._run_command(
-                ["git", "checkout", "-b", branch_name], cwd=target_repo_dir
+
+            self._submit_to_gitea_repo(
+                pkg=pkg,
+                target_repo_url=strategy.target_repo,
+                target_branch=target_branch,
+                fork_org=fork_org,
+                branch_name=branch_name,
+                sync_func=sync_files,
+                commit_msg=f"Update {pkg} from {source_project}",
+                pr_title=f"Update {pkg} from {source_project}",
+                pr_desc_base=f"Automatic update of {pkg} from {source_project}",
+                tmp_path=tmp_path,
             )
 
-            # 6. Sync files
-            source_dist_dir = source_repo_dir / strategy.source_dir
-            target_dist_dir = target_repo_dir / strategy.target_dir
-
-            logging.info(f"Syncing files from {source_dist_dir} to {target_dist_dir}")
-            if target_dist_dir.exists():
-                shutil.rmtree(target_dist_dir)
-            shutil.copytree(source_dist_dir, target_dist_dir)
-
-            # 7. Commit and push
-            pr_description = self._commit_and_get_pr_description(
-                target_repo_dir,
-                f"Update {pkg} from {source_project}",
-                f"Automatic update of {pkg} from {source_project}",
-            )
-            if not pr_description:
-                return
-
-            self._run_command(
-                ["git", "config", "lfs.allowincompletepush", "true"],
-                cwd=target_repo_dir,
-            )
-            self._run_command(
-                ["git", "push", push_remote, branch_name, "--force"],
-                cwd=target_repo_dir,
-            )
-
-            # 8. Create PR using tea
-            repo_path = f"{target_owner}/{repo_name}"
-            # For tea, head is <owner>:<branch> if it's from a fork
-            head_spec = f"{push_owner}:{branch_name}"
-
-            logging.info(f"Creating PR for {pkg} in {repo_path}")
-            check_pr_cmd = [
-                "tea",
-                "pr",
-                "list",
-                "--repo",
-                repo_path,
-                "--state",
-                "open",
-                "-f",
-                "index,title,state,author,milestone,updated,labels,head,base,url",
-                "--output",
-                "json",
-            ]
-
-            try:
-                res = self._run_command(check_pr_cmd)
-                all_prs = json.loads(res.stdout)
-                existing_prs = [
-                    pr
-                    for pr in all_prs
-                    if pr.get("head") in (branch_name, head_spec)
-                    and pr.get("base") == target_branch
-                ]
-                if existing_prs:
-                    logging.info(
-                        f"Pull request already exists for {pkg}: {existing_prs[0].get('url')}"
-                    )
-                else:
-                    pr_cmd = [
-                        "tea",
-                        "pr",
-                        "create",
-                        "--repo",
-                        repo_path,
-                        "--base",
-                        target_branch,
-                        "--head",
-                        head_spec,
-                        "--title",
-                        f"Update {pkg} from {source_project}",
-                        "--description",
-                        pr_description,
-                    ]
-                    try:
-                        self._run_command(pr_cmd)
-                    except subprocess.CalledProcessError as e:
-                        if "pull request already exists" in e.stderr:
-                            logging.info(f"Pull request already exists for {pkg}")
-                        else:
-                            raise
-            except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
-                logging.error(f"Failed to check or create PR for {pkg}: {e}")
-                raise
-
-        # This will not run if a command fails, enabling us do debug the problem
+        # This will not run if a command fails, enabling us to debug the problem
         temp_obj.cleanup()
 
     def submit_to_gitea(
@@ -360,145 +391,46 @@ class ReleaseMaker:
                 self._run_command(co_cmd, cwd=tmp_path)
                 obs_pkg_dir = tmp_path / source_project / pkg
 
-                # 2. Clone from Gitea
+                # 2. Synchronize standard OBS files into the cloned repository
+                def sync_files(target_repo_dir: Path) -> None:
+                    logging.info("Syncing files from OBS to Gitea")
+                    for item in target_repo_dir.iterdir():
+                        if item.name in (
+                            ".git",
+                            ".gitattributes",
+                            ".gitignore",
+                        ):
+                            continue
+                        if item.is_dir():
+                            shutil.rmtree(item)
+                        else:
+                            item.unlink()
+
+                    for item in obs_pkg_dir.iterdir():
+                        if item.name == ".osc":
+                            continue
+                        if item.is_dir():
+                            shutil.copytree(item, target_repo_dir / item.name)
+                        else:
+                            shutil.copy2(item, target_repo_dir / item.name)
+
                 gitea_remote = f"gitea@{gitea_host}:{target_org}/{pkg}.git"
-                git_repo_dir = tmp_path / f"{pkg}-git"
-                logging.info(
-                    f"Cloning {pkg} from Gitea {gitea_remote} (branch {target_branch})"
-                )
-                self._run_command(
-                    [
-                        "git",
-                        "clone",
-                        "--branch",
-                        target_branch,
-                        gitea_remote,
-                        str(git_repo_dir),
-                    ]
-                )
-
-                # 3. Handle Fork
-                push_remote = "origin"
-                push_owner = target_org
-                if fork_org and fork_org != target_org:
-                    fork_url = f"gitea@{gitea_host}:{fork_org}/{pkg}.git"
-                    logging.info(f"Adding fork remote: {fork_url}")
-                    self._run_command(
-                        ["git", "remote", "add", "fork", fork_url], cwd=git_repo_dir
-                    )
-                    push_remote = "fork"
-                    push_owner = fork_org
-
-                # 4. Create branch
                 branch_name = f"{target_branch}-update"
-                logging.info(f"Creating branch {branch_name}")
-                self._run_command(
-                    ["git", "checkout", "-b", branch_name], cwd=git_repo_dir
+
+                self._submit_to_gitea_repo(
+                    pkg=pkg,
+                    target_repo_url=gitea_remote,
+                    target_branch=target_branch,
+                    fork_org=fork_org,
+                    branch_name=branch_name,
+                    sync_func=sync_files,
+                    commit_msg=f"Update from OBS {source_project}",
+                    pr_title=f"Update from OBS {source_project}",
+                    pr_desc_base=f"Automatic update from {source_project}",
+                    tmp_path=tmp_path,
                 )
 
-                # 5. Sync files (excluding .git .gitattributes .gitignore)
-                logging.info("Syncing files from OBS to Gitea")
-                for item in git_repo_dir.iterdir():
-                    if item.name in (".git", ".gitattributes", ".gitignore"):
-                        continue
-                    if item.is_dir():
-                        shutil.rmtree(item)
-                    else:
-                        item.unlink()
-
-                # Copy from OBS to Gitea
-                for item in obs_pkg_dir.iterdir():
-                    if item.name == ".osc":
-                        continue
-                    if item.is_dir():
-                        shutil.copytree(item, git_repo_dir / item.name)
-                    else:
-                        shutil.copy2(item, git_repo_dir / item.name)
-
-                # 6. Commit and push
-                pr_description = self._commit_and_get_pr_description(
-                    git_repo_dir,
-                    f"Update from OBS {source_project}",
-                    f"Automatic update from {source_project}",
-                )
-                if not pr_description:
-                    continue
-
-                # When pushing to a fork, LFS might try to verify historical LFS objects.
-                # Since we only cloned a specific branch, we don't have them locally.
-                # We tell LFS to ignore missing local objects that aren't being modified.
-                self._run_command(
-                    ["git", "config", "lfs.allowincompletepush", "true"],
-                    cwd=git_repo_dir,
-                )
-                self._run_command(
-                    ["git", "push", push_remote, branch_name, "--force"],
-                    cwd=git_repo_dir,
-                )
-
-                # 7. Create PR using tea
-                repo_path = f"{target_org}/{pkg}"
-                # For tea, head is <owner>:<branch> if it's from a fork
-                head_spec = f"{push_owner}:{branch_name}"
-
-                logging.info(f"Creating PR for {pkg} in {repo_path}")
-                # Check for existing PR first
-                check_pr_cmd = [
-                    "tea",
-                    "pr",
-                    "list",
-                    "--repo",
-                    repo_path,
-                    "--state",
-                    "open",
-                    "-f",
-                    "index,title,state,author,milestone,updated,labels,head,base,url",
-                    "--output",
-                    "json",
-                ]
-
-                try:
-                    res = self._run_command(check_pr_cmd)
-                    all_prs = json.loads(res.stdout)
-                    # Filter manually as tea doesn't support head/base filtering
-                    existing_prs = [
-                        pr
-                        for pr in all_prs
-                        if pr.get("head") in (branch_name, head_spec)
-                        and pr.get("base") == target_branch
-                    ]
-                    if existing_prs:
-                        logging.info(
-                            f"Pull request already exists for {pkg}: {existing_prs[0].get('url')}"
-                        )
-                    else:
-                        pr_cmd = [
-                            "tea",
-                            "pr",
-                            "create",
-                            "--repo",
-                            repo_path,
-                            "--base",
-                            target_branch,
-                            "--head",
-                            head_spec,
-                            "--title",
-                            f"Update from OBS {source_project}",
-                            "--description",
-                            pr_description,
-                        ]
-                        try:
-                            self._run_command(pr_cmd)
-                        except subprocess.CalledProcessError as e:
-                            if "pull request already exists" in e.stderr:
-                                logging.info(f"Pull request already exists for {pkg}")
-                            else:
-                                raise
-                except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
-                    logging.error(f"Failed to check or create PR for {pkg}: {e}")
-                    raise
-
-            # This will not run if a command fails, enabling us do debug the problem
+            # This will not run if a command fails, enabling us to debug the problem
             temp_obj.cleanup()
 
 
