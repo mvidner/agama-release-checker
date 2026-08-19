@@ -9,6 +9,9 @@ from pathlib import Path
 from .models import BinaryPackage
 
 
+import time
+
+
 def check_command(command: str) -> bool:
     """Checks if a command is available in PATH."""
     return shutil.which(command) is not None
@@ -32,23 +35,34 @@ def mount_iso(iso_path: Path, mount_point: Path) -> bool:
         return False
 
 
-def unmount_iso(mount_point: Path) -> bool:
+def unmount_iso(mount_point: Path, retries: int = 3, delay: float = 0.5) -> bool:
     """Unmounts a fuseiso mounted directory."""
     logging.debug(f"Unmounting {mount_point}")
-    try:
-        subprocess.run(
-            ["fusermount", "-u", str(mount_point)],
-            check=True,
-            stdout=sys.stdout,
-            stderr=sys.stderr,
-        )
-        logging.debug(f"Successfully unmounted {mount_point}")
-        os.rmdir(mount_point)
-        logging.debug(f"Removed mount point directory {mount_point}")
-        return True
-    except (subprocess.CalledProcessError, FileNotFoundError) as e:
-        logging.error(f"Error unmounting {mount_point}: {e}")
-        return False
+
+    for attempt in range(retries):
+        try:
+            subprocess.run(
+                ["fusermount", "-u", str(mount_point)],
+                check=True,
+                stdout=sys.stdout,
+                stderr=sys.stderr,
+            )
+            logging.debug(f"Successfully unmounted {mount_point}")
+            os.rmdir(mount_point)
+            logging.debug(f"Removed mount point directory {mount_point}")
+            return True
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
+            if attempt < retries - 1:
+                logging.debug(
+                    f"Error unmounting (attempt {attempt + 1}/{retries}): {e}. Retrying in {delay}s..."
+                )
+                time.sleep(delay)
+            else:
+                logging.error(
+                    f"Error unmounting {mount_point} after {retries} attempts: {e}"
+                )
+                return False
+    return False
 
 
 class IsoMounter:
