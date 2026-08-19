@@ -277,6 +277,60 @@ def test_submit_to_gitea_existing_pr(
         args = call[0][0]
         assert not (args[0] == "tea" and args[2] == "create")
 
+    # Verify that we avoided cloning and OBS checkout completely
+    for call in mock_run.call_args_list:
+        args = call[0][0]
+        assert not (args[0] == "git" and args[1] == "clone")
+        assert not (args[0] == "osc")
+
+
+@patch("agama_release_checker.maker.shutil.copytree")
+@patch("agama_release_checker.maker.subprocess.run")
+def test_submit_to_gitea_custom_existing_pr(mock_run, mock_copytree, mock_config):
+    """Verifies that submit_to_gitea custom strategy avoids cloning/building if PR exists."""
+    strategy = GiteaSubmitStrategy(
+        source_repo="https://github.com/org/repo",
+        source_run="make build",
+        source_dir="dist",
+        target_repo="gitea@gitea.example.com:target_owner/target_repo.git",
+        target_dir="subdir",
+        target_branch="custom_branch",
+    )
+    mock_config.package_submissions = {
+        "custom-pkg": PackageSubmissionConfig(gitea_submit=strategy)
+    }
+
+    def run_side_effect(cmd, **kwargs):
+        if "pr" in cmd and "list" in cmd:
+            # Return an existing PR
+            return MagicMock(
+                returncode=0,
+                stdout=json.dumps(
+                    [
+                        {
+                            "head": "target_owner:custom_branch-update-custom-pkg",
+                            "base": "custom_branch",
+                            "url": "http://example.com/pr/2",
+                        }
+                    ]
+                ),
+                stderr="",
+            )
+        return MagicMock(returncode=0, stdout="OK", stderr="")
+
+    mock_run.side_effect = run_side_effect
+
+    maker = ReleaseMaker(mock_config)
+    maker.submit_to_gitea([])
+
+    # Verify we only did the tea pr list check, and did not clone or build
+    assert mock_run.call_count == 1
+    # Check that the call was indeed tea pr list
+    cmd = mock_run.call_args_list[0][0][0]
+    assert cmd[0] == "tea"
+    assert cmd[1] == "pr"
+    assert cmd[2] == "list"
+
 
 @patch("agama_release_checker.maker.shutil.copytree")
 @patch("agama_release_checker.maker.subprocess.run")

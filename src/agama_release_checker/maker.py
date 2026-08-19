@@ -155,6 +155,58 @@ class ReleaseMaker:
         self._run_command(["git", "commit", "-m", commit_msg], cwd=repo_dir)
         return pr_description
 
+    def _gitea_pr_exists(
+        self,
+        *,
+        pkg: str,
+        target_repo_url: str,
+        target_branch: str,
+        fork_org: str | None,
+        branch_name: str,
+    ) -> bool:
+        """Checks if an open pull request already exists for the given package on Gitea.
+
+        Parses the repository URL to find owner and repo name, then uses the `tea` CLI
+        to check if a pull request is already open for the target branch and branch name.
+        """
+        host, target_owner, repo_name = self._get_gitea_info(target_repo_url)
+        push_owner = target_owner
+        if fork_org and fork_org != target_owner:
+            push_owner = fork_org
+
+        repo_path = f"{target_owner}/{repo_name}"
+        head_spec = f"{push_owner}:{branch_name}"
+
+        check_pr_cmd = [
+            "tea",
+            "pr",
+            "list",
+            "--repo",
+            repo_path,
+            "--state",
+            "open",
+            "-f",
+            "index,title,state,author,milestone,updated,labels,head,base,url",
+            "--output",
+            "json",
+        ]
+
+        res = self._run_command(check_pr_cmd)
+        all_prs = json.loads(res.stdout)
+        existing_prs = [
+            pr
+            for pr in all_prs
+            if pr.get("head") in (branch_name, head_spec)
+            and pr.get("base") == target_branch
+        ]
+        if existing_prs:
+            logging.info(
+                f"Pull request already exists for {pkg}: {existing_prs[0].get('url')}"
+            )
+            return True
+
+        return False
+
     def _submit_to_gitea_repo(
         self,
         *,
@@ -223,64 +275,34 @@ class ReleaseMaker:
             cwd=target_repo_dir,
         )
 
-        # 6. Create or verify PR using tea
+        # 6. Create PR using tea
         repo_path = f"{target_owner}/{repo_name}"
         head_spec = f"{push_owner}:{branch_name}"
 
         logging.info(f"Creating PR for {pkg} in {repo_path}")
-        check_pr_cmd = [
+        pr_cmd = [
             "tea",
             "pr",
-            "list",
+            "create",
             "--repo",
             repo_path,
-            "--state",
-            "open",
-            "-f",
-            "index,title,state,author,milestone,updated,labels,head,base,url",
-            "--output",
-            "json",
+            "--base",
+            target_branch,
+            "--head",
+            head_spec,
+            "--title",
+            pr_title,
+            "--description",
+            pr_description,
         ]
-
         try:
-            res = self._run_command(check_pr_cmd)
-            all_prs = json.loads(res.stdout)
-            existing_prs = [
-                pr
-                for pr in all_prs
-                if pr.get("head") in (branch_name, head_spec)
-                and pr.get("base") == target_branch
-            ]
-            if existing_prs:
-                logging.info(
-                    f"Pull request already exists for {pkg}: {existing_prs[0].get('url')}"
-                )
+            self._run_command(pr_cmd)
+        except subprocess.CalledProcessError as e:
+            if "pull request already exists" in e.stderr:
+                logging.info(f"Pull request already exists for {pkg}")
             else:
-                pr_cmd = [
-                    "tea",
-                    "pr",
-                    "create",
-                    "--repo",
-                    repo_path,
-                    "--base",
-                    target_branch,
-                    "--head",
-                    head_spec,
-                    "--title",
-                    pr_title,
-                    "--description",
-                    pr_description,
-                ]
-                try:
-                    self._run_command(pr_cmd)
-                except subprocess.CalledProcessError as e:
-                    if "pull request already exists" in e.stderr:
-                        logging.info(f"Pull request already exists for {pkg}")
-                    else:
-                        raise
-        except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
-            logging.error(f"Failed to check or create PR for {pkg}: {e}")
-            raise
+                logging.error(f"Failed to create PR for {pkg}: {e}")
+                raise
 
     def _submit_to_gitea_custom(
         self,
@@ -293,6 +315,20 @@ class ReleaseMaker:
             strategy.target_branch or self.config.gitea_submissions.target_branch
         )
         fork_org = strategy.fork_org or self.config.gitea_submissions.fork_org
+        branch_name = f"{target_branch}-update-{pkg}"
+
+        try:
+            if self._gitea_pr_exists(
+                pkg=pkg,
+                target_repo_url=strategy.target_repo,
+                target_branch=target_branch,
+                fork_org=fork_org,
+                branch_name=branch_name,
+            ):
+                return
+        except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
+            logging.error(f"Failed to check PR for {pkg}: {e}")
+            raise
 
         temp_obj = tempfile.TemporaryDirectory(
             prefix="agama-release-maker-", delete=False
@@ -326,8 +362,6 @@ class ReleaseMaker:
                 if target_dist_dir.exists():
                     shutil.rmtree(target_dist_dir)
                 shutil.copytree(source_dist_dir, target_dist_dir)
-
-            branch_name = f"{target_branch}-update-{pkg}"
 
             self._submit_to_gitea_repo(
                 pkg=pkg,
@@ -375,6 +409,21 @@ class ReleaseMaker:
                 continue
 
             target_branch = default_target_branch
+            gitea_remote = f"gitea@{gitea_host}:{target_org}/{pkg}.git"
+            branch_name = f"{target_branch}-update"
+
+            try:
+                if self._gitea_pr_exists(
+                    pkg=pkg,
+                    target_repo_url=gitea_remote,
+                    target_branch=target_branch,
+                    fork_org=fork_org,
+                    branch_name=branch_name,
+                ):
+                    continue
+            except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
+                logging.error(f"Failed to check PR for {pkg}: {e}")
+                raise
 
             temp_obj = tempfile.TemporaryDirectory(
                 prefix="agama-release-maker-", delete=False
@@ -413,9 +462,6 @@ class ReleaseMaker:
                             shutil.copytree(item, target_repo_dir / item.name)
                         else:
                             shutil.copy2(item, target_repo_dir / item.name)
-
-                gitea_remote = f"gitea@{gitea_host}:{target_org}/{pkg}.git"
-                branch_name = f"{target_branch}-update"
 
                 self._submit_to_gitea_repo(
                     pkg=pkg,
