@@ -1,0 +1,14 @@
+# https://EditorConfig.org  -*- ini -*-
+# This is a unified way to tell all your editors
+# about the proper indentation style in this repo.
+#
+# Emacs:   https://github.com/editorconfig/editorconfig-emacs#readme
+# Vim:     https://github.com/editorconfig/editorconfig-vim#readme
+# VS Code: https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig
+
+# don't continue looking in upper directories, this is the top level
+root = true
+
+[*.py]
+indent_style = space
+indent_size = 4
