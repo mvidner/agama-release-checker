@@ -243,6 +243,10 @@ class ReleaseMaker:
                 return
 
             self._run_command(
+                ["git", "config", "lfs.allowincompletepush", "true"],
+                cwd=target_repo_dir,
+            )
+            self._run_command(
                 ["git", "push", push_remote, branch_name, "--force"],
                 cwd=target_repo_dir,
             )
@@ -420,6 +424,13 @@ class ReleaseMaker:
                 if not pr_description:
                     continue
 
+                # When pushing to a fork, LFS might try to verify historical LFS objects.
+                # Since we only cloned a specific branch, we don't have them locally.
+                # We tell LFS to ignore missing local objects that aren't being modified.
+                self._run_command(
+                    ["git", "config", "lfs.allowincompletepush", "true"],
+                    cwd=git_repo_dir,
+                )
                 self._run_command(
                     ["git", "push", push_remote, branch_name, "--force"],
                     cwd=git_repo_dir,
