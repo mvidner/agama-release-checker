@@ -48,6 +48,16 @@ repositories:
   branch: slfo-main
   name: ibs-pool
 
+- url: https://src.suse.de/products/
+  type: gitea
+  internal: true
+  branch: "16.1"
+  # if none: keys of binary_packages_by_source with no filtering
+  repos:
+    # repo name -> match substring in PR title
+    SLES: agama-installer
+  name: ibs-pool-agama-installer-SLES
+
 - url: https://download.suse.de/ibs/SUSE:/SLFO:/Products:/SLES:/16.1:/TEST/product/iso/
   internal: true
   type: mirrorcache

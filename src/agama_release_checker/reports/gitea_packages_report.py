@@ -206,7 +206,10 @@ class GiteaPackagesReport:
     def run(self) -> tuple[str | None, list[SourcePackage] | None]:
         logging.info(f"Processing Gitea project: {self.config.name}")
         all_packages: list[SourcePackage] = []
-        for package_name in self.binary_patterns_by_source.keys():
+        package_names = (
+            self.config.repos.keys() or self.binary_patterns_by_source.keys()
+        )
+        for package_name in package_names:
             pkgs = self._fetch_package_data(package_name)
             if pkgs:
                 all_packages.extend(pkgs)

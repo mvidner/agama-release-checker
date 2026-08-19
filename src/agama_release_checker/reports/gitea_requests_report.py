@@ -41,6 +41,8 @@ class GiteaRequestsReport:
         login = self._get_login()
         branch = self.config.branch
         config_name = self.config.name
+        # (BTW the empty substring maches everything wich is fine)
+        title_substring = self.config.repos.get(package_name, "")
 
         cmd = [
             "tea",
@@ -73,6 +75,11 @@ class GiteaRequestsReport:
                 if branch and item.get("base") != branch:
                     continue
 
+                # in products/SLES we are only interested in a subdir,
+                # which we don't see in tea output, so we filter by known title substring
+                if not title_substring in item.get("title", ""):
+                    continue
+
                 prs.append(
                     GiteaPullRequest(
                         repo=repo,
@@ -96,7 +103,10 @@ class GiteaRequestsReport:
     def run(self) -> tuple[None, list[GiteaPullRequest]]:
         logging.info(f"Processing Gitea pull requests for: {self.config.name}")
         all_prs: list[GiteaPullRequest] = []
-        for package_name in self.binary_patterns_by_source.keys():
+        package_names = (
+            self.config.repos.keys() or self.binary_patterns_by_source.keys()
+        )
+        for package_name in package_names:
             prs = self._fetch_prs(package_name)
             all_prs.extend(prs)
         return None, all_prs

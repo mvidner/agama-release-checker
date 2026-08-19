@@ -130,6 +130,7 @@ class GiteaConfig(RepositoryConfig):
     """
 
     branch: str | None = None
+    repos: dict[str, str] = field(default_factory=dict)
 
 
 _CONFIG_CLASSES: dict[str, type[RepositoryConfig]] = {
