@@ -7,6 +7,18 @@ repositories:
   type: git
   name: agama-integration-tests
 
+# These are correct but not useful yet, since the code that
+# shows "Git Updated" relies on the RPM versions including
+# the Git hashes, and YaST packages don't do that.
+#
+#- url: https://github.com/yast/yast-bootloader/
+#  type: git
+#  name: yast2-bootloader
+#
+#- url: https://github.com/yast/yast-storage-ng/
+#  type: git
+#  name: yast2-storage-ng
+
 - url: https://build.opensuse.org/project/show/systemsmanagement:Agama:Devel
   type: obs
   name: obs-sm-A-Devel
@@ -89,6 +101,10 @@ binary_patterns_by_source:
   - agama-products*
   agama-integration-tests:
   - agama-integration-tests
+  yast2-bootloader:
+  - yast2-bootloader
+  yast2-storage-ng:
+  - yast2-storage-ng
 
 # Maps obs package to a list of RPM spec files.
 # If not specified, foo maps to a singleton [foo].
